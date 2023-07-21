@@ -1,0 +1,75 @@
+buildscript {
+	dependencies {
+		classpath "com.github.node-gradle:gradle-node-plugin:3.1.0"
+	}
+}
+
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.13'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id "com.github.node-gradle.node" version "3.0.1"
+}
+
+repositories {
+	mavenCentral()
+	gradlePluginPortal()
+}
+
+apply plugin: 'com.github.node-gradle.node'
+
+node {
+	version = '14.17.6'
+	download = true
+	nodeProjectDir = file("${project.projectDir}/../frontend")
+//	distBaseUrl = "https://nodejs.org/dist"
+//	npmInstallCommand = "install"
+//
+//	workDir = file("${project.projectDir}/.gradle/nodejs")
+//	npmWorkDir = file("${project.projectDir}/.gradle/npm")
+//
+//	nodeProxySettings = ProxySettings.SMART
+}
+
+task npmBuild(dependsOn: npmInstall, type: NpmTask) {
+	args = ['run', 'build']
+}
+processResources.dependsOn 'npmBuild'
+
+group = 'pokerface'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '11'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+//	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+//	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+	implementation group: 'io.openvidu', name: 'openvidu-java-client', version: '2.28.0'
+	implementation group: 'com.auth0', name: 'java-jwt', version: '3.10.2'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

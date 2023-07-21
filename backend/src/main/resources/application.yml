@@ -1,0 +1,44 @@
+server:
+  address: localhost
+  servlet:
+    encoding:
+      force: 'true'
+      charset: UTF-8
+      enabled: 'true'
+    contextPath: /
+  port: '8080'
+build:
+  date: '@build.date@'
+
+spa:
+  default-file: /static/index.html
+
+# Swagger
+springfox:
+  documentation:
+    swagger:
+      use-model-v3: 'false'
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 100
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://stg-yswa-kr-practice-db-master.mariadb.database.azure.com:3306/S09P12A603
+    username: S09P12A603
+    password: DkyeFRtWLR
+  mvc:
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
+      static-locations: classpath:/static/
+
+logging:
+  level:
+    org.hibernate.sql: debug
