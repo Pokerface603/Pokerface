@@ -27,6 +27,7 @@ spring:
       hibernate:
         format_sql: true
         default_batch_fetch_size: 100
+        show_sql: true
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://stg-yswa-kr-practice-db-master.mariadb.database.azure.com:3306/S09P12A603
