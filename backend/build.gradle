@@ -34,7 +34,7 @@ node {
 task npmBuild(dependsOn: npmInstall, type: NpmTask) {
 	args = ['run', 'build']
 }
-processResources.dependsOn 'npmBuild'
+//processResources.dependsOn 'npmBuild'
 
 group = 'pokerface'
 version = '0.0.1-SNAPSHOT'
