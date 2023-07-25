@@ -20,6 +20,10 @@ public class Room extends BaseTime {
 
     private String title;
 
+    private String isPrivate;
+
+    private String roomPassword;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "host_id")
     private Member host;

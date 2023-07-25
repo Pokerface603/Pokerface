@@ -17,6 +17,8 @@ public class Member extends BaseTime {
 
     private String email;
 
+    private String userPassword;
+
     private String nickname;
 
     private Integer rating;
