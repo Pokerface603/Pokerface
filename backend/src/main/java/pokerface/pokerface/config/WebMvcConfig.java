@@ -15,14 +15,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**")
-                .addResourceLocations("classpath:/static/")
+                .addResourceLocations("classpath:/dist")
                 .resourceChain(true)
                 .addResolver(new PathResourceResolver() {
                     @Override
                     protected Resource getResource(String resourcePath, Resource location) throws IOException {
                         Resource requestResource = location.createRelative(resourcePath);
                         return requestResource.exists() && requestResource.isReadable() ?
-                                requestResource : new ClassPathResource("/static/index.html");
+                                requestResource : new ClassPathResource("/dist/static/index.html");
                     }
                 });
     }

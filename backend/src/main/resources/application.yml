@@ -1,5 +1,5 @@
 spa:
-  default-file: /static/index.html
+  default-file: dist/index.html
 
 # Swagger
 springfox:
@@ -27,7 +27,7 @@ spring:
   web:
     resources:
       add-mappings: false
-      static-locations: classpath:/static/
+      static-locations: classpath:/dist/
 
 logging:
   level:
@@ -47,3 +47,4 @@ spring:
       on-profile: set2
 server:
   port: 8082
+

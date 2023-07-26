@@ -19,22 +19,34 @@ repositories {
 apply plugin: 'com.github.node-gradle.node'
 
 node {
-	version = '14.17.6'
+	version = '18.16.1'
+	yarnVersion = '1.22.19'
 	download = true
+
 	nodeProjectDir = file("${project.projectDir}/../frontend")
-//	distBaseUrl = "https://nodejs.org/dist"
-//	npmInstallCommand = "install"
-//
-//	workDir = file("${project.projectDir}/.gradle/nodejs")
-//	npmWorkDir = file("${project.projectDir}/.gradle/npm")
-//
-//	nodeProxySettings = ProxySettings.SMART
+	distBaseUrl = "https://nodejs.org/dist"
+
+	workDir = file("${project.projectDir}/.gradle/nodejs")
+	yarnWorkDir = file("${project.projectDir}/yarn") // yarn을 설치할 폴더를 설정
 }
 
-task npmBuild(dependsOn: npmInstall, type: NpmTask) {
-	args = ['run', 'build']
+task yarnInstall(type: YarnTask) {
+	args = ['install']
 }
-//processResources.dependsOn 'npmBuild'
+
+task nodeModuleInstall {
+	doLast {
+		nodeSetup.execute() // node를 설치
+		yarnSetup.execute() // yarn을 설치
+		yarnInstall.execute() // package.json에 추가된 의존 모듈을 설치(yarn install)
+	}
+}
+
+task yarnBuild(dependsOn: yarnInstall, type: YarnTask) {
+	args = ['run', "build"]
+}
+
+//processResources.dependsOn 'yarnBuild'
 
 group = 'pokerface'
 version = '0.0.1-SNAPSHOT'
@@ -60,8 +72,8 @@ jar {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+//	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+//	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	compileOnly 'org.projectlombok:lombok'
@@ -74,8 +86,4 @@ dependencies {
 	implementation group: 'io.openvidu', name: 'openvidu-java-client', version: '2.28.0'
 	implementation group: 'com.auth0', name: 'java-jwt', version: '3.10.2'
 	implementation "org.springframework.boot:spring-boot-starter-actuator"
-}
-
-tasks.named('test') {
-	useJUnitPlatform()
 }
