@@ -1,6 +1,6 @@
 package pokerface.pokerface.domain;
 
-public class test22 {
+public class test3 {
     private int hello;
     private String test2;
 }
