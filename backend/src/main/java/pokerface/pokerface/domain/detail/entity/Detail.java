@@ -20,7 +20,9 @@ public class Detail extends BaseTime {
 
     private String gameLog;
 
-    private String ratingLog;
+    private Integer preRating;
+
+    private Integer postRating;
 
     @Enumerated(EnumType.STRING)
     private Result result;
