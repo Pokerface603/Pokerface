@@ -20,6 +20,7 @@ import static pokerface.pokerface.domain.detail.entity.Result.*;
 public class DetailService {
     private DetailRepository detailRepository;
 
+    // DB의 게임 로그를 라운드 로그로 분리하는 메소드
     public GameLogResponse convertGameLogtoData(String gameLog){
         return GameLogResponse.of(Pattern.compile("#")
                 .splitAsStream(gameLog)
@@ -27,6 +28,7 @@ public class DetailService {
                 .collect(Collectors.toList()));
     }
 
+    // 분리된 라운드 로그를 라운드 게임 정보로 변환하는 메소드
     public RoundLogResponse convertRoundLogtoData(String roundLog){
         StringTokenizer st = new StringTokenizer(roundLog, "$");
         return RoundLogResponse.of(Integer.parseInt(st.nextToken()),
@@ -37,6 +39,7 @@ public class DetailService {
                 getResult(st.nextToken()));
     }
 
+    // String -> Enum 변환 메소드
     public Result getResult(String result){
         if(result.equals(WIN.getValue())){
             return WIN;
