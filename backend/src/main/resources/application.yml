@@ -39,7 +39,7 @@ spring:
     activate:
       on-profile: set1
 server:
-  port: 9000
+  port: 8081
 ---
 spring:
   config:
