@@ -4,13 +4,13 @@ import lombok.Getter;
 
 @Getter
 public enum Result {
-    WIN("win"),
-    LOSE("lose"),
-    FORCE("force");
+    WIN(1),
+    LOSE(0),
+    FORCE(-1);
 
-    private final String value;
+    private final Integer value;
 
-    private Result(String value){
+    Result(Integer value){
         this.value = value;
     }
 }

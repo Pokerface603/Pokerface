@@ -13,12 +13,13 @@ import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static pokerface.pokerface.domain.detail.entity.Result.*;
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class DetailService {
     private DetailRepository detailRepository;
+    private static final Integer RATING_SCALE = 400;
+    private static final Integer RATING_WEIGHT = 60;
 
     // DB의 게임 로그를 라운드 로그로 분리하는 메소드
     public GameLogResponse convertGameLogtoData(String gameLog){
@@ -36,20 +37,12 @@ public class DetailService {
                         .splitAsStream(st.nextToken())
                         .map(Integer::parseInt)
                         .collect(Collectors.toList()),
-                getResult(st.nextToken()));
+                Result.valueOf(st.nextToken()));
     }
 
-    // String -> Enum 변환 메소드
-    public Result getResult(String result){
-        if(result.equals(WIN.getValue())){
-            return WIN;
-        }
-        if(result.equals(LOSE.getValue())){
-            return LOSE;
-        }
-        if(result.equals(FORCE.getValue())){
-            return FORCE;
-        }
-        return null;
+    public Integer calculateRating(Integer myRating, Integer opponentRating, Integer myPlays, Integer opponentPlays, Result result){
+        double expectRate = 1 / (Math.pow(10, (double)(opponentRating - myRating)/400) + 1);
+
+        return (int)Math.round(myRating + 60 * opponentPlays / (myPlays + opponentPlays) * (result.getValue() - expectRate));
     }
 }
