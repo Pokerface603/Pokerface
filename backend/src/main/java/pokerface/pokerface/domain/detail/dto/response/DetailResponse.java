@@ -1,6 +1,7 @@
 package pokerface.pokerface.domain.detail.dto.response;
 
 import lombok.Builder;
+import lombok.Getter;
 import pokerface.pokerface.domain.detail.entity.Detail;
 import pokerface.pokerface.domain.detail.entity.Result;
 
@@ -8,6 +9,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 @Builder
+@Getter
 public class DetailResponse {
     private final Long detailId;
 
@@ -16,7 +18,7 @@ public class DetailResponse {
     private final Integer postRating;
 
     @Enumerated(EnumType.STRING)
-    public Result result;
+    private Result result;
 
     private final GameLogResponse gameLogResponse;
 

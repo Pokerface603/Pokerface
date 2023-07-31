@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/members")
 @RequiredArgsConstructor
 public class MemberController {
-    private MemberService memberService;
+    private final MemberService memberService;
 
     @GetMapping
     public List<MemberResponse> memberListAll(){

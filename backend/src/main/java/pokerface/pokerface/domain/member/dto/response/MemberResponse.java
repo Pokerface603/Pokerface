@@ -1,9 +1,11 @@
 package pokerface.pokerface.domain.member.dto.response;
 
 import lombok.Builder;
+import lombok.Getter;
 import pokerface.pokerface.domain.member.entity.Member;
 
 @Builder
+@Getter
 public class MemberResponse {
     private final Long memberId;
 

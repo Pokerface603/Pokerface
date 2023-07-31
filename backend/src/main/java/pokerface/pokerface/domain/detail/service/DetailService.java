@@ -24,9 +24,9 @@ import java.util.stream.Collectors;
 @Transactional
 @RequiredArgsConstructor
 public class DetailService {
-    private DetailRepository detailRepository;
-    private HistoryRepository historyRepository;
-    private MemberRepository memberRepository;
+    private final DetailRepository detailRepository;
+    private final HistoryRepository historyRepository;
+    private final MemberRepository memberRepository;
 
     private static final Integer RATING_SCALE = 400;
     private static final Integer RATING_WEIGHT = 60;

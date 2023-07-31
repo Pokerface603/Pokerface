@@ -13,7 +13,7 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class MemberService {
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
     public List<Member> findAll(){
         return memberRepository.findAll();

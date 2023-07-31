@@ -15,7 +15,7 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class HistoryService {
-    private HistoryRepository historyRepository;
+    private final HistoryRepository historyRepository;
 
     public List<History> findAll(){
         return historyRepository.findAll();
