@@ -34,4 +34,13 @@ public class Detail extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    public Detail(String gameLog, Integer preRating, Integer postRating, String result, History history, Member member){
+        this.gameLog = gameLog;
+        this.preRating = preRating;
+        this.postRating = postRating;
+        this.result = Result.valueOf(result);
+        this.history = history;
+        this.member = member;
+    }
 }

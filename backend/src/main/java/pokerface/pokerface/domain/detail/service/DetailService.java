@@ -4,12 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
+import pokerface.pokerface.domain.detail.dto.request.DetailRequest;
 import pokerface.pokerface.domain.detail.dto.response.DetailResponse;
 import pokerface.pokerface.domain.detail.dto.response.GameLogResponse;
 import pokerface.pokerface.domain.detail.dto.response.RoundLogResponse;
 import pokerface.pokerface.domain.detail.entity.Detail;
 import pokerface.pokerface.domain.detail.entity.Result;
 import pokerface.pokerface.domain.detail.repository.DetailRepository;
+import pokerface.pokerface.domain.history.repository.HistoryRepository;
+import pokerface.pokerface.domain.member.repository.MemberRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,9 +25,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DetailService {
     private DetailRepository detailRepository;
+    private HistoryRepository historyRepository;
+    private MemberRepository memberRepository;
+
     private static final Integer RATING_SCALE = 400;
     private static final Integer RATING_WEIGHT = 60;
-
 
     public List<Detail> findAll(){
         return detailRepository.findAll();
@@ -34,14 +39,20 @@ public class DetailService {
         return detailRepository.findDetailByMemberId(memberId);
     }
 
-    public Optional<Detail> findById(Long detailId){
-        return detailRepository.findById(detailId);
+    public Detail findById(Long detailId){
+        return detailRepository.findById(detailId).orElseThrow(IllegalAccessError::new);
     }
 
     public DetailResponse getDetail(Long detailId){
-        Detail detail = detailRepository.findById(detailId).orElseThrow(IllegalAccessError::new);
+        Detail detail = findById(detailId);
 
         return DetailResponse.of(detail, convertGameLogtoData(detail.getGameLog()));
+    }
+
+    public void save(DetailRequest detailRequest, Long historyId, Long memberId){
+        detailRepository.save(detailRequest.toDetail(
+                historyRepository.findById(historyId).orElseThrow(IllegalAccessError::new),
+                memberRepository.findById(memberId).orElseThrow(IllegalAccessError::new)));
     }
 
     // DB의 게임 로그를 라운드 로그로 분리하는 메소드
