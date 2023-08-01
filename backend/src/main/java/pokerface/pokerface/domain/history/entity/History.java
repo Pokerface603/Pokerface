@@ -17,4 +17,8 @@ public class History extends BaseTime {
 
     @Enumerated(EnumType.STRING)
     private GameMode gameMode;
+
+    public History(String gameMode){
+        this.gameMode = GameMode.valueOf(gameMode);
+    }
 }
