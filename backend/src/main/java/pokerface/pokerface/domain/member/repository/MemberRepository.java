@@ -1,11 +1,11 @@
-package pokerface.pokerface.domain.history.repository;
+package pokerface.pokerface.domain.member.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import pokerface.pokerface.domain.history.entity.History;
+import pokerface.pokerface.domain.member.entity.Member;
 
 @Repository
 @Transactional(readOnly = true)
-public interface HistoryRepository extends JpaRepository<History, Long> {
+public interface MemberRepository extends JpaRepository<Member, Long> {
 }

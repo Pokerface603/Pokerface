@@ -1,11 +1,14 @@
 package pokerface.pokerface.domain.detail.repository;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import pokerface.pokerface.domain.detail.entity.Detail;
+
+import java.util.List;
 
 @Repository
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class DetailRepository {
+public interface DetailRepository extends JpaRepository<Detail, Long> {
+    List<Detail> findDetailByMemberId(Long memberId);
 }
