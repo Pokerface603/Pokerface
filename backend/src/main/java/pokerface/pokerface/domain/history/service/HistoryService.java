@@ -22,6 +22,9 @@ public class HistoryService {
     private final DetailService detailService;
     private final MemberService memberService;
 
+    private static final Integer RATING_SCALE = 400;
+    private static final Integer RATING_WEIGHT = 60;
+
     public List<History> findAll(){
         return historyRepository.findAll();
     }
@@ -39,9 +42,11 @@ public class HistoryService {
         detailService.save(new DetailRequest(historyRequest.getGameLog(), calculateRating(loser, winner, 0), "LOSE"), history, loser);
     }
 
-    public Integer calculateRating(Member player, Member opponent, Integer K){
-        double expectRate = 1 / (Math.pow(10, (double)(opponent.getRating() - player.getRating())/400) + 1);
+    public Integer calculateRating(Member player, Member opponent, Integer result){
+        double expectRate = 1 / (Math.pow(10, (double)(opponent.getRating() - player.getRating())/RATING_SCALE) + 1);
+        Long playerCount = detailService.countByMemberId(player.getId());
+        Long opponentCount = detailService.countByMemberId(opponent.getId());
 
-        return (int)Math.round(player.getRating() + 60 * detailService.countByMemberId(opponent.getId()) / (detailService.countByMemberId(player.getId()) + detailService.countByMemberId(opponent.getId())) * (K - expectRate));
+        return (int)Math.round(player.getRating() + (result - expectRate) * (RATING_WEIGHT * opponentCount) / (playerCount + opponentCount));
     }
 }

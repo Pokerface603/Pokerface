@@ -12,9 +12,7 @@ import pokerface.pokerface.domain.detail.entity.Detail;
 import pokerface.pokerface.domain.detail.entity.Result;
 import pokerface.pokerface.domain.detail.repository.DetailRepository;
 import pokerface.pokerface.domain.history.entity.History;
-import pokerface.pokerface.domain.history.repository.HistoryRepository;
 import pokerface.pokerface.domain.member.entity.Member;
-import pokerface.pokerface.domain.member.repository.MemberRepository;
 
 import java.util.List;
 import java.util.StringTokenizer;
@@ -26,11 +24,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DetailService {
     private final DetailRepository detailRepository;
-    private final HistoryRepository historyRepository;
-    private final MemberRepository memberRepository;
-
-    private static final Integer RATING_SCALE = 400;
-    private static final Integer RATING_WEIGHT = 60;
 
     public List<Detail> findAll(){
         return detailRepository.findAll();
