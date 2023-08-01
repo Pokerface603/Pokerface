@@ -15,7 +15,6 @@ import pokerface.pokerface.domain.history.repository.HistoryRepository;
 import pokerface.pokerface.domain.member.repository.MemberRepository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
