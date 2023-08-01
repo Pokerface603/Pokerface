@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import pokerface.pokerface.domain.detail.dto.request.DetailRequest;
 import pokerface.pokerface.domain.detail.dto.response.DetailResponse;
 import pokerface.pokerface.domain.detail.dto.response.ExpectRatingResponse;
-import pokerface.pokerface.domain.detail.entity.Detail;
+import pokerface.pokerface.domain.detail.dto.response.SimpleDetailResponse;
 import pokerface.pokerface.domain.detail.service.DetailService;
 
 import java.util.List;
@@ -29,9 +29,9 @@ public class DetailController {
     }
 
     @GetMapping("/member/{memberId}")
-    public List<DetailResponse> detailListByMemberId(@PathVariable Long memberId){
+    public List<SimpleDetailResponse> detailListByMemberId(@PathVariable Long memberId){
         return detailService.findByMemberId(memberId).stream()
-                .map(detail -> DetailResponse.of(detail, detailService.convertGameLogtoData(detail.getGameLog())))
+                .map(SimpleDetailResponse::of)
                 .collect(Collectors.toList());
     }
 
