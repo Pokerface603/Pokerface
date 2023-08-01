@@ -13,11 +13,14 @@ public class MemberResponse {
 
     private final String nickname;
 
+    private final Integer rating;
+
     public static MemberResponse of(Member member){
         return MemberResponse.builder()
                 .memberId(member.getId())
                 .email(member.getEmail())
                 .nickname(member.getNickname())
+                .rating(member.getRating())
                 .build();
     }
 }

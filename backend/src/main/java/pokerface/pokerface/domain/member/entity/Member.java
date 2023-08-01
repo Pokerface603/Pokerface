@@ -36,9 +36,10 @@ public class Member extends BaseTime {
 
     private String status;
 
-    public Member(String email, String nickname, String userPassword){
+    public Member(String email, String nickname, String userPassword, Integer rating){
         this.email = email;
         this.nickname = nickname;
         this.userPassword = userPassword;
+        this.rating = rating;
     }
 }

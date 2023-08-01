@@ -13,6 +13,12 @@ import pokerface.pokerface.domain.history.entity.History;
 public class HistoryRequest {
     private String gameMode;
 
+    private String gameLog;
+
+    private Long winner;
+
+    private Long loser;
+
     public History toHistory(){
         return new History(gameMode);
     }

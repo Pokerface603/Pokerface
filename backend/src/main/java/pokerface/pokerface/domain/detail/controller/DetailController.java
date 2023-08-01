@@ -40,10 +40,11 @@ public class DetailController {
         return detailService.getDetail(detailId);
     }
 
-    @PostMapping
-    public void detailRegistry(@RequestBody @Validated DetailRequest detailRequest, Long historyId, Long memberId){
-        detailService.save(detailRequest, historyId, memberId);
-    }
+    // history 에서 호출하는 방식으로 변경
+//    @PostMapping
+//    public void detailRegistry(@RequestBody @Validated DetailRequest detailRequest, Long historyId, Long memberId){
+//        detailService.save(detailRequest, historyId, memberId);
+//    }
 
 //    @GetMapping
 //    public ExpectRatingResponse expectRating(@PathVariable Long memberId, @PathVariable Long opponentId ){

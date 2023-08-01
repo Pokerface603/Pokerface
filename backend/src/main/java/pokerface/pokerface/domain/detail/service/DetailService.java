@@ -11,6 +11,7 @@ import pokerface.pokerface.domain.detail.dto.response.RoundLogResponse;
 import pokerface.pokerface.domain.detail.entity.Detail;
 import pokerface.pokerface.domain.detail.entity.Result;
 import pokerface.pokerface.domain.detail.repository.DetailRepository;
+import pokerface.pokerface.domain.history.entity.History;
 import pokerface.pokerface.domain.history.repository.HistoryRepository;
 import pokerface.pokerface.domain.member.repository.MemberRepository;
 
@@ -48,9 +49,8 @@ public class DetailService {
         return DetailResponse.of(detail, convertGameLogtoData(detail.getGameLog()));
     }
 
-    public void save(DetailRequest detailRequest, Long historyId, Long memberId){
-        detailRepository.save(detailRequest.toDetail(
-                historyRepository.findById(historyId).orElseThrow(IllegalAccessError::new),
+    public void save(DetailRequest detailRequest, History history, Long memberId){
+        detailRepository.save(detailRequest.toDetail(history,
                 memberRepository.findById(memberId).orElseThrow(IllegalAccessError::new)));
     }
 
