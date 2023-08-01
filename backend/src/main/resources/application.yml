@@ -1,23 +1,9 @@
-server:
-  address: localhost
-  servlet:
-    encoding:
-      force: 'true'
-      charset: UTF-8
-      enabled: 'true'
-    contextPath: /
-  port: '8080'
-build:
-  date: '@build.date@'
-
-spa:
-  default-file: /static/index.html
-
 # Swagger
 springfox:
   documentation:
     swagger:
       use-model-v3: 'false'
+
 
 spring:
   jpa:
@@ -35,11 +21,22 @@ spring:
     password: DkyeFRtWLR
   mvc:
     throw-exception-if-no-handler-found: true
-  web:
-    resources:
-      add-mappings: false
-      static-locations: classpath:/static/
 
 logging:
   level:
     org.hibernate.sql: debug
+
+---
+spring:
+  config:
+    activate:
+      on-profile: set1
+server:
+  port: 8081
+---
+spring:
+  config:
+    activate:
+      on-profile: set2
+server:
+  port: 8082

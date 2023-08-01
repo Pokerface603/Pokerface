@@ -5,9 +5,9 @@ import org.springframework.stereotype.Service;
 import pokerface.pokerface.domain.member.dto.request.MemberRequest;
 import pokerface.pokerface.domain.member.entity.Member;
 import pokerface.pokerface.domain.member.repository.MemberRepository;
-
 import javax.transaction.Transactional;
 import java.util.List;
+
 
 @Service
 @Transactional
