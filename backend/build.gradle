@@ -1,52 +1,13 @@
-buildscript {
-	dependencies {
-		classpath "com.github.node-gradle:gradle-node-plugin:3.1.0"
-	}
-}
-
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.13'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
-	id "com.github.node-gradle.node" version "3.0.1"
 }
 
 repositories {
 	mavenCentral()
 	gradlePluginPortal()
 }
-
-apply plugin: 'com.github.node-gradle.node'
-
-node {
-	version = '18.16.1'
-	yarnVersion = '1.22.19'
-	download = true
-
-	nodeProjectDir = file("${project.projectDir}/../frontend")
-	distBaseUrl = "https://nodejs.org/dist"
-
-	workDir = file("${project.projectDir}/.gradle/nodejs")
-	yarnWorkDir = file("${project.projectDir}/yarn") // yarn을 설치할 폴더를 설정
-}
-
-task yarnInstall(type: YarnTask) {
-	args = ['install']
-}
-
-task nodeModuleInstall {
-	doLast {
-		nodeSetup.execute() // node를 설치
-		yarnSetup.execute() // yarn을 설치
-		yarnInstall.execute() // package.json에 추가된 의존 모듈을 설치(yarn install)
-	}
-}
-
-task yarnBuild(dependsOn: yarnInstall, type: YarnTask) {
-	args = ['run', "build"]
-}
-
-//processResources.dependsOn 'yarnBuild'
 
 group = 'pokerface'
 version = '0.0.1-SNAPSHOT'

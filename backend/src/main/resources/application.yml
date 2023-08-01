@@ -1,6 +1,3 @@
-spa:
-  default-file: dist/index.html
-
 # Swagger
 springfox:
   documentation:
@@ -24,10 +21,6 @@ spring:
     password: DkyeFRtWLR
   mvc:
     throw-exception-if-no-handler-found: true
-  web:
-    resources:
-      add-mappings: false
-      static-locations: classpath:/dist/
 
 logging:
   level:
