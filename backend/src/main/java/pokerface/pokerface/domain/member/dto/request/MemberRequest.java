@@ -1,19 +1,21 @@
 package pokerface.pokerface.domain.member.dto.request;
 
-import com.sun.istack.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import pokerface.pokerface.domain.member.entity.Member;
 
+@Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MemberRequest {
-    @NotNull
-    String email;
+    private String email;
 
-    @NotNull
-    String nickname;
+    private String nickname;
 
-    @NotNull
-    String userPassword;
+    private String userPassword;
 
     public Member toMember(){
         return new Member(email, nickname, userPassword);

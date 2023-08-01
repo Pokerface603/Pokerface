@@ -10,6 +10,7 @@ import pokerface.pokerface.domain.detail.entity.Detail;
 import pokerface.pokerface.domain.detail.service.DetailService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static pokerface.pokerface.domain.detail.entity.Result.LOSE;
 import static pokerface.pokerface.domain.detail.entity.Result.WIN;
@@ -21,13 +22,17 @@ public class DetailController {
     private final DetailService detailService;
 
     @GetMapping
-    public List<Detail> detailListAll(){
-        return detailService.findAll();
+    public List<DetailResponse> detailListAll(){
+        return detailService.findAll().stream()
+                .map(detail -> DetailResponse.of(detail, detailService.convertGameLogtoData(detail.getGameLog())))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{memberId}")
-    public List<Detail> detailListByMemberId(@PathVariable Long memberId){
-        return detailService.findByMemberId(memberId);
+    public List<DetailResponse> detailListByMemberId(@PathVariable Long memberId){
+        return detailService.findByMemberId(memberId).stream()
+                .map(detail -> DetailResponse.of(detail, detailService.convertGameLogtoData(detail.getGameLog())))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{detailId}")
