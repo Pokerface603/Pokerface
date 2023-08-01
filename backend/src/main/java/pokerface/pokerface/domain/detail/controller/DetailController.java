@@ -28,7 +28,7 @@ public class DetailController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/{memberId}")
+    @GetMapping("/member/{memberId}")
     public List<DetailResponse> detailListByMemberId(@PathVariable Long memberId){
         return detailService.findByMemberId(memberId).stream()
                 .map(detail -> DetailResponse.of(detail, detailService.convertGameLogtoData(detail.getGameLog())))
