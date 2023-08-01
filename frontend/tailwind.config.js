@@ -3,7 +3,7 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        "parchment-box": "url('/src/assets/images/parchment.jpg')",
+        "parchment-box": "url('/src/assets/images/parchment.svg')",
       },
     },
   },
