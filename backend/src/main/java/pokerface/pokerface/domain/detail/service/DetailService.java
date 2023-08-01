@@ -13,6 +13,7 @@ import pokerface.pokerface.domain.detail.entity.Result;
 import pokerface.pokerface.domain.detail.repository.DetailRepository;
 import pokerface.pokerface.domain.history.entity.History;
 import pokerface.pokerface.domain.history.repository.HistoryRepository;
+import pokerface.pokerface.domain.member.entity.Member;
 import pokerface.pokerface.domain.member.repository.MemberRepository;
 
 import java.util.List;
@@ -49,9 +50,12 @@ public class DetailService {
         return DetailResponse.of(detail, convertGameLogtoData(detail.getGameLog()));
     }
 
-    public void save(DetailRequest detailRequest, History history, Long memberId){
-        detailRepository.save(detailRequest.toDetail(history,
-                memberRepository.findById(memberId).orElseThrow(IllegalAccessError::new)));
+    public void save(DetailRequest detailRequest, History history, Member member){
+        detailRepository.save(detailRequest.toDetail(history, member));
+    }
+
+    public Long countByMemberId(Long memberId){
+        return detailRepository.countByMemberId(memberId);
     }
 
     // DB의 게임 로그를 라운드 로그로 분리하는 메소드
@@ -71,11 +75,5 @@ public class DetailService {
                         .map(Integer::parseInt)
                         .collect(Collectors.toList()),
                 Result.valueOf(st.nextToken()));
-    }
-
-    public Integer calculateRating(Integer myRating, Integer opponentRating, Integer myPlays, Integer opponentPlays, Result result){
-        double expectRate = 1 / (Math.pow(10, (double)(opponentRating - myRating)/400) + 1);
-
-        return (int)Math.round(myRating + 60 * opponentPlays / (myPlays + opponentPlays) * (result.getValue() - expectRate));
     }
 }

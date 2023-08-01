@@ -40,6 +40,11 @@ public class DetailController {
         return detailService.getDetail(detailId);
     }
 
+    @GetMapping("/count/{memberId}")
+    public Long countByMemberId(@PathVariable Long memberId){
+        return detailService.countByMemberId(memberId);
+    }
+
     // history 에서 호출하는 방식으로 변경
 //    @PostMapping
 //    public void detailRegistry(@RequestBody @Validated DetailRequest detailRequest, Long historyId, Long memberId){

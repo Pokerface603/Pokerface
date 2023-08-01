@@ -11,4 +11,6 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface DetailRepository extends JpaRepository<Detail, Long> {
     List<Detail> findDetailByMemberId(Long memberId);
+
+    Long countByMemberId(Long memberId);
 }
