@@ -1,0 +1,19 @@
+@font-face {
+  font-family: "Unchained-Regular";
+  src: url("./unchained/Unchained-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Unchained-RegularShadow";
+  src: url("./unchained/Unchained-RegularShadow.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Unchained-Spaghetti";
+  src: url("./unchained/Unchained-Spaghetti.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Unchained-Spaghettuitalic";
+  src: url("./unchained/Unchained-SpaghettiItalic.ttf") format("truetype");
+}

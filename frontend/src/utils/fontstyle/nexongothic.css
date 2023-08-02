@@ -1,0 +1,20 @@
+@font-face {
+  font-family: "NexonGothic";
+  src: url("./nexon/NEXON\ Lv2\ Gothic\ Medium.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "NexonGothic";
+  src: url("./nexon/NEXON\ Lv2\ Gothic\ Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "NexonGothicLight";
+  src: url("./nexon/NEXON\ Lv2\ Gothic\ Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
