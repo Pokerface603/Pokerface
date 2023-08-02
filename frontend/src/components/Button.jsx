@@ -1,11 +1,32 @@
-const Button = ({ label, onClick, icon }) => {
+const Button = ({
+  width,
+  height,
+  backgroundColor,
+  fontSize,
+  color,
+  label,
+  onClick,
+  icon,
+}) => {
   return (
-    <div>
-      <button onClick={onClick} type="submit" className="bg-orange-400 hover:bg-orange-500 text-white font-bold py-1 px-8">
-        {icon}
-        <span>{label}</span>
+    <>
+      <button
+        onClick={onClick}
+        className="flex items-center justify-center gap-1 p-2 hover:brightness-90"
+        style={{
+          width,
+          height,
+          background: `${backgroundColor}`,
+          fontSize,
+          fontFamily: "NexonGothic",
+          fontWeight: "bold",
+          color,
+        }}
+      >
+          {icon}
+          <span>{label}</span>
       </button>
-    </div>
+    </>
   );
 };
 
