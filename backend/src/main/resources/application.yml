@@ -1,3 +1,7 @@
+server:
+  servlet:
+    context-path: /api
+
 # Swagger
 springfox:
   documentation:
@@ -15,10 +19,10 @@ spring:
         default_batch_fetch_size: 100
         show_sql: true
   datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://stg-yswa-kr-practice-db-master.mariadb.database.azure.com:3306/S09P12A603
-    username: S09P12A603
-    password: DkyeFRtWLR
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://52.79.146.194:3306/pokerface?characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: 1234
   mvc:
     throw-exception-if-no-handler-found: true
 
@@ -33,6 +37,8 @@ spring:
       on-profile: set1
 server:
   port: 8081
+  servlet:
+    context-path: /api
 ---
 spring:
   config:
@@ -40,3 +46,5 @@ spring:
       on-profile: set2
 server:
   port: 8082
+  servlet:
+    context-path: /api
