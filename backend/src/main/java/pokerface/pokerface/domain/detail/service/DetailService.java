@@ -11,11 +11,10 @@ import pokerface.pokerface.domain.detail.dto.response.RoundLogResponse;
 import pokerface.pokerface.domain.detail.entity.Detail;
 import pokerface.pokerface.domain.detail.entity.Result;
 import pokerface.pokerface.domain.detail.repository.DetailRepository;
-import pokerface.pokerface.domain.history.repository.HistoryRepository;
-import pokerface.pokerface.domain.member.repository.MemberRepository;
+import pokerface.pokerface.domain.history.entity.History;
+import pokerface.pokerface.domain.member.entity.Member;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -25,11 +24,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DetailService {
     private final DetailRepository detailRepository;
-    private final HistoryRepository historyRepository;
-    private final MemberRepository memberRepository;
-
-    private static final Integer RATING_SCALE = 400;
-    private static final Integer RATING_WEIGHT = 60;
 
     public List<Detail> findAll(){
         return detailRepository.findAll();
@@ -49,10 +43,12 @@ public class DetailService {
         return DetailResponse.of(detail, convertGameLogtoData(detail.getGameLog()));
     }
 
-    public void save(DetailRequest detailRequest, Long historyId, Long memberId){
-        detailRepository.save(detailRequest.toDetail(
-                historyRepository.findById(historyId).orElseThrow(IllegalAccessError::new),
-                memberRepository.findById(memberId).orElseThrow(IllegalAccessError::new)));
+    public void save(DetailRequest detailRequest, History history, Member member){
+        detailRepository.save(detailRequest.toDetail(history, member));
+    }
+
+    public Long countByMemberId(Long memberId){
+        return detailRepository.countByMemberId(memberId);
     }
 
     // DB의 게임 로그를 라운드 로그로 분리하는 메소드
@@ -72,11 +68,5 @@ public class DetailService {
                         .map(Integer::parseInt)
                         .collect(Collectors.toList()),
                 Result.valueOf(st.nextToken()));
-    }
-
-    public Integer calculateRating(Integer myRating, Integer opponentRating, Integer myPlays, Integer opponentPlays, Result result){
-        double expectRate = 1 / (Math.pow(10, (double)(opponentRating - myRating)/400) + 1);
-
-        return (int)Math.round(myRating + 60 * opponentPlays / (myPlays + opponentPlays) * (result.getValue() - expectRate));
     }
 }

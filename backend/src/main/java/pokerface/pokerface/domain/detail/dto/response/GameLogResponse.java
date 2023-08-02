@@ -5,7 +5,7 @@ import java.util.List;
 
 @Builder
 public class GameLogResponse {
-    public final List<RoundLogResponse> roundLogResponses;
+    private final List<RoundLogResponse> roundLogResponses;
 
     public static GameLogResponse of(List<RoundLogResponse> roundLogResponses){
         return new GameLogResponse(roundLogResponses);

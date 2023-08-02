@@ -16,13 +16,11 @@ import pokerface.pokerface.domain.member.entity.Member;
 public class DetailRequest {
     private String gameLog;
 
-    private Integer preRating;
-
     private Integer postRating;
 
     private String result;
 
     public Detail toDetail(History history, Member member){
-        return new Detail(gameLog, preRating, postRating, result, history, member);
+        return new Detail(gameLog, member.getRating(), postRating, result, history, member);
     }
 }

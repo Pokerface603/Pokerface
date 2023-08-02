@@ -17,7 +17,9 @@ public class MemberRequest {
 
     private String userPassword;
 
+    private Integer rating;
+
     public Member toMember(){
-        return new Member(email, nickname, userPassword);
+        return new Member(email, nickname, userPassword, rating);
     }
 }
