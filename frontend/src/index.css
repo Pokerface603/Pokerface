@@ -1,3 +1,65 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: "NexonGothic";
+  src: url("./assets/fonts/nexon/NEXON\ Lv2\ Gothic\ Medium.ttf")
+    format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "NexonGothic";
+  src: url("./assets/fonts/nexon/NEXON\ Lv2\ Gothic\ Bold.ttf")
+    format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "NexonGothicLight";
+  src: url("./assets/fonts/nexon/NEXON\ Lv2\ Gothic\ Light.ttf")
+    format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Unchained-Regular";
+  src: url("./assets/fonts/unchained/Unchained-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Unchained-RegularShadow";
+  src: url("./assets/fonts/unchained/Unchained-RegularShadow.ttf")
+    format("truetype");
+}
+
+@font-face {
+  font-family: "Unchained-Spaghetti";
+  src: url("./assets/fonts/unchained/Unchained-Spaghetti.ttf")
+    format("truetype");
+}
+
+@font-face {
+  font-family: "Unchained-Spaghettuitalic";
+  src: url("./assets/fonts/unchained/Unchained-SpaghettiItalic.ttf")
+    format("truetype");
+}
+
+@font-face {
+  font-family: "BouWestern";
+  src: url("./assets/fonts/BouWestern.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "VanillaWhale";
+  src: url("./assets/fonts/vanilla\ whale.otf") format("truetype");
+}
+
+@font-face {
+  font-family: "YangJin";
+  src: url("./assets/fonts/YangJin.ttf") format("truetype");
+}
