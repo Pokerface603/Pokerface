@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --red: #B22D36;
+  --ocher: #C59C70;
+  --brown_dark: #482613;
+  --ocher_light: #DFD2BA;
+  --brown: #794626;
+  --orange: #E58632;
+  --green: #4c9c61;
+  --blue: #13A7E6;
+}
+
 @font-face {
   font-family: "NexonGothic";
   src: url("./assets/fonts/nexon/NEXON\ Lv2\ Gothic\ Medium.ttf")
