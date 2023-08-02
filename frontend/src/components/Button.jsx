@@ -1,7 +1,7 @@
 const Button = ({
   width,
   height,
-  backgroundColor,
+  background,
   fontSize,
   color,
   label,
@@ -16,7 +16,7 @@ const Button = ({
         style={{
           width,
           height,
-          background: `${backgroundColor}`,
+          background,
           fontSize,
           fontFamily: "NexonGothic",
           fontWeight: "bold",
