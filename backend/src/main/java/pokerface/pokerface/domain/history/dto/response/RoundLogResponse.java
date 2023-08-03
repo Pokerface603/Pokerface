@@ -1,6 +1,7 @@
 package pokerface.pokerface.domain.history.dto.response;
 
 import lombok.Builder;
+import lombok.Getter;
 import pokerface.pokerface.domain.detail.entity.Result;
 
 import javax.persistence.EnumType;
@@ -8,6 +9,7 @@ import javax.persistence.Enumerated;
 import java.util.List;
 
 @Builder
+@Getter
 public class RoundLogResponse {
     private final Integer hostCardNum;
 
