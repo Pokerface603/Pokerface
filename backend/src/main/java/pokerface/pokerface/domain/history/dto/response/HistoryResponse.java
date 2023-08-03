@@ -16,10 +16,19 @@ public class HistoryResponse {
     @Enumerated(EnumType.STRING)
     private final GameMode gameMode;
 
-    public static HistoryResponse of(History history) {
+    private final GameLogResponse gameLogResponse;
+
+    private final Long hostId;
+
+    private final Long guestId;
+
+    public static HistoryResponse of(History history, GameLogResponse gameLogResponse) {
         return HistoryResponse.builder()
                 .historyId(history.getId())
                 .gameMode(history.getGameMode())
+                .gameLogResponse(gameLogResponse)
+                .hostId(history.getHost().getId())
+                .guestId(history.getGuest().getId())
                 .build();
     }
 }

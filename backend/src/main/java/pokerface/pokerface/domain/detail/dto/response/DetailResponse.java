@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import pokerface.pokerface.domain.detail.entity.Detail;
 import pokerface.pokerface.domain.detail.entity.Result;
+import pokerface.pokerface.domain.history.entity.GameMode;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -20,15 +21,18 @@ public class DetailResponse {
     @Enumerated(EnumType.STRING)
     private Result result;
 
-    private final GameLogResponse gameLogResponse;
+    private final Long historyId;
 
-    public static DetailResponse of(Detail detail, GameLogResponse gameLogResponse){
+    private final GameMode gameMode;
+
+    public static DetailResponse of(Detail detail){
         return DetailResponse.builder()
                 .detailId(detail.getId())
                 .preRating(detail.getPreRating())
                 .postRating(detail.getPostRating())
                 .result(detail.getResult())
-                .gameLogResponse(gameLogResponse)
+                .historyId(detail.getHistory().getId())
+                .gameMode(detail.getHistory().getGameMode())
                 .build();
     }
 }
