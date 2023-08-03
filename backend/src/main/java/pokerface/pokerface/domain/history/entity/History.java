@@ -18,7 +18,20 @@ public class History extends BaseTime {
     @Enumerated(EnumType.STRING)
     private GameMode gameMode;
 
-    public History(String gameMode){
+    private String gameLog;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member host;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member guest;
+
+    public History(String gameMode, String gameLog, Member host, Member guest){
         this.gameMode = GameMode.valueOf(gameMode);
+        this.gameLog = gameLog;
+        this.host = host;
+        this.guest = guest;
     }
 }
