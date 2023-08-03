@@ -13,4 +13,11 @@ public enum Result {
     Result(Integer value){
         this.value = value;
     }
+
+    public Result reverse(){
+        if(this.equals(WIN)){
+            return LOSE;
+        }
+        return WIN;
+    }
 }
