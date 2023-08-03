@@ -17,6 +17,8 @@ public class Member extends BaseTime {
 
     private String email;
 
+    private String userPassword;
+
     private String nickname;
 
     private Integer rating;
@@ -33,4 +35,11 @@ public class Member extends BaseTime {
     private String userRole;
 
     private String status;
+
+    public Member(String email, String nickname, String userPassword, Integer rating){
+        this.email = email;
+        this.nickname = nickname;
+        this.userPassword = userPassword;
+        this.rating = rating;
+    }
 }

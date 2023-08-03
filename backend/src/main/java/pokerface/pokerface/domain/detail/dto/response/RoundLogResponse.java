@@ -9,12 +9,12 @@ import java.util.List;
 
 @Builder
 public class RoundLogResponse {
-    public final Integer cardNum;
+    private final Integer cardNum;
 
-    public final List<Integer> battingMoney;
+    private final List<Integer> battingMoney;
 
     @Enumerated(EnumType.STRING)
-    public Result result;
+    private Result result;
 
     public static RoundLogResponse of(Integer cardNum, List<Integer> battingMoney, Result result){
         return new RoundLogResponse(cardNum, battingMoney, result);
