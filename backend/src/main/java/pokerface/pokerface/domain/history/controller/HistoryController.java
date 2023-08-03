@@ -19,13 +19,13 @@ public class HistoryController {
     @GetMapping
     public List<HistoryResponse> historyListAll(){
         return historyService.findAll().stream()
-                .map(HistoryResponse::of)
+                .map(history -> HistoryResponse.of(history, historyService.convertGameLogtoData(history.getGameLog())))
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{historyId}")
-    public HistoryResponse getHistoryInfo(@PathVariable Long historyId){
-        return HistoryResponse.of(historyService.findById(historyId));
+    public HistoryResponse getHistory(@PathVariable Long historyId){
+        return historyService.getHistory(historyId);
     }
 
     @PostMapping
