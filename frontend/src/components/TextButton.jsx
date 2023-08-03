@@ -1,14 +1,16 @@
 import React from "react";
+import kakaoLogo from "../assets/images/kakao-logo.svg";
 
 const TextButton = ({ width, height, fontSize, text, onClick }) => {
+  const font = text === "kakao" ? "Unchained-Spaghetti" : "NexonGothic";
+
   return (
     <div
-      className="text-center cursor-pointer hover:underline hover:shadow-2xl hover:opacity-75"
+      className="flex text-center justify-center items-center cursor-pointer hover:shadow-2xl hover:underline hover:opacity-75"
       style={{ width, height }}
       onClick={onClick}>
-      <span
-        className=" align-bottom"
-        style={{ fontFamily: "NexonGothic", fontSize }}>
+      {text === "kakao" && <img src={kakaoLogo} alt="l" />}
+      <span className=" align-bottom" style={{ fontFamily: font, fontSize }}>
         {text}
       </span>
     </div>
