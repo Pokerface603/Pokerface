@@ -1,19 +1,12 @@
 package pokerface.pokerface.domain.detail.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import pokerface.pokerface.domain.detail.dto.request.DetailRequest;
 import pokerface.pokerface.domain.detail.dto.response.DetailResponse;
-import pokerface.pokerface.domain.detail.dto.response.ExpectRatingResponse;
-import pokerface.pokerface.domain.detail.dto.response.SimpleDetailResponse;
 import pokerface.pokerface.domain.detail.service.DetailService;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static pokerface.pokerface.domain.detail.entity.Result.LOSE;
-import static pokerface.pokerface.domain.detail.entity.Result.WIN;
 
 @RestController
 @RequestMapping("/details")
@@ -24,14 +17,14 @@ public class DetailController {
     @GetMapping
     public List<DetailResponse> detailListAll(){
         return detailService.findAll().stream()
-                .map(detail -> DetailResponse.of(detail, detailService.convertGameLogtoData(detail.getGameLog())))
+                .map(DetailResponse::of)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/member/{memberId}")
-    public List<SimpleDetailResponse> detailListByMemberId(@PathVariable Long memberId){
+    public List<DetailResponse> detailListByMemberId(@PathVariable Long memberId){
         return detailService.findByMemberId(memberId).stream()
-                .map(SimpleDetailResponse::of)
+                .map(DetailResponse::of)
                 .collect(Collectors.toList());
     }
 
@@ -43,6 +36,11 @@ public class DetailController {
     @GetMapping("/count/{memberId}")
     public Long countByMemberId(@PathVariable Long memberId){
         return detailService.countByMemberId(memberId);
+    }
+
+    @GetMapping("/count/{memberId}/win")
+    public Long countWinByMemberId(@PathVariable Long memberId){
+        return detailService.countWinByMemberId(memberId);
     }
 
     // history 에서 호출하는 방식으로 변경
