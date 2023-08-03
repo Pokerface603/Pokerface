@@ -1,4 +1,4 @@
-package pokerface.pokerface.config;
+package pokerface.pokerface.config.profile;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;

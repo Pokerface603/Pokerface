@@ -1,10 +1,13 @@
 package pokerface.pokerface.domain.room.repository;
 
-
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 import pokerface.pokerface.domain.room.entity.Room;
 
-public interface RoomRepository extends JpaRepository<Room, Long> {
+import java.util.Optional;
+
+public interface RoomRepository extends CrudRepository<Room, Long> {
+
+    Optional<Room> findRoomBySessionId(String sessionId);
 
 }
 

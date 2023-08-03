@@ -8,6 +8,7 @@ build/
 ### properties ###
 openvidu.yml
 mysql.yml
+redis.yml
 
 ### STS ###
 .apt_generated
