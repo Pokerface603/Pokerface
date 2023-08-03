@@ -1,10 +1,8 @@
 import React from "react";
 
-const Parchment = ({ width, height, children, style }) => {
+const Parchment = ({ style, children }) => {
   return (
-    <div
-      className="bg-parchment-box bg-cover"
-      style={{ width, height, ...style }}>
+    <div className="bg-parchment-box bg-cover" style={{ ...style }}>
       {children}
     </div>
   );
