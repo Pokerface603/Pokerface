@@ -1,4 +1,4 @@
-import TierBoxSvg from "../utils/TierBoxSvg";
+import TierBoxSvg from "./constants/TierBoxSvg";
 
 const TierBox = ({ tier, width, height }) => {
   return (
