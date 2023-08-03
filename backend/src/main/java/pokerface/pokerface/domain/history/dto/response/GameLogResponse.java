@@ -1,4 +1,4 @@
-package pokerface.pokerface.domain.detail.dto.response;
+package pokerface.pokerface.domain.history.dto.response;
 
 import lombok.Builder;
 import java.util.List;
