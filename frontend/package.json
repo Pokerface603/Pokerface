@@ -19,8 +19,9 @@
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "start": "craco start",
-    "build": "craco build",
+    "start": "env-cmd -f .env.development craco start",
+    "start:prod": "env-cmd -f .env.production craco start",
+    "build": "env-cmd -f .env.production craco build",
     "test": "craco test",
     "eject": "craco eject"
   },
