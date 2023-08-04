@@ -17,8 +17,6 @@ import java.util.List;
 @ToString
 public class Room {
     @Id
-    private Long id;
-
     private String sessionId;
 
     private String title;

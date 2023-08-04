@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class RoomInfoRes {
-    private Long id;
-
     private String sessionId;
 
     private String title;

@@ -1,6 +1,5 @@
 package pokerface.pokerface.domain.room.entity;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,6 +8,8 @@ import pokerface.pokerface.config.error.RestException;
 import pokerface.pokerface.config.error.errorcode.ErrorCode;
 import pokerface.pokerface.domain.history.entity.GameMode;
 import pokerface.pokerface.domain.member.entity.Member;
+import pokerface.pokerface.domain.member.entity.Tier;
+import pokerface.pokerface.domain.member.repository.MemberRepository;
 import pokerface.pokerface.domain.room.dto.request.RoomCreateReq;
 import pokerface.pokerface.domain.room.repository.RoomRepository;
 import pokerface.pokerface.domain.room.service.RoomService;
@@ -27,17 +28,23 @@ class RoomTest {
     @Autowired
     private RoomRepository roomRepository;
 
+    @Autowired
+    private MemberRepository memberRepository;
+
     @Test
-    @Transactional
+//    @Transactional
     void saveRoom() {
-        Member member1 = new Member("test1", "1234", "jio");
-        Member member2 = new Member("test2", "1234", "seo");
+        Member member1 = new Member("test1", "1234", "jio", Tier.ACE);
+        Member member2 = new Member("test2", "1234", "seo", Tier.KING);
+
+        memberRepository.save(member1);
+        memberRepository.save(member2);
 
         List<Member> members = new ArrayList<>(List.of(member1, member2));
 
-
-        Room room = Room.builder().title("테스트용 방").roomPassword(null).isPrivate(false)
-                .sessionId("sessionA").members(members).build();
+        String sessionId = "sessionA";
+        Room room = Room.builder().title("테스트용 방").roomPassword("1234").isPrivate(true)
+                .sessionId(sessionId).members(members).build();
 
         Room savedRoom = roomRepository.save(room);
 
@@ -49,8 +56,8 @@ class RoomTest {
     @Test
     @Transactional
     void createRoom() {
-        Member member1 = new Member("test1", "1234", "jio");
-        Member member2 = new Member("test2", "1234", "seo");
+        Member member1 = new Member("test1", "1234", "jio", Tier.ACE);
+        Member member2 = new Member("test2", "1234", "seo", Tier.KING);
 
         List<Member> members = new ArrayList<>(List.of(member1, member2));
 
@@ -67,13 +74,28 @@ class RoomTest {
 
     @Test
     @Transactional
+    void getRoomInfo() {
+        String sessionId = "sessionA";
+        System.out.println(roomService.findRoomInfoById(sessionId));
+    }
+
+    @Test
+    @Transactional
+    void deleteRoomInfo() {
+        String sessionId = "sessionA";
+        roomService.removeRoom(sessionId);
+        assertThat(roomRepository.findById(sessionId).orElse(null)).isNull();
+    }
+
+    @Test
+    @Transactional
     void removeMember() {
         String sessionId = "sessionA";
-        Room roomBySessionId = roomRepository.findRoomBySessionId(sessionId).orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND));
-        System.out.println("roomBySessionId = " + roomBySessionId);
+        Room findRoom = roomRepository.findById(sessionId).orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND));
+        System.out.println("findRoom = " + findRoom);
 
         roomService.removeMember(sessionId, "test1");
 
-        System.out.println("roomInfo = " + roomRepository.findRoomBySessionId(sessionId));
+        System.out.println("roomInfo = " + roomRepository.findById(sessionId));
     }
 }

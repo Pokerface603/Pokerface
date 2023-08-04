@@ -20,12 +20,12 @@ public class RoomController {
 
     @GetMapping
     public ResponseEntity<List<RoomInfoRes>> getAllRoomInfos() {
-        return new ResponseEntity<>(roomService.findAllRooms(), HttpStatus.OK);
+        return new ResponseEntity<>(roomService.findAllRoomInfos(), HttpStatus.OK);
     }
 
     @GetMapping("/{sessionId}")
     public ResponseEntity<RoomInfoRes> getRoomInfo(@PathVariable String sessionId) {
-        return new ResponseEntity<>(roomService.findRoomBySessionId(sessionId), HttpStatus.OK);
+        return new ResponseEntity<>(roomService.findRoomInfoById(sessionId), HttpStatus.OK);
     }
 
     @PostMapping("/{sessionId}/{email}")
