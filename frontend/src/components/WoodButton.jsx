@@ -1,6 +1,6 @@
 import React from "react";
 
-const WoodButton = ({ width, height, text, onClick }) => {
+const WoodButton = ({ width, height, text, fontSize, onClick }) => {
   return (
     <div
       className="bg-wood-button bg-cover text-center hover:brightness-90"
@@ -13,6 +13,7 @@ const WoodButton = ({ width, height, text, onClick }) => {
         className="align-top"
         style={{
           fontFamily: "Unchained-Spaghetti",
+          fontSize,
         }}>
         {text}
       </text>
