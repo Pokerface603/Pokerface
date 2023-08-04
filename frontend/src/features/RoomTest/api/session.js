@@ -8,7 +8,13 @@ export async function getToken(mySessionId) {
 async function createSession(sessionId) {
   const response = await axios.post(
     "/sessions",
-    { customSessionId: sessionId },
+    {
+      customSessionId: sessionId,
+      title: "테스트용 방입니다.",
+      gameMode: "NORMAL",
+      isPrivate: true,
+      roomPassword: "1234",
+    },
     {
       headers: { "Content-Type": "application/json" },
     }
