@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pokerface.pokerface.config.error.RestException;
 import pokerface.pokerface.config.error.errorcode.ErrorCode;
+import pokerface.pokerface.domain.history.entity.GameMode;
 import pokerface.pokerface.domain.member.entity.Member;
 import pokerface.pokerface.domain.member.entity.Tier;
 import pokerface.pokerface.domain.member.repository.MemberRepository;
@@ -13,7 +14,6 @@ import pokerface.pokerface.domain.room.dto.response.RoomInfoRes;
 import pokerface.pokerface.domain.room.entity.Room;
 import pokerface.pokerface.domain.room.repository.RoomRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -31,6 +31,7 @@ public class RoomService {
 
         return RoomInfoRes.builder()
                 .sessionId(room.getSessionId())
+                .gameMode(GameMode.valueOf(room.getGameMode()))
                 .title(room.getTitle())
                 .isPrivate(room.getIsPrivate())
                 .roomPassword(room.getRoomPassword())
@@ -45,15 +46,16 @@ public class RoomService {
 
         return StreamSupport.stream(rooms.spliterator(), false)
                 .map(room -> RoomInfoRes.builder()
-                .sessionId(room.getSessionId())
-                .title(room.getTitle())
-                .isPrivate(room.getIsPrivate())
-                .roomPassword(room.getRoomPassword())
-                .hostName(room.getMembers().get(0).getNickname())
-                .hostTier(room.getMembers().get(0).getTier().toString())
-                .playerCount(room.getMembers().size())
-                .build())
-                .collect(Collectors.toList());
+                    .gameMode(GameMode.valueOf(room.getGameMode()))
+                    .sessionId(room.getSessionId())
+                    .title(room.getTitle())
+                    .isPrivate(room.getIsPrivate())
+                    .roomPassword(room.getRoomPassword())
+                    .hostName(room.getMembers().get(0).getNickname())
+                    .hostTier(room.getMembers().get(0).getTier().toString())
+                    .playerCount(room.getMembers().size())
+                    .build())
+                        .collect(Collectors.toList());
     }
 
     @Transactional
@@ -63,6 +65,7 @@ public class RoomService {
 
         return roomRepository.save(Room.builder()
                 .sessionId(sessionId)
+                .gameMode(roomCreateReq.getGameMode().toString())
                 .title(roomCreateReq.getTitle())
                 .isPrivate(roomCreateReq.isPrivate())
                 .roomPassword(roomCreateReq.getRoomPassword())
@@ -81,5 +84,20 @@ public class RoomService {
                 .getMembers().remove(memberRepository.findMemberByEmail(email)
                         .orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND))
         );
+    }
+
+    public List<RoomInfoRes> findRoomsByGameMode(GameMode gameMode) {
+        return roomRepository.findAllByGameMode(gameMode.toString()).stream()
+                .map(room -> RoomInfoRes.builder()
+                        .gameMode(GameMode.valueOf(room.getGameMode()))
+                        .sessionId(room.getSessionId())
+                        .title(room.getTitle())
+                        .isPrivate(room.getIsPrivate())
+                        .roomPassword(room.getRoomPassword())
+                        .hostName(room.getMembers().get(0).getNickname())
+                        .hostTier(room.getMembers().get(0).getTier().toString())
+                        .playerCount(room.getMembers().size())
+                        .build())
+                .collect(Collectors.toList());
     }
 }
