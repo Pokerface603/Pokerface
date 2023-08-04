@@ -43,7 +43,7 @@ public class HistoryService {
     public HistoryResponse getHistory(Long historyId){
         History history = findById(historyId);
 
-        return HistoryResponse.of(history, convertGameLogtoData(history.getGameLog()));
+        return HistoryResponse.of(history, convertGameLogToData(history.getGameLog()));
     }
 
     public void save(HistoryRequest historyRequest) {
@@ -58,15 +58,15 @@ public class HistoryService {
 
     public Integer calculateRating(Member player, Member opponent, Result result){
         double expectRate = 1 / (Math.pow(10, (double)(opponent.getRating() - player.getRating())/RATING_SCALE) + 1);
-        Long playerCount = detailService.countByMemberId(player.getId());
-        Long opponentCount = detailService.countByMemberId(opponent.getId());
+        Long playerCount = detailService.countByMemberId(player.getId()) + 1;
+        Long opponentCount = detailService.countByMemberId(opponent.getId()) + 1;
 
         return (int)Math.round(player.getRating() + (result.getValue() - expectRate) * (RATING_WEIGHT * opponentCount) / (playerCount + opponentCount));
     }
 
     // DB의 게임 로그를 라운드 로그로 분리하는 메소드
-    public GameLogResponse convertGameLogtoData(String gameLog){
-        return GameLogResponse.of(Pattern.compile("$")
+    public GameLogResponse convertGameLogToData(String gameLog){
+        return GameLogResponse.of(Pattern.compile("#")
                 .splitAsStream(gameLog)
                 .map(this::convertRoundLogToData)
                 .collect(Collectors.toList()));
@@ -74,7 +74,7 @@ public class HistoryService {
 
     // 분리된 라운드 로그를 라운드 게임 정보로 변환하는 메소드
     public RoundLogResponse convertRoundLogToData(String roundLog){
-        StringTokenizer st = new StringTokenizer(roundLog, "#");
+        StringTokenizer st = new StringTokenizer(roundLog, "$");
         return RoundLogResponse.of(Integer.parseInt(st.nextToken()),
                 Integer.parseInt(st.nextToken()),
                 Integer.parseInt(st.nextToken()),

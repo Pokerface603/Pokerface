@@ -22,4 +22,9 @@ public class Friend extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "to_id")
     private Member to;
+
+    public Friend(Member from, Member to){
+        this.from = from;
+        this.to = to;
+    }
 }

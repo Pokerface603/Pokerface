@@ -21,11 +21,11 @@ public class History extends BaseTime {
     private String gameLog;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "host_id")
     private Member host;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "guest_id")
     private Member guest;
 
     public History(String gameMode, String gameLog, Member host, Member guest){

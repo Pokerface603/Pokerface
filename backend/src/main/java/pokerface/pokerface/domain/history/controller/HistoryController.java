@@ -19,7 +19,7 @@ public class HistoryController {
     @GetMapping
     public List<HistoryResponse> historyListAll(){
         return historyService.findAll().stream()
-                .map(history -> HistoryResponse.of(history, historyService.convertGameLogtoData(history.getGameLog())))
+                .map(history -> HistoryResponse.of(history, historyService.convertGameLogToData(history.getGameLog())))
                 .collect(Collectors.toList());
     }
 
