@@ -1,4 +1,5 @@
 import Input from "@component/Input";
+import CheckIcon from "./CheckIcon";
 
 import {
   height,
@@ -13,7 +14,9 @@ import {
 
 const RegistForm = () => {
   return (
-    <div style={{ width: "912px", height: "428px" }}>
+    <div
+      className="grid grid-cols-1 justify-items-center content-center"
+      style={{ width: "912px", height: "333px" }}>
       <div className="flex">
         <Input
           width={nameWidth}
@@ -21,10 +24,7 @@ const RegistForm = () => {
           type={idProps.type}
           placeholder={idProps.placeholder}
         />
-        <div
-          className="bg-check-button bg-cover cursor-pointer brightness-0 hover:brightness-50"
-          style={{ width: checkWidth, height }}
-        />
+        <CheckIcon width={checkWidth} height={height} />
       </div>
       <div className="flex">
         <Input
@@ -33,10 +33,7 @@ const RegistForm = () => {
           type={nicknameProps.type}
           placeholder={nicknameProps.placeholder}
         />
-        <div
-          className="bg-check-button bg-cover cursor-pointer brightness-0 hover:brightness-50"
-          style={{ width: checkWidth, height }}
-        />
+        <CheckIcon width={checkWidth} height={height} />
       </div>
       <Input
         width={pwWidth}
