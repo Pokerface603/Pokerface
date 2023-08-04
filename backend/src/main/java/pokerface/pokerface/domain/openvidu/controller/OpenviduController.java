@@ -58,8 +58,8 @@ public class OpenviduController {
 
     @GetMapping("/sessions")
     public ResponseEntity<?> getActiveSessions(){
-        openvidu.getActiveSessions().forEach(session -> System.out.println("session.getSessionId() = " + session.getSessionId()));
-        System.out.println("==============");
+        openvidu.getActiveSessions().
+                forEach(session -> System.out.println("session.getSessionId() = " + session.getSessionId()));
 
         return new ResponseEntity<>(openvidu.getActiveSessions(), HttpStatus.OK);
     }
@@ -79,6 +79,17 @@ public class OpenviduController {
         Connection connection = session.createConnection(properties);
 
         return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
+    }
+
+    @PostMapping("/sessions/{sessionId}/{email}/disconnections")
+    public ResponseEntity<Void> disConnection(@PathVariable("sessionId") String sessionId,
+                                                   @PathVariable String email,
+                                                   @RequestBody(required = false) Map<String, Object> params)
+            throws OpenViduJavaClientException, OpenViduHttpException {
+
+        roomService.removeMember(sessionId, email);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

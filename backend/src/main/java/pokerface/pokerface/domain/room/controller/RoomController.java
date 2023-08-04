@@ -1,4 +1,4 @@
-package pokerface.pokerface.domain.room;
+package pokerface.pokerface.domain.room.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

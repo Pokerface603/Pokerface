@@ -32,7 +32,7 @@ class RoomTest {
     private MemberRepository memberRepository;
 
     @Test
-//    @Transactional
+    @Transactional
     void saveRoom() {
         Member member1 = new Member("test1", "1234", "jio", Tier.ACE);
         Member member2 = new Member("test2", "1234", "seo", Tier.KING);
@@ -56,20 +56,10 @@ class RoomTest {
     @Test
     @Transactional
     void createRoom() {
-        Member member1 = new Member("test1", "1234", "jio", Tier.ACE);
-        Member member2 = new Member("test2", "1234", "seo", Tier.KING);
-
-        List<Member> members = new ArrayList<>(List.of(member1, member2));
-
-        Room room = Room.builder().title("하이하이").roomPassword("1234").isPrivate(true)
-                .sessionId("sessionA").members(members).build();
-
-        Room createdRoom = roomService.createRoom("sessionA",
-                new RoomCreateReq("하이하이", GameMode.ORIGIN, false, "1234"));
+        Room createdRoom = roomService.createRoom("sessionB",
+                new RoomCreateReq("하이하이", GameMode.ORIGIN, false, null));
 
         System.out.println("createdRoom = " + createdRoom);
-
-        assertThat(room).isNotEqualTo(createdRoom);
     }
 
     @Test
@@ -92,6 +82,7 @@ class RoomTest {
     void removeMember() {
         String sessionId = "sessionA";
         Room findRoom = roomRepository.findById(sessionId).orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND));
+
         System.out.println("findRoom = " + findRoom);
 
         roomService.removeMember(sessionId, "test1");

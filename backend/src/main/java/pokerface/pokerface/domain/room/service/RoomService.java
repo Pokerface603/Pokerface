@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pokerface.pokerface.config.error.RestException;
 import pokerface.pokerface.config.error.errorcode.ErrorCode;
+import pokerface.pokerface.domain.member.entity.Member;
+import pokerface.pokerface.domain.member.entity.Tier;
 import pokerface.pokerface.domain.member.repository.MemberRepository;
 import pokerface.pokerface.domain.room.dto.request.RoomCreateReq;
 import pokerface.pokerface.domain.room.dto.response.RoomInfoRes;
@@ -26,6 +28,7 @@ public class RoomService {
 
     public RoomInfoRes findRoomInfoById(String sessionId) {
         Room room = roomRepository.findById(sessionId).orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND));
+
         return RoomInfoRes.builder()
                 .sessionId(room.getSessionId())
                 .title(room.getTitle())
@@ -38,9 +41,10 @@ public class RoomService {
     }
 
     public List<RoomInfoRes> findAllRoomInfos() {
-        Iterable<Room> all = roomRepository.findAll();
+        Iterable<Room> rooms = roomRepository.findAll();
 
-        return StreamSupport.stream(all.spliterator(), false).map(room -> RoomInfoRes.builder()
+        return StreamSupport.stream(rooms.spliterator(), false)
+                .map(room -> RoomInfoRes.builder()
                 .sessionId(room.getSessionId())
                 .title(room.getTitle())
                 .isPrivate(room.getIsPrivate())
@@ -54,12 +58,15 @@ public class RoomService {
 
     @Transactional
     public Room createRoom(String sessionId, RoomCreateReq roomCreateReq) {
+        // 로그인이 구현되어 있지 않아 방 생성 시 임의로 사용자를 넣어준다.
+        Member member = new Member("test1", "1234", "jio", Tier.ACE);
+
         return roomRepository.save(Room.builder()
                 .sessionId(sessionId)
                 .title(roomCreateReq.getTitle())
                 .isPrivate(roomCreateReq.isPrivate())
                 .roomPassword(roomCreateReq.getRoomPassword())
-                .members(new ArrayList<>(List.of()))
+                .members(List.of(member))
                 .build());
     }
 
@@ -70,8 +77,7 @@ public class RoomService {
 
     @Transactional
     public void removeMember(String sessionId, String email) {
-        roomRepository.findById(sessionId)
-                .orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND))
+        roomRepository.findById(sessionId).orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND))
                 .getMembers().remove(memberRepository.findMemberByEmail(email)
                         .orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND))
         );

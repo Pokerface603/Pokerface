@@ -15,6 +15,9 @@ import java.util.List;
 public class WebRestController {
     private final Environment env;
 
+    /**
+     * @return 현재 profile
+     */
     @GetMapping("/profile")
     public String getProfile() {
         List<String> profiles = Arrays.asList(env.getActiveProfiles());
