@@ -3,12 +3,14 @@ package pokerface.pokerface.domain.member.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import pokerface.pokerface.global.BaseTime;
 import javax.persistence.*;
 
 @Entity
 @Getter @Setter
 @NoArgsConstructor
+@ToString
 public class Member extends BaseTime {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,5 +43,12 @@ public class Member extends BaseTime {
         this.nickname = nickname;
         this.userPassword = userPassword;
         this.rating = rating;
+    }
+
+    public Member(String email, String userPassword, String nickname, Tier tier) {
+        this.email = email;
+        this.userPassword = userPassword;
+        this.nickname = nickname;
+        this.tier = tier;
     }
 }

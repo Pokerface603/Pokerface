@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -17,9 +18,12 @@ import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 import io.openvidu.java.client.Session;
 import io.openvidu.java.client.SessionProperties;
+import pokerface.pokerface.domain.room.dto.request.RoomCreateReq;
+import pokerface.pokerface.domain.room.service.RoomService;
 
 @CrossOrigin(origins = "*")
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 public class OpenviduController {
 
@@ -36,20 +40,16 @@ public class OpenviduController {
         this.openvidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
     }
 
-    /**
-     * @param params The Session properties
-     * @return The Session ID
-     */
+    private final RoomService roomService;
+
     @PostMapping("/sessions")
-    public ResponseEntity<String> initializeSession(@RequestBody(required = false) Map<String, Object> params)
+    public ResponseEntity<String> initializeSession(@RequestBody(required = false) Map<String, Object> params,
+                                                    @RequestBody RoomCreateReq roomCreateReq)
             throws OpenViduJavaClientException, OpenViduHttpException {
-        System.out.println("Controller.initializeSession");
-
-        params.forEach((key, value) -> System.out.println("key : " + key + " / value : " + value));
-
         SessionProperties properties = SessionProperties.fromJson(params).build();
         Session session = openvidu.createSession(properties);
-        System.out.println("session.getSessionId() = " + session.getSessionId());
+
+        roomService.createRoom(session.getSessionId(), roomCreateReq);
 
         //sessionId : session 생성 시 입력한 세션 이름
         return new ResponseEntity<>(session.getSessionId(), HttpStatus.OK);
@@ -58,27 +58,19 @@ public class OpenviduController {
 
     @GetMapping("/sessions")
     public ResponseEntity<?> getActiveSessions(){
-        openvidu.getActiveSessions().forEach(session -> System.out.println("session.getSessionId() = " + session.getSessionId()));
-        System.out.println("==============");
+        openvidu.getActiveSessions().
+                forEach(session -> System.out.println("session.getSessionId() = " + session.getSessionId()));
+
         return new ResponseEntity<>(openvidu.getActiveSessions(), HttpStatus.OK);
     }
 
-    /**
-     * @param sessionId The Session in which to create the Connection
-     * @param params    The Connection properties
-     * @return The Token associated to the Connection
-     */
     @PostMapping("/sessions/{sessionId}/connections")
     public ResponseEntity<String> createConnection(@PathVariable("sessionId") String sessionId,
                                                    @RequestBody(required = false) Map<String, Object> params)
             throws OpenViduJavaClientException, OpenViduHttpException {
 
-        System.out.println("Controller.createConnection");
-
-        System.out.println("sessionId = " + sessionId);
-        params.forEach((key, value) -> System.out.println("key : " + key + " / value : " + value));
-
         Session session = openvidu.getActiveSession(sessionId);
+
         if (session == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -87,6 +79,17 @@ public class OpenviduController {
         Connection connection = session.createConnection(properties);
 
         return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
+    }
+
+    @PostMapping("/sessions/{sessionId}/{email}/disconnections")
+    public ResponseEntity<Void> disConnection(@PathVariable("sessionId") String sessionId,
+                                                   @PathVariable String email,
+                                                   @RequestBody(required = false) Map<String, Object> params)
+            throws OpenViduJavaClientException, OpenViduHttpException {
+
+        roomService.removeMember(sessionId, email);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
