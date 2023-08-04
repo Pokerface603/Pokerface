@@ -18,6 +18,8 @@ import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 import io.openvidu.java.client.Session;
 import io.openvidu.java.client.SessionProperties;
+
+import pokerface.pokerface.domain.history.entity.GameMode;
 import pokerface.pokerface.domain.room.dto.request.RoomCreateReq;
 import pokerface.pokerface.domain.room.service.RoomService;
 
@@ -43,13 +45,19 @@ public class OpenviduController {
     private final RoomService roomService;
 
     @PostMapping("/sessions")
-    public ResponseEntity<String> initializeSession(@RequestBody(required = false) Map<String, Object> params,
-                                                    @RequestBody RoomCreateReq roomCreateReq)
+    public ResponseEntity<String> initializeSession(@RequestBody(required = false) Map<String, Object> params)
             throws OpenViduJavaClientException, OpenViduHttpException {
+
         SessionProperties properties = SessionProperties.fromJson(params).build();
         Session session = openvidu.createSession(properties);
 
-        roomService.createRoom(session.getSessionId(), roomCreateReq);
+        roomService.createRoom(session.getSessionId(),
+                RoomCreateReq.builder()
+                        .title((String) params.get("title"))
+                        .gameMode(GameMode.valueOf((String) params.get("mode")))
+                        .isPrivate((boolean) params.get("isPrivate"))
+                        .roomPassword((String) params.get("roomPassword"))
+                        .build());
 
         //sessionId : session 생성 시 입력한 세션 이름
         return new ResponseEntity<>(session.getSessionId(), HttpStatus.OK);
@@ -83,8 +91,8 @@ public class OpenviduController {
 
     @PostMapping("/sessions/{sessionId}/{email}/disconnections")
     public ResponseEntity<Void> disConnection(@PathVariable("sessionId") String sessionId,
-                                                   @PathVariable String email,
-                                                   @RequestBody(required = false) Map<String, Object> params)
+                                              @PathVariable String email,
+                                              @RequestBody(required = false) Map<String, Object> params)
             throws OpenViduJavaClientException, OpenViduHttpException {
 
         roomService.removeMember(sessionId, email);
