@@ -13,7 +13,7 @@ const TextButton = ({ width, height, fontSize, text, imgSrc, onClick }) => {
       className="flex text-center justify-center items-center cursor-pointer hover:shadow-2xl hover:underline hover:opacity-75"
       style={{ width, height }}
       onClick={onClick}>
-      {imgSrc && <img src={kakaoLogo} alt="logo" />}
+      {imgSrc && <img src={imgSrc} alt="logo" />}
       <span className=" align-bottom" style={{ fontFamily, fontSize }}>
         {text}
       </span>
