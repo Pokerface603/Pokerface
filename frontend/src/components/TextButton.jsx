@@ -1,18 +1,20 @@
 import React from "react";
 import kakaoLogo from "../assets/images/kakao-logo.svg";
 
-const TextButton = ({ width, height, fontSize, text, onClick }) => {
-  const isKakao = text === "kakao";
+const TextButton = ({ width, height, fontSize, text, imgSrc, onClick }) => {
+  const isenglish = /^[A-Za-z]+$/;
 
-  const font = isKakao ? "Unchained-Spaghetti" : "NexonGothic";
+  const fontFamily = isenglish.test(text)
+    ? "Unchained-Spaghetti"
+    : "NexonGothic";
 
   return (
     <div
       className="flex text-center justify-center items-center cursor-pointer hover:shadow-2xl hover:underline hover:opacity-75"
       style={{ width, height }}
       onClick={onClick}>
-      {isKakao && <img src={kakaoLogo} alt="l" />}
-      <span className=" align-bottom" style={{ fontFamily: font, fontSize }}>
+      {imgSrc && <img src={kakaoLogo} alt="logo" />}
+      <span className=" align-bottom" style={{ fontFamily, fontSize }}>
         {text}
       </span>
     </div>
