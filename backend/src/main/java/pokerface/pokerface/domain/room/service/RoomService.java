@@ -31,7 +31,7 @@ public class RoomService {
 
         return RoomInfoRes.builder()
                 .sessionId(room.getSessionId())
-                .gameMode(GameMode.valueOf(room.getGameMode()))
+                .gameMode(room.getGameMode())
                 .title(room.getTitle())
                 .isPrivate(room.getIsPrivate())
                 .roomPassword(room.getRoomPassword())
@@ -46,7 +46,7 @@ public class RoomService {
 
         return StreamSupport.stream(rooms.spliterator(), false)
                 .map(room -> RoomInfoRes.builder()
-                    .gameMode(GameMode.valueOf(room.getGameMode()))
+                    .gameMode(room.getGameMode())
                     .sessionId(room.getSessionId())
                     .title(room.getTitle())
                     .isPrivate(room.getIsPrivate())
@@ -65,7 +65,7 @@ public class RoomService {
 
         return roomRepository.save(Room.builder()
                 .sessionId(sessionId)
-                .gameMode(roomCreateReq.getGameMode().toString())
+                .gameMode(roomCreateReq.getGameMode())
                 .title(roomCreateReq.getTitle())
                 .isPrivate(roomCreateReq.isPrivate())
                 .roomPassword(roomCreateReq.getRoomPassword())
@@ -87,9 +87,9 @@ public class RoomService {
     }
 
     public List<RoomInfoRes> findRoomsByGameMode(GameMode gameMode) {
-        return roomRepository.findAllByGameMode(gameMode.toString()).stream()
+        return roomRepository.findAllByGameMode(gameMode).stream()
                 .map(room -> RoomInfoRes.builder()
-                        .gameMode(GameMode.valueOf(room.getGameMode()))
+                        .gameMode(room.getGameMode())
                         .sessionId(room.getSessionId())
                         .title(room.getTitle())
                         .isPrivate(room.getIsPrivate())
@@ -98,6 +98,15 @@ public class RoomService {
                         .hostTier(room.getMembers().get(0).getTier().toString())
                         .playerCount(room.getMembers().size())
                         .build())
+                .collect(Collectors.toList());
+    }
+
+    /*
+    Redis는 sql의 like와 같은 패턴 매칭 기능이 없어 전체 방을 조회 후 stream으로 검색어(방 제목)를 포함하는 여부 확인
+     */
+    public List<RoomInfoRes> findRoomsByTitle(String title) {
+        return findAllRoomInfos().stream()
+                .filter(roomInfoRes -> roomInfoRes.getTitle().contains(title))
                 .collect(Collectors.toList());
     }
 }

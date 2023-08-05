@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface RoomRepository extends CrudRepository<Room, String> {
     Room findByTitle(String title);
-    List<Room> findAllByGameMode(String gameMode);
-    List<Room> findAllByTitle(String title);
+    List<Room> findAllByGameMode(GameMode gameMode);
 }
 

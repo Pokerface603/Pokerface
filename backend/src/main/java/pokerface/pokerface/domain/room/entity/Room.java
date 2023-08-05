@@ -4,6 +4,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.index.Indexed;
+import pokerface.pokerface.domain.history.entity.GameMode;
 import pokerface.pokerface.domain.member.entity.Member;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class Room {
     private String title;
 
     @Indexed
-    private String gameMode;
+    private GameMode gameMode;
 
     private Boolean isPrivate;
 
@@ -30,7 +31,7 @@ public class Room {
     private List<Member> members;
 
     @Builder
-    public Room(String sessionId, String gameMode, String title, Boolean isPrivate, String roomPassword, List<Member> members) {
+    public Room(String sessionId, GameMode gameMode, String title, Boolean isPrivate, String roomPassword, List<Member> members) {
         this.sessionId = sessionId;
         this.gameMode = gameMode;
         this.title = title;

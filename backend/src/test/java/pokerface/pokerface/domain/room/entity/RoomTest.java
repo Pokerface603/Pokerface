@@ -43,8 +43,9 @@ class RoomTest {
 
         List<Member> members = new ArrayList<>(List.of(member1, member2));
 
-        String sessionId = "sessionB";
-        Room room = Room.builder().gameMode(GameMode.BLIND.toString()).title("hi").roomPassword("1234").isPrivate(true)
+        String sessionId = "sessionD";
+
+        Room room = Room.builder().gameMode(GameMode.NORMAL).title("안녕하세요").roomPassword("1234").isPrivate(true)
                 .sessionId(sessionId).members(members).build();
 
         Room savedRoom = roomRepository.save(room);
@@ -94,7 +95,7 @@ class RoomTest {
     @Test
     @Transactional
     void findRoomsByMode() {
-        List<RoomInfoRes> roomsByMode = roomService.findRoomsByGameMode(GameMode.BLIND);
+        List<RoomInfoRes> roomsByMode = roomService.findRoomsByGameMode(GameMode.NORMAL);
         System.out.println("roomsByMode.size() = " + roomsByMode.size());
 
         roomService.findRoomsByGameMode(GameMode.NORMAL).forEach(System.out::println);
@@ -110,7 +111,6 @@ class RoomTest {
     @Test
     @Transactional
     void findAllRoomByTitle() {
-        List<Room> room = roomRepository.findAllByTitle("hi");
-        room.forEach(System.out::println);
+        roomService.findRoomsByTitle("안녕").forEach(System.out::print);
     }
 }
