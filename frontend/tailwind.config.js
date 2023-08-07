@@ -6,6 +6,9 @@ module.exports = {
         "parchment-box": "url('/src/assets/images/parchment.svg')",
         "wood-button": "url('/src/assets/images/WoodButton.svg')",
         "wood-background": "url('/src/assets/images/WoodBackground.svg')",
+        "check-button": "url('/src/assets/images/check.svg')",
+        "email-check-ticket":
+          "url('/src/assets/images/email-check-ticket.svg')",
       },
     },
   },
