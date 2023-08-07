@@ -1,25 +1,24 @@
-package com.gavoyage.config.jwt.filter;
+package pokerface.pokerface.config.jwt.filter;
 
-import java.io.IOException;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import pokerface.pokerface.config.error.RestException;
+import pokerface.pokerface.config.error.errorcode.ErrorCode;
+import pokerface.pokerface.config.jwt.service.JwtService;
+import pokerface.pokerface.config.login.PrincipalDetails;
+import pokerface.pokerface.domain.member.entity.Member;
+import pokerface.pokerface.domain.member.repository.MemberRepository;
+import pokerface.pokerface.domain.member.service.MemberService;
 
-import com.gavoyage.config.jwt.service.JwtService;
-import com.gavoyage.config.login.PrincipalDetails;
-import com.gavoyage.exception.RestException;
-import com.gavoyage.exception.errorcode.ErrorCode;
-import com.gavoyage.user.domain.Users;
-import com.gavoyage.user.service.UserServiceImpl;
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 
 // 권한이나 인증이 필요한(회원용 api) url을 호출했을 경우  스프링 시큐리티의 BasicAuthenticationFilter를 무조건 거치게 된다.
@@ -36,11 +35,11 @@ import lombok.extern.slf4j.Slf4j;
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 	
 	private final JwtService jwtService;
-	private final UserServiceImpl userService;
+	private final MemberService memberService;
 	
-	public JwtAuthorizationFilter(AuthenticationManager authenticationManager, JwtService jwtService, UserServiceImpl userService) {
+	public JwtAuthorizationFilter(AuthenticationManager authenticationManager, JwtService jwtService, MemberService memberService) {
 		super(authenticationManager);
-		this.userService = userService;
+		this.memberService = memberService;
 		this.jwtService = jwtService;
 	}
 	
@@ -55,10 +54,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 		
 		String uri = request.getRequestURI();
 		
-		if(uri.equals("/login") || uri.startsWith("/oauth2")) { // "/login" url로 요청시 인증 과정 생략
-			log.debug("인증인데 login 주소로 온 경우");
-			chain.doFilter(request, response);
-			return;
+		if(uri.equals("/login") || uri.startsWith("/oauth2")) { // "/login", "/oauth2" url로 요청시 인증 과정 생략
+			chain.doFilter(request, response); // 다음 필터로 이동
+			return; // return을 하지 않으면 밑에 로직을 수행 수 다음 필터로 이동하기에 필수로 넣어줘야한다.
 		}
 		
 		String accessToken = jwtService.extractAccessToken(request).orElse(null);
@@ -73,19 +71,19 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 		log.debug("accessToken : " + accessToken);
 		log.debug("refreshToken : " + refreshToken);
 		
-		// access token이 만료된 경우 에러를 발생 시키고 access token과 refresh token 모두 재발급
+		// access token이 만료된 경우 access token과 refresh token 모두 재발급
 		if(refreshToken != null) {
 			log.debug("access token이 만료된 경우");
 			
-			Users findUser = userService.findByRefreshToken(refreshToken).orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND));
-			log.debug("findUser : " + findUser);
+			Member member = memberService.findByRefreshToken(refreshToken).orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND));
+			log.debug("member : " + member);
 			
 			// refresh token 갱신
 			String reIssuedRefreshToken = jwtService.createRefreshToken();
-			userService.updateRefreshToken(findUser.getEmail(), reIssuedRefreshToken);
+			jwtService.updateRefreshToken(member, reIssuedRefreshToken);
 			
 			jwtService.sendAccessAndRefreshToken(response,
-								jwtService.createAccessToken(findUser.getEmail(), findUser.getNickname()),
+								jwtService.createAccessToken(member.getEmail(), member.getNickname()),
 								reIssuedRefreshToken);
 		}
 		
@@ -97,19 +95,19 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 			jwtService.isTokenValid(accessToken);
 			
 			String email = jwtService.extractEmail(accessToken).orElse(null); // claim으로 부터 email 추출
-			Users userEntity = userService.findByUserEmail(email).orElse(null);
+			Member member = memberService.findByEmail(email);
 			
-			PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
-			log.debug("userEntity : " + userEntity);
+			PrincipalDetails principalDetails = new PrincipalDetails(member);
+			log.debug("member : " + member);
 			
 			// JWT 토큰 서명이 정상일 경우 Authentication 객체를 직접 생성한다.
 			Authentication authentication = 
 					new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
 			
-			// 위에서 만든 Authentication을 스프링 세큐리티의 세션에 강제로 저장
+			// 위에서 만든 Authentication 객체를 스프링 세큐리티의 세션(SecurityContextHolder에)에 저장
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			
-			chain.doFilter(request, response);
+			chain.doFilter(request, response); // 다음 필터로 이동
 		}
 		
 	}
