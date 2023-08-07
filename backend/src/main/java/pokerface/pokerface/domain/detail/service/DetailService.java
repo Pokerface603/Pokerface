@@ -6,18 +6,12 @@ import javax.transaction.Transactional;
 
 import pokerface.pokerface.domain.detail.dto.request.DetailRequest;
 import pokerface.pokerface.domain.detail.dto.response.DetailResponse;
-import pokerface.pokerface.domain.detail.dto.response.GameLogResponse;
-import pokerface.pokerface.domain.detail.dto.response.RoundLogResponse;
 import pokerface.pokerface.domain.detail.entity.Detail;
-import pokerface.pokerface.domain.detail.entity.Result;
 import pokerface.pokerface.domain.detail.repository.DetailRepository;
 import pokerface.pokerface.domain.history.entity.History;
 import pokerface.pokerface.domain.member.entity.Member;
 
 import java.util.List;
-import java.util.StringTokenizer;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -38,9 +32,7 @@ public class DetailService {
     }
 
     public DetailResponse getDetail(Long detailId){
-        Detail detail = findById(detailId);
-
-        return DetailResponse.of(detail, convertGameLogtoData(detail.getGameLog()));
+        return DetailResponse.of(findById(detailId));
     }
 
     public void save(DetailRequest detailRequest, History history, Member member){
@@ -51,22 +43,7 @@ public class DetailService {
         return detailRepository.countByMemberId(memberId);
     }
 
-    // DB의 게임 로그를 라운드 로그로 분리하는 메소드
-    public GameLogResponse convertGameLogtoData(String gameLog){
-        return GameLogResponse.of(Pattern.compile("#")
-                .splitAsStream(gameLog)
-                .map(this::convertRoundLogtoData)
-                .collect(Collectors.toList()));
-    }
-
-    // 분리된 라운드 로그를 라운드 게임 정보로 변환하는 메소드
-    public RoundLogResponse convertRoundLogtoData(String roundLog){
-        StringTokenizer st = new StringTokenizer(roundLog, "$");
-        return RoundLogResponse.of(Integer.parseInt(st.nextToken()),
-                Pattern.compile(",")
-                        .splitAsStream(st.nextToken())
-                        .map(Integer::parseInt)
-                        .collect(Collectors.toList()),
-                Result.valueOf(st.nextToken()));
+    public Long countWinByMemberId(Long memberId){
+        return detailRepository.countWinByMemberId(memberId);
     }
 }

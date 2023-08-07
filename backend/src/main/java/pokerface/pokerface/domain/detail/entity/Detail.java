@@ -18,8 +18,6 @@ public class Detail extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String gameLog;
-
     private Integer preRating;
 
     private Integer postRating;
@@ -35,11 +33,10 @@ public class Detail extends BaseTime {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    public Detail(String gameLog, Integer preRating, Integer postRating, String result, History history, Member member){
-        this.gameLog = gameLog;
+    public Detail(Integer preRating, Integer postRating, Result result, History history, Member member){
         this.preRating = preRating;
         this.postRating = postRating;
-        this.result = Result.valueOf(result);
+        this.result = result;
         this.history = history;
         this.member = member;
     }
