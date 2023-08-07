@@ -24,7 +24,7 @@ public class MemberService {
     }
 
     public Member findById(Long memberId){
-        return memberRepository.findById(memberId).orElseThrow(IllegalAccessError::new);
+        return memberRepository.findById(memberId).orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND));
     }
 
     public Member findByEmail(String email) {

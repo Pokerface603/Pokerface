@@ -1,5 +1,6 @@
 package pokerface.pokerface.config;
 
+import com.mysql.cj.log.Log;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.filter.CorsFilter;
+import pokerface.pokerface.config.jwt.filter.JwtAuthorizationFilter;
+import pokerface.pokerface.config.jwt.filter.JwtExceptionFilter;
+import pokerface.pokerface.config.jwt.service.JwtService;
+import pokerface.pokerface.config.login.filter.LoginFilter;
+import pokerface.pokerface.domain.member.service.MemberService;
 
 @Configuration // 스프링 설정 정보 
 @EnableWebSecurity // 스프링 시큐리티 활성화
@@ -18,8 +24,8 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private final CorsFilter corsFilter;
-//	private final UserServiceImpl userService;
-//	private final JwtService jwtService;
+	private final MemberService memberService;
+	private final JwtService jwtService;
 //	private final CustomOAuth2UserService customOAuth2UserService;
 //	private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 //	private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
@@ -37,13 +43,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); // 세션을 사용하지 않도록 설정
 		http.authorizeHttpRequests()
-				.antMatchers("/**").permitAll();
-//		.antMatchers("/", "/users/join", "/swagger-ui/**", "/users/emailCheck/**", "/users/nicknameCheck/**", "/regions/**", "/css/**", "/img/**", "/js/**", "/favicon.ico",
-//				"/v3/api-docs", "/swagger-resources/**", "/swagger-ui.html","/swagger-ui/**").permitAll()
-//		.antMatchers(HttpMethod.GET, "/reviews/**").permitAll()
-//		.antMatchers("/reviews/users", "/reviews/likes").authenticated()
-//		.antMatchers(HttpMethod.POST, "/reviews/**").hasRole("USER")
-//		.anyRequest().authenticated(); // 나머지 요청들은 로그인 없어도 허용
+//				.antMatchers("/**").permitAll();
+				.antMatchers("/", "/members/join", "/swagger-ui/**", "/members/check/email/**", "/members/check/nickname/**", "/css/**", "/img/**", "/js/**", "/favicon.ico",
+								"/v3/api-docs", "/swagger-resources/**", "/swagger-ui.html","/swagger-ui/**").permitAll()
+				.anyRequest().authenticated(); // 나머지 요청들은 인증을 필요로 한다.
 		
 		/**
 		 * 소셜 로그인 관리	
@@ -54,8 +57,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        .failureHandler(oAuth2LoginFailureHandler) // 소셜 로그인 실패 시 호출
 //        .userInfoEndpoint().userService(customOAuth2UserService); // OAuth2 로그인 로직 담당하는 서비스 설정
 //
-//		http.addFilterAfter(new LoginFilter(authenticationManager(), jwtService, userService), LogoutFilter.class); // 로그인 시 정상 회원이라면 jwt 토큰을 생성해주는 필터
-//		http.addFilterBefore(new JwtAuthorizationFilter(authenticationManager(), jwtService, userService), LoginFilter.class); // 회원용 api 호출 시 jwt의 유효성을 검사해주는 필터
+		http.addFilterAfter(new LoginFilter(authenticationManager(), jwtService, memberService), LogoutFilter.class); // 로그인 시 정상 회원이라면 jwt 토큰을 생성해주는 필터
+//		http.addFilterAfter(getLoginFilter(), LogoutFilter.class); // 로그인 시 정상 회원이라면 jwt 토큰을 생성해주는 필터
+//		http.addFilterBefore(new JwtAuthorizationFilter(authenticationManager(), jwtService, memberService), LoginFilter.class); // 회원용 api 호출 시 jwt의 유효성을 검사해주는 필터
 //		http.addFilterBefore(new JwtExceptionFilter(), JwtAuthorizationFilter.class); // jwt 토큰 유효성 검사해주는 필터
 	}
 	
@@ -63,4 +67,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public BCryptPasswordEncoder passwordEncoder() { // 비밀번호 암호화 
 		return new BCryptPasswordEncoder();
 	}
+
+//	@Bean
+//	public LoginFilter getLoginFilter() throws Exception {
+//		LoginFilter filter = new LoginFilter(authenticationManager(), jwtService, memberService);
+//		filter.setFilterProcessesUrl("/api/members/login");
+//		return filter;
+//	}
+//
+//	@Bean
+//	public JwtAuthorizationFilter getJwtAuthorizationFilter() throws Exception {
+//		return new JwtAuthorizationFilter(authenticationManager(), jwtService, memberService);
+//	}
 }

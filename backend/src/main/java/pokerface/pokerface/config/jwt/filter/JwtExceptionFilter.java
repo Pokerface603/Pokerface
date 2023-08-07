@@ -26,7 +26,7 @@ public class JwtExceptionFilter extends OncePerRequestFilter{
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		try {
-			log.debug("Jwt Exception Filter Called");
+			log.info("Jwt Exception Filter Called");
 			filterChain.doFilter(request, response); // JWT 인증 필터로 이동
 		} catch (JwtException e) { // JWT 인증 필터에서 JWT 관련 예외 발생 시 catch 후 응답
 			System.out.println("Jwt Exception Filter에서 예외 catch");

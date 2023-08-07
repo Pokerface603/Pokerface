@@ -11,7 +11,6 @@ import pokerface.pokerface.config.error.errorcode.ErrorCode;
 import pokerface.pokerface.config.jwt.service.JwtService;
 import pokerface.pokerface.config.login.PrincipalDetails;
 import pokerface.pokerface.domain.member.entity.Member;
-import pokerface.pokerface.domain.member.repository.MemberRepository;
 import pokerface.pokerface.domain.member.service.MemberService;
 
 import javax.servlet.FilterChain;
@@ -48,13 +47,14 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		
-		log.debug("인증이나 권한이 필요한 주소 요청");
-		log.debug("request.getRequestURL() : " + request.getRequestURL());
-		log.debug("request.getRequestURI() : " + request.getRequestURI());
+		log.info("인증이나 권한이 필요한 주소 요청");
+		log.info("request.getRequestURL() : " + request.getRequestURL());
+		log.info("request.getRequestURI() : " + request.getRequestURI());
 		
 		String uri = request.getRequestURI();
 		
-		if(uri.equals("/login") || uri.startsWith("/oauth2")) { // "/login", "/oauth2" url로 요청시 인증 과정 생략
+		if(uri.equals("/api/members/login") || uri.startsWith("/api/members/oauth2")) { // "/login", "/oauth2" url로 요청시 인증 과정 생략
+			log.info("로그인 요청 또는 소셜 로그인 요청일 경우");
 			chain.doFilter(request, response); // 다음 필터로 이동
 			return; // return을 하지 않으면 밑에 로직을 수행 수 다음 필터로 이동하기에 필수로 넣어줘야한다.
 		}
@@ -63,20 +63,20 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 		String refreshToken = jwtService.extractRefreshToken(request).orElse(null);
 		
 		if((accessToken == null && refreshToken == null)) { // header가 없거나 Bearer 방식이 아닐 경우
-			log.debug("토큰이 아예 없는 경우");
+			log.info("토큰이 아예 없는 경우");
 			chain.doFilter(request, response);
 			return;
 		}
 		
-		log.debug("accessToken : " + accessToken);
-		log.debug("refreshToken : " + refreshToken);
+		log.info("accessToken : " + accessToken);
+		log.info("refreshToken : " + refreshToken);
 		
 		// access token이 만료된 경우 access token과 refresh token 모두 재발급
 		if(refreshToken != null) {
-			log.debug("access token이 만료된 경우");
+			log.info("access token이 만료된 경우");
 			
 			Member member = memberService.findByRefreshToken(refreshToken).orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND));
-			log.debug("member : " + member);
+			log.info("member : " + member);
 			
 			// refresh token 갱신
 			String reIssuedRefreshToken = jwtService.createRefreshToken();
@@ -90,7 +90,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 		
 		// access token을 보내 인증 처리
 		if(refreshToken == null) {
-			log.debug("Access Token이 온 경우");
+			log.info("Access Token이 온 경우");
 			
 			jwtService.isTokenValid(accessToken);
 			
@@ -98,7 +98,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 			Member member = memberService.findByEmail(email);
 			
 			PrincipalDetails principalDetails = new PrincipalDetails(member);
-			log.debug("member : " + member);
+			log.info("member : " + member);
 			
 			// JWT 토큰 서명이 정상일 경우 Authentication 객체를 직접 생성한다.
 			Authentication authentication = 
