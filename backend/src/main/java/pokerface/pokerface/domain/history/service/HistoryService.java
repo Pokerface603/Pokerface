@@ -2,8 +2,8 @@ package pokerface.pokerface.domain.history.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import javax.transaction.Transactional;
 
+import org.springframework.transaction.annotation.Transactional;
 import pokerface.pokerface.domain.detail.dto.request.DetailRequest;
 import pokerface.pokerface.domain.detail.entity.Result;
 import pokerface.pokerface.domain.detail.service.DetailService;
@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class HistoryService {
     private final HistoryRepository historyRepository;
@@ -46,6 +46,7 @@ public class HistoryService {
         return HistoryResponse.of(history, convertGameLogToData(history.getGameLog()));
     }
 
+    @Transactional
     public void save(HistoryRequest historyRequest) {
         Member host = memberService.findById(historyRequest.getHostId());
         Member guest = memberService.findById(historyRequest.getGuestId());
