@@ -10,7 +10,7 @@ const WoodButton = ({ width, height, text, fontSize, onClick }) => {
       }}
       onClick={onClick}>
       <text
-        className="align-top"
+        className="leading-none"
         style={{
           fontFamily: "Unchained-Spaghetti",
           fontSize,
