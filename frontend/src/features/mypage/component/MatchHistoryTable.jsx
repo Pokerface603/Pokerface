@@ -6,10 +6,9 @@ import Parchment from "@component/Parchment";
 const MatchHistoryTable = () => {
   const table = history;
 
-  const tableRow = table.map((match) => (
+  const makeTableRow = table.map((match) => (
     <tr key={match.id} className="h-20 text-center border-y-2 border-black">
       <td
-        className="w-1/5 text-center"
         style={{
           fontFamily: "Unchained-RegularShadow",
           fontSize: "40px",
@@ -17,11 +16,16 @@ const MatchHistoryTable = () => {
         }}>
         {match.res}
       </td>
-      <td>
-        <img src={getTicketImg(match.mode)} alt="tier" />
+      <td className="flex justify-center">
+        <img
+          className=" shadow-md shadow-slate-500 mt-2 mb-2"
+          src={getTicketImg(match.mode)}
+          alt="tier"
+        />
       </td>
       <td>{match.name}</td>
-      <td className="w-1/6">{getRatingUpDown(match.rated)}</td>
+      <td>{match.rating}</td>
+      <td>{getRatingUpDown(match.rating - match.prevRating)}</td>
     </tr>
   ));
 
@@ -38,12 +42,21 @@ const MatchHistoryTable = () => {
           className="caption-top"
           style={{
             fontFamily: "Unchained-RegularShadow",
-            fontSize: "40px",
+            fontSize: "55px",
             fontWeight: "normal",
           }}>
           Match History
         </caption>
-        <tbody>{tableRow}</tbody>
+        <thead>
+          <tr className="bg-red-950 text-yellow-100">
+            <th className="w-1/5">결과</th>
+            <th className="w-1/6 ">모드</th>
+            <th>상대의 닉네임</th>
+            <th className="w-1/6">레이팅</th>
+            <th className="w-1/6">변동</th>
+          </tr>
+        </thead>
+        <tbody>{makeTableRow}</tbody>
       </table>
     </Parchment>
   );
