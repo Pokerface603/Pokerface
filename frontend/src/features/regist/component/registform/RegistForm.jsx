@@ -6,10 +6,10 @@ import {
   nameWidth,
   pwWidth,
   checkWidth,
-  idProps,
-  nicknameProps,
-  passwordProps,
-  passCheckProps,
+  idStyles,
+  nicknameStyles,
+  passwordStyles,
+  passCheckStyles,
 } from "./registFormStyle";
 
 const RegistForm = () => {
@@ -21,8 +21,8 @@ const RegistForm = () => {
         <Input
           width={nameWidth}
           height={height}
-          type={idProps.type}
-          placeholder={idProps.placeholder}
+          type={idStyles.type}
+          placeholder={idStyles.placeholder}
         />
         <CheckIcon width={checkWidth} height={height} />
       </div>
@@ -30,22 +30,22 @@ const RegistForm = () => {
         <Input
           width={nameWidth}
           height={height}
-          type={nicknameProps.type}
-          placeholder={nicknameProps.placeholder}
+          type={nicknameStyles.type}
+          placeholder={nicknameStyles.placeholder}
         />
         <CheckIcon width={checkWidth} height={height} />
       </div>
       <Input
         width={pwWidth}
         height={height}
-        type={passwordProps.type}
-        placeholder={passwordProps.placeholder}
+        type={passwordStyles.type}
+        placeholder={passwordStyles.placeholder}
       />
       <Input
         width={pwWidth}
         height={height}
-        type={passCheckProps.type}
-        placeholder={passCheckProps.placeholder}
+        type={passCheckStyles.type}
+        placeholder={passCheckStyles.placeholder}
       />
     </div>
   );
