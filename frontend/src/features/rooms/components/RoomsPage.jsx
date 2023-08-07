@@ -17,11 +17,11 @@ const RoomsPage = () => {
         <div className="col-span-1">
           <div className style={{ width: "1280px", height: "870px" }}>
             <div className="h-1/4">
-              <div className="grid grid-cols-3 gap-8 h-full">
-                <div className="col-span-2 grid">
-                  <Logo />
-                  <div  style={{ width: "765px", marginTop: "-25px" }}  >
-                  <SearchBar/>
+              <div className="grid grid-cols-3 gap-10 h-full">
+                <div className="col-span-2 grid mb-3">
+                    <Logo />
+                  <div style={{ width: "660px" }}>
+                    <SearchBar />
                   </div>
                 </div>
                 <div>
