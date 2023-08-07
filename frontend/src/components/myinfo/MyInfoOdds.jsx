@@ -1,0 +1,32 @@
+import React from "react";
+
+const MyInfoOdds = ({ wins, totalReward }) => {
+  const losses = totalReward - wins;
+  const winPercentage = Math.round((wins / totalReward) * 100);
+
+  return (
+    <div className="my-0 mx-3 gap-2 h-9 flex items-center">
+      <span
+        style={{
+          fontFamily: "Unchained-Spaghetti",
+          color: "gray",
+          fontSize: "30px",
+        }}
+      >
+        ODDS
+      </span>
+      {wins && !isNaN(losses) && winPercentage && (
+        <span
+          style={{
+            fontFamily: "Unchained-Spaghetti",
+            fontSize: "20px",
+          }}
+        >
+          {wins} WINS {losses} LOSSES ({winPercentage}%)
+        </span>
+      )}
+    </div>
+  );
+};
+
+export default MyInfoOdds;
