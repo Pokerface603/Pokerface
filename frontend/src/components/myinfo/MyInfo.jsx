@@ -1,5 +1,4 @@
 import React from "react";
-import Sheriff from "../../assets/images/myinfo/sheriff.svg";
 import LineForMyInfo from "../../assets/images/myinfo/line-for-my-info.svg";
 import TierBox from "@component/TierBox";
 import Parchment from "@component/Parchment";
@@ -38,16 +37,6 @@ const MyInfo = ({
           </div>
           <img src={LineForMyInfo} alt="line for myInfo" />
         </div>
-        <img
-          src={Sheriff}
-          style={{
-            top: "110px",
-            right: "110px",
-            position: "absolute",
-            zIndex: 1,
-          }}
-          alt="sheriff"
-        />
       </div>
     </Parchment>
   );
