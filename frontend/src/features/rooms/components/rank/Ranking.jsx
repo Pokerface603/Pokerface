@@ -1,6 +1,7 @@
-import Frame from "../../../../assets/images/rooms/frame.svg";
+import React from "react";
 import Saloon from "../../../../assets/images/rooms/saloon.svg";
 import TierNoBox from "../TierNoBox";
+import Frame from "../Frame"
 
 const Ranking = ({ id, nickname, tier, reward }) => {
   const isenglish = /^[A-Za-z]+$/;
@@ -12,7 +13,7 @@ const Ranking = ({ id, nickname, tier, reward }) => {
   return (
     <div className="relative w-300 h-200">
       <div className="flex items-center justify-center w-full h-full">
-        <img src={Frame} alt="frame" className="absolute z-0 object-cover" />
+        <Frame style={{position:"absolute", zIndex:0,  objectFit: "cover" }}/>
         <p
           style={{
             fontFamily: "Unchained-Spaghetti",
