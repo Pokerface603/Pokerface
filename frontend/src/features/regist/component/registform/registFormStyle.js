@@ -6,22 +6,22 @@ export const pwWidth = "515px";
 
 export const checkWidth = "51px";
 
-export const idProps = {
+export const idStyles = {
   type: "email",
   placeholder: "id(e-mail)",
 };
 
-export const nicknameProps = {
+export const nicknameStyles = {
   type: "text",
   placeholder: "Nickname",
 };
 
-export const passwordProps = {
+export const passwordStyles = {
   type: "password",
   placeholder: "password",
 };
 
-export const passCheckProps = {
+export const passCheckStyles = {
   type: "password",
   placeholder: "pass-check",
 };
