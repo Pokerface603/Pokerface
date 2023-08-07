@@ -9,7 +9,8 @@
       "@route/*": ["./routes/*"],
       "@store/*": ["./stores/*"],
       "@util/*": ["./utils/*"],
-      "@lib/*": ["/lib/*"]
+      "@lib/*": ["./lib/*"],
+      "@asset/*": ["./assets/*"]
     }
   },
   "include": ["src"]
