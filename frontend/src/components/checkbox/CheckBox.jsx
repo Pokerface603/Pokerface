@@ -1,6 +1,6 @@
 import React from "react";
 import "./style.css";
-function CheckBox({ width, height, fontFamily, fontSize }) {
+function CheckBox({ width, height, fontFamily, fontSize, onClick }) {
   return (
     <label
       className="flex items-center, select-none"
@@ -17,6 +17,7 @@ function CheckBox({ width, height, fontFamily, fontSize }) {
           height,
           borderColor: "#676055",
         }}
+        onClick={onClick}
       />
       <span
         className={`font-[${fontFamily}]`}
