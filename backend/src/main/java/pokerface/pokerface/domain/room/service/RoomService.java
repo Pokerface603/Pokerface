@@ -81,7 +81,7 @@ public class RoomService {
     @Transactional
     public void removeMember(String sessionId, String email) {
         roomRepository.findById(sessionId).orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND))
-                .getMembers().remove(memberRepository.findMemberByEmail(email)
+                .getMembers().remove(memberRepository.findByEmail(email)
                         .orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND))
         );
     }

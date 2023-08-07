@@ -1,4 +1,4 @@
-package com.gavoyage.config;
+package pokerface.pokerface.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +15,6 @@ public class CorsConfig {
 		CorsConfiguration config = new CorsConfiguration();
 		
 		// 서버 응답 시 CORS 처리
-		
 		config.setAllowCredentials(true); // api에서 응답으로 보내는 json을 자바스크립트에서 처리할 수 있도록 설정 
 		config.addAllowedOrigin("*"); // 모든 ip에 응답을 허용
 		config.addAllowedHeader("*"); // 모든 header에 응답 허용
