@@ -8,6 +8,7 @@ const RewardProgressBar = ({
   marginTop,
   style,
 }) => {
+  
   // totalMatches는 임의로 넣어논 값. 
   const percentage = (reward / totalMatches) * 100;
   return (

@@ -33,8 +33,8 @@ const MyInfo = ({
           <MyInfoHeader nickname={nickname} button={button} />
           <img src={LineForMyInfo} alt="line for myInfo" />
           <div className="my-0">
-            <MyInfoReward reward={reward} totalReward={totalMatches} />
-            <MyInfoOdds wins={wins} totalReward={totalMatches} />
+            <MyInfoReward reward={reward} totalMatches={totalMatches} />
+            <MyInfoOdds wins={wins} totalMatches={totalMatches} />
           </div>
           <img src={LineForMyInfo} alt="line for myInfo" />
         </div>
