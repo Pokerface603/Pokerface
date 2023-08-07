@@ -5,8 +5,11 @@ import React, { useState } from "react";
 import ModalHeader from "./ModalHeader";
 import CheckBox from "@component/checkbox/CheckBox";
 import { makeRoom } from "../api/room";
+import { useNavigate } from "react-router-dom";
 
-function RoomMakeModal() {
+function RoomMakeModal({ close }) {
+  const navigate = useNavigate();
+
   const [roomData, setRoomData] = useState({
     roomName: "",
     roomPassword: "",
@@ -27,12 +30,19 @@ function RoomMakeModal() {
       target: { value },
     } = e;
 
-
-    setRoomData((prevRoomData) => ({ ...prevRoomData, roomPassowrd: value }));
+    setRoomData((prevRoomData) => ({ ...prevRoomData, roomPassword: value }));
   };
 
   const onClickMakeRoom = () => {
     makeRoom(roomData);
+    navigate(`game/${roomData.roomName}`);
+  };
+
+  const onToggleSecretRoom = () => {
+    setRoomData((prevRoomData) => ({
+      ...prevRoomData,
+      isPrivate: !prevRoomData.isPrivate,
+    }));
   };
 
   return (
@@ -72,14 +82,18 @@ function RoomMakeModal() {
               height={"55px"}
               fontFamily={"nexonGothic"}
               fontSize={"44px"}
+              onClick={onToggleSecretRoom}
             />
           </div>
 
-          <Input
-            placeholder={"비밀번호"}
-            height={"50px"}
-            onChange={onChangePassword}
-          />
+          {roomData.isPrivate && (
+            <Input
+              placeholder={"비밀번호"}
+              height={"50px"}
+              onChange={onChangePassword}
+              disabled={!roomData.isPrivate}
+            />
+          )}
           <Input placeholder={"모드"} height={"50px"} />
         </div>
 
@@ -98,6 +112,7 @@ function RoomMakeModal() {
             color={"white"}
             width={"300px"}
             fontSize={"30px"}
+            onClick={close}
           ></Button>
         </div>
       </div>
