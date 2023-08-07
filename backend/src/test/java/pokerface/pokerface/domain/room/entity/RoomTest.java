@@ -11,6 +11,7 @@ import pokerface.pokerface.domain.member.entity.Member;
 import pokerface.pokerface.domain.member.entity.Tier;
 import pokerface.pokerface.domain.member.repository.MemberRepository;
 import pokerface.pokerface.domain.room.dto.request.RoomCreateReq;
+import pokerface.pokerface.domain.room.dto.response.RoomInfoRes;
 import pokerface.pokerface.domain.room.repository.RoomRepository;
 import pokerface.pokerface.domain.room.service.RoomService;
 
@@ -42,8 +43,9 @@ class RoomTest {
 
         List<Member> members = new ArrayList<>(List.of(member1, member2));
 
-        String sessionId = "sessionA";
-        Room room = Room.builder().title("테스트용 방").roomPassword("1234").isPrivate(true)
+        String sessionId = "sessionD";
+
+        Room room = Room.builder().gameMode(GameMode.NORMAL).title("안녕하세요").roomPassword("1234").isPrivate(true)
                 .sessionId(sessionId).members(members).build();
 
         Room savedRoom = roomRepository.save(room);
@@ -57,7 +59,7 @@ class RoomTest {
     @Transactional
     void createRoom() {
         Room createdRoom = roomService.createRoom("sessionB",
-                new RoomCreateReq("하이하이", GameMode.ORIGIN, false, null));
+                new RoomCreateReq("하이하이", GameMode.NORMAL, false, null));
 
         System.out.println("createdRoom = " + createdRoom);
     }
@@ -88,5 +90,27 @@ class RoomTest {
         roomService.removeMember(sessionId, "test1");
 
         System.out.println("roomInfo = " + roomRepository.findById(sessionId));
+    }
+
+    @Test
+    @Transactional
+    void findRoomsByMode() {
+        List<RoomInfoRes> roomsByMode = roomService.findRoomsByGameMode(GameMode.NORMAL);
+        System.out.println("roomsByMode.size() = " + roomsByMode.size());
+
+        roomService.findRoomsByGameMode(GameMode.NORMAL).forEach(System.out::println);
+        }
+
+    @Test
+    @Transactional
+    void findRoomByTitle() {
+        Room room = roomRepository.findByTitle("hello");
+        System.out.println("room = " + room);
+    }
+
+    @Test
+    @Transactional
+    void findAllRoomByTitle() {
+        roomService.findRoomsByTitle("안녕").forEach(System.out::print);
     }
 }
