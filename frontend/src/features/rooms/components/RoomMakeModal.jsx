@@ -1,11 +1,40 @@
 import Button from "@component/Button";
 import Input from "@component/Input";
 import Parchment from "@component/Parchment";
-import React from "react";
+import React, { useState } from "react";
 import ModalHeader from "./ModalHeader";
 import CheckBox from "@component/checkbox/CheckBox";
+import { makeRoom } from "../api/room";
 
 function RoomMakeModal() {
+  const [roomData, setRoomData] = useState({
+    roomName: "",
+    roomPassword: "",
+    isPrivate: false,
+    gameMode: "NORMAL",
+  });
+
+  const onChangeRoomName = (e) => {
+    const {
+      target: { value },
+    } = e;
+
+    setRoomData((prevRoomData) => ({ ...prevRoomData, roomName: value }));
+  };
+
+  const onChangePassword = (e) => {
+    const {
+      target: { value },
+    } = e;
+
+
+    setRoomData((prevRoomData) => ({ ...prevRoomData, roomPassowrd: value }));
+  };
+
+  const onClickMakeRoom = () => {
+    makeRoom(roomData);
+  };
+
   return (
     <Parchment
       style={{
@@ -20,9 +49,7 @@ function RoomMakeModal() {
       }}
     >
       <div>
-        <ModalHeader>
-          <span style={{ color: "red" }}>방 생성</span>
-        </ModalHeader>
+        <ModalHeader />
         <div
           style={{
             display: "flex",
@@ -38,6 +65,7 @@ function RoomMakeModal() {
               style={{
                 flex: "1 0 auto",
               }}
+              onChange={onChangeRoomName}
             />
             <CheckBox
               width={"55px"}
@@ -47,7 +75,11 @@ function RoomMakeModal() {
             />
           </div>
 
-          <Input placeholder={"비밀번호"} height={"50px"} />
+          <Input
+            placeholder={"비밀번호"}
+            height={"50px"}
+            onChange={onChangePassword}
+          />
           <Input placeholder={"모드"} height={"50px"} />
         </div>
 
@@ -58,6 +90,7 @@ function RoomMakeModal() {
             color={"white"}
             width={"300px"}
             fontSize={"30px"}
+            onClick={onClickMakeRoom}
           ></Button>
           <Button
             label={"취소"}
