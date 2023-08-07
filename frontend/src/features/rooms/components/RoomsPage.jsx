@@ -17,25 +17,11 @@ const RoomsPage = () => {
         <div className="col-span-1">
           <div className style={{ width: "1280px", height: "870px" }}>
             <div className="h-1/4">
-              <div
-                className="grid grid-cols-3 gap-8 h-full"
-                style={{ gridTemplateRows: "8fr 2fr" }}
-              >
+              <div className="grid grid-cols-3 gap-8 h-full">
                 <div className="col-span-2 grid">
-                  <div
-                    className="h-full"
-                    style={{ gridRow: "span 1", marginBottom: "-5px" }}
-                  >
-                    <Logo />
-                  </div>
-                  <div
-                    style={{
-                      gridRow: "span 1",
-                      width: "765px",
-                      marginTop: "-25px",
-                    }}
-                  >
-                    <SearchBar />
+                  <Logo />
+                  <div  style={{ width: "765px", marginTop: "-25px" }}  >
+                  <SearchBar/>
                   </div>
                 </div>
                 <div>
@@ -43,6 +29,7 @@ const RoomsPage = () => {
                 </div>
               </div>
             </div>
+
             <Parchment
               style={{ width: "1280px", height: "652px", display: "flex" }}
             >
@@ -105,7 +92,6 @@ const RoomsPage = () => {
             <div className="h-2/5 flex justify-center items-center">
               <Parchment style={{ width: "450px", height: "320px" }}>
                 <div className="mt-1">
-
                   {/* 임의의 값 입력 */}
                   <ConnectList
                     tier="J"
