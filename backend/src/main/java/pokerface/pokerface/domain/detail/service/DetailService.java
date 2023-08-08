@@ -2,8 +2,8 @@ package pokerface.pokerface.domain.detail.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import javax.transaction.Transactional;
 
+import org.springframework.transaction.annotation.Transactional;
 import pokerface.pokerface.domain.detail.dto.request.DetailRequest;
 import pokerface.pokerface.domain.detail.dto.response.DetailResponse;
 import pokerface.pokerface.domain.detail.entity.Detail;
@@ -14,7 +14,7 @@ import pokerface.pokerface.domain.member.entity.Member;
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class DetailService {
     private final DetailRepository detailRepository;
@@ -35,6 +35,7 @@ public class DetailService {
         return DetailResponse.of(findById(detailId));
     }
 
+    @Transactional
     public void save(DetailRequest detailRequest, History history, Member member){
         detailRepository.save(detailRequest.toDetail(history, member));
     }

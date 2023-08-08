@@ -1,6 +1,8 @@
 package pokerface.pokerface.domain.detail.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pokerface.pokerface.domain.detail.dto.response.DetailResponse;
 import pokerface.pokerface.domain.detail.service.DetailService;
@@ -15,44 +17,33 @@ public class DetailController {
     private final DetailService detailService;
 
     @GetMapping
-    public List<DetailResponse> detailListAll(){
-        return detailService.findAll().stream()
+    public ResponseEntity<List<DetailResponse>> detailListAll(){
+        return new ResponseEntity<>(detailService.findAll().stream()
                 .map(DetailResponse::of)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()),
+                HttpStatus.OK);
     }
 
     @GetMapping("/member/{memberId}")
-    public List<DetailResponse> detailListByMemberId(@PathVariable Long memberId){
-        return detailService.findByMemberId(memberId).stream()
+    public ResponseEntity<List<DetailResponse>> detailListByMemberId(@PathVariable Long memberId){
+        return new ResponseEntity<>(detailService.findByMemberId(memberId).stream()
                 .map(DetailResponse::of)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()),
+                HttpStatus.OK);
     }
 
     @GetMapping("/{detailId}")
-    public DetailResponse getDetailInfo(@PathVariable Long detailId){
-        return detailService.getDetail(detailId);
+    public ResponseEntity<DetailResponse> getDetailInfo(@PathVariable Long detailId){
+        return new ResponseEntity<>(detailService.getDetail(detailId), HttpStatus.OK);
     }
 
     @GetMapping("/count/{memberId}")
-    public Long countByMemberId(@PathVariable Long memberId){
-        return detailService.countByMemberId(memberId);
+    public ResponseEntity<Long> countByMemberId(@PathVariable Long memberId){
+        return new ResponseEntity<>(detailService.countByMemberId(memberId), HttpStatus.OK);
     }
 
     @GetMapping("/count/{memberId}/win")
-    public Long countWinByMemberId(@PathVariable Long memberId){
-        return detailService.countWinByMemberId(memberId);
+    public ResponseEntity<Long> countWinByMemberId(@PathVariable Long memberId){
+        return new ResponseEntity<>(detailService.countWinByMemberId(memberId), HttpStatus.OK);
     }
-
-    // history 에서 호출하는 방식으로 변경
-//    @PostMapping
-//    public void detailRegistry(@RequestBody @Validated DetailRequest detailRequest, Long historyId, Long memberId){
-//        detailService.save(detailRequest, historyId, memberId);
-//    }
-
-//    @GetMapping
-//    public ExpectRatingResponse expectRating(@PathVariable Long memberId, @PathVariable Long opponentId ){
-//        return ExpectRatingResponse.of(
-//                detailService.calculateRating(0, 0, 0, 0, WIN),
-//                detailService.calculateRating(0, 0, 0, 0, LOSE));
-//    }
 }

@@ -25,6 +25,8 @@ public class DetailResponse {
 
     private final GameMode gameMode;
 
+    private final Long opponentId;
+
     public static DetailResponse of(Detail detail){
         return DetailResponse.builder()
                 .detailId(detail.getId())
@@ -33,6 +35,8 @@ public class DetailResponse {
                 .result(detail.getResult())
                 .historyId(detail.getHistory().getId())
                 .gameMode(detail.getHistory().getGameMode())
+                .opponentId((detail.getHistory().getHost().equals(detail.getMember()) ?
+                        detail.getHistory().getGuest() : detail.getHistory().getHost()).getId())
                 .build();
     }
 }
