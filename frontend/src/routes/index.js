@@ -1,4 +1,4 @@
-import GamePage from "@feature/RoomTest/components/GamePage";
+import GamePage from "@feature/Game/routes/GamePage";
 import LobbyPage from "@feature/RoomTest/components/LobbyPage";
 import { createBrowserRouter } from "react-router-dom";
 

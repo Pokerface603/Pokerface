@@ -1,10 +1,11 @@
 import { OpenVidu } from "openvidu-browser";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getToken } from "../api/session";
-import OpeviduVideo from "./OpeviduVideo";
+import { getToken } from "../../RoomTest/api/session";
+import OpeviduVideo from "../../RoomTest/components/OpeviduVideo";
 import Button from "@component/Button";
 import { useRef } from "react";
+import Game from "../components/Game";
 
 function GamePage() {
   const navigate = useNavigate();
@@ -119,6 +120,7 @@ function GamePage() {
 
   return (
     <div>
+      <Game />
       {sessionInfo?.subscribers?.map((sub, i) => (
         <OpeviduVideo key={i} streamManager={sub} />
       ))}
