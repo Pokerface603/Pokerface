@@ -5,6 +5,7 @@ import MatchHistoryTable from "./MatchHistoryTable";
 import HistorySummary from "./HistorySummary";
 import MyInfo from "../../../components/myinfo/MyInfo";
 import { myInfoTest } from "./test";
+import BackButton from "./BackButton";
 
 const MyPage = () => {
   const test = myInfoTest;
@@ -28,13 +29,7 @@ const MyPage = () => {
             />
           </div>
 
-          <WoodButton
-            className="skew-x-6"
-            width="323px"
-            height="58px"
-            fontSize="50px"
-            text="Back"
-          />
+          <BackButton />
         </div>
         <div className="w-full h-full flex items-center overflow-hidden">
           <MatchHistoryTable />
