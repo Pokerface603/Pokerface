@@ -41,7 +41,7 @@ public class Member extends BaseTime {
     private String refreshToken;
 
     @Enumerated(EnumType.STRING)
-    @ColumnDefault("'USER'")
+    @ColumnDefault("'ROLE_USER'")
     private Role userRole;
 
     @ColumnDefault("'Y'")

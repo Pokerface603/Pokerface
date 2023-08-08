@@ -43,7 +43,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); // 세션을 사용하지 않도록 설정
 		http.authorizeHttpRequests()
-//				.antMatchers("/**").permitAll();
 				.antMatchers("/", "/members/join", "/swagger-ui/**", "/members/check/email/**", "/members/check/nickname/**", "/css/**", "/img/**", "/js/**", "/favicon.ico",
 								"/v3/api-docs", "/swagger-resources/**", "/swagger-ui.html","/swagger-ui/**").permitAll()
 				.anyRequest().authenticated(); // 나머지 요청들은 인증을 필요로 한다.
@@ -57,26 +56,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        .failureHandler(oAuth2LoginFailureHandler) // 소셜 로그인 실패 시 호출
 //        .userInfoEndpoint().userService(customOAuth2UserService); // OAuth2 로그인 로직 담당하는 서비스 설정
 //
+
 		http.addFilterAfter(new LoginFilter(authenticationManager(), jwtService, memberService), LogoutFilter.class); // 로그인 시 정상 회원이라면 jwt 토큰을 생성해주는 필터
-//		http.addFilterAfter(getLoginFilter(), LogoutFilter.class); // 로그인 시 정상 회원이라면 jwt 토큰을 생성해주는 필터
-//		http.addFilterBefore(new JwtAuthorizationFilter(authenticationManager(), jwtService, memberService), LoginFilter.class); // 회원용 api 호출 시 jwt의 유효성을 검사해주는 필터
-//		http.addFilterBefore(new JwtExceptionFilter(), JwtAuthorizationFilter.class); // jwt 토큰 유효성 검사해주는 필터
+		http.addFilterBefore(new JwtAuthorizationFilter(authenticationManager(), jwtService, memberService), LoginFilter.class); // 회원용 api 호출 시 jwt의 유효성을 검사해주는 필터
+		http.addFilterBefore(new JwtExceptionFilter(), JwtAuthorizationFilter.class); // jwt 토큰 유효성 검사해주는 필터
 	}
 	
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() { // 비밀번호 암호화 
 		return new BCryptPasswordEncoder();
 	}
-
-//	@Bean
-//	public LoginFilter getLoginFilter() throws Exception {
-//		LoginFilter filter = new LoginFilter(authenticationManager(), jwtService, memberService);
-//		filter.setFilterProcessesUrl("/api/members/login");
-//		return filter;
-//	}
-//
-//	@Bean
-//	public JwtAuthorizationFilter getJwtAuthorizationFilter() throws Exception {
-//		return new JwtAuthorizationFilter(authenticationManager(), jwtService, memberService);
-//	}
 }

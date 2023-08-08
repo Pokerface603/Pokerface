@@ -7,6 +7,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.util.AntPathMatcher;
 import pokerface.pokerface.config.jwt.service.JwtService;
 import pokerface.pokerface.config.login.PrincipalDetails;
 import pokerface.pokerface.domain.member.dto.request.MemberLoginReq;
@@ -28,16 +30,18 @@ import java.io.IOException;
 @Slf4j
 public class LoginFilter extends UsernamePasswordAuthenticationFilter{
 
-	private final String filterProcessesUrl = "/api/members/login";
+	private final String filterProcessesUrl = "/members/login";
 	private final AuthenticationManager authenticationManager;
 	private final JwtService jwtService;
 	private final MemberService memberService;
-	
+
 	public LoginFilter(AuthenticationManager authenticationManager, JwtService jwtService,
 					   MemberService memberService) {
-		log.info("Login Filter Called");
+		log.debug("Login Filter Called");
+		log.debug("filterProcessUrl : {}", filterProcessesUrl);
 
 		setFilterProcessesUrl(filterProcessesUrl);
+
 		this.authenticationManager = authenticationManager;
 		this.jwtService = jwtService;
 		this.memberService = memberService;
@@ -48,8 +52,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter{
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException {
 
-		log.info("JwtAuthenticationFilter : 로그인 시도");
-		log.info("request.getRequestURI() : " + request.getRequestURL());
+		log.debug("JwtAuthenticationFilter : 로그인 시도");
+		log.debug("request.getRequestURI() : " + request.getRequestURL());
 
 		// 1. 로그인 시 json으로 받아온 username, userpassword를 MemberLoginReq 형태로 변환(json to java object)
 		ObjectMapper om = new ObjectMapper();
@@ -61,7 +65,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter{
 			throw new RuntimeException(e);
 		}
 
-		log.info("json to MemberLoginReq 완료 ");
+		log.debug("json to MemberLoginReq 완료 ");
 
 		// UsernamePasswordAuthenticationToken 생성(로그인 정보를 지닌다)
 		UsernamePasswordAuthenticationToken authenticationToken =
@@ -73,7 +77,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter{
 
 		// 로그인이 되었는지 principalDetails 출력하여 확인(유저가 출력된다면 로그인 성공), 꼭 필요한 코드는 아님!
 		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-		log.info("principalDetails.getUser() : " + principalDetails.getMember());
+		log.debug("principalDetails.getUser() : " + principalDetails.getMember());
 
 		// authentication(사용자 정보)가 session 영역에 저장됨
 		// 굳이 JWT를 사용하면서 세션을 만들 이유는 없지만 유저의 권환 관리를 위해 session에 넣어줌
@@ -88,7 +92,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter{
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 			Authentication authResult) throws IOException, ServletException {
 		
-		log.info("로그인 성공");
+		log.debug("로그인 성공");
 		
 		PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
 		Member member = principalDetails.getMember();
@@ -115,12 +119,13 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter{
 	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException failed) throws IOException, ServletException {
 
-		log.info("로그인 실패");
+		log.debug("로그인 실패");
 		
 		response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+		response.setCharacterEncoding("UTF-8");
         response.getWriter().write("로그인 실패");
         
-        log.info("로그인에 실패했습니다. 메시지 : {}", failed.getMessage());
+        log.debug("로그인에 실패했습니다. 메시지 : {}", failed.getMessage());
 	}
 
 }

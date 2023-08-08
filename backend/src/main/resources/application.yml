@@ -17,7 +17,11 @@ spring:
 logging:
   level:
     root: info
+    pokerface:
+      pokerface: debug
     org.hibernate.sql: info
+    org.hibernate.type.descriptor.sql: trace
+    org.springframework.security.web.FilterChainProxy: DEBUG
 
 ---
 spring:

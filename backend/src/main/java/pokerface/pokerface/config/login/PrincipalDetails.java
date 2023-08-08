@@ -1,5 +1,6 @@
 package pokerface.pokerface.config.login;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import pokerface.pokerface.domain.member.entity.Member;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 // UserDetails : 스프링 세큐리티 세션에 Users 객체를 UserDetails 타입으로 저장한다.
+@Slf4j
 public class PrincipalDetails implements UserDetails{ // 스프링 세큐리티에서 사용할 유저 정보
 	
 	private Member member;
@@ -24,7 +26,8 @@ public class PrincipalDetails implements UserDetails{ // 스프링 세큐리티�
 		authorities.add(new GrantedAuthority() { // 현재 서비스는 유저 당 역할을 하나만 지니는 상태이지만 유저 당 역할이 여러개 인 경우도 있으므로 Collection 사용
           @Override
           public String getAuthority() {
-			  return "ROLE_" + member.getUserRole(); // role 을 받을 때 앞에 "ROLE_" 붙이는 것(prefix)이 스프링의 규칙, 즉 ROLE_USER 같은 식으로 리턴됨
+			  System.out.println("member.getUserRole() = " + member.getUserRole());
+			  return member.getUserRole().toString(); // role 을 받을 때 앞에 "ROLE_" 붙이는 것(prefix)이 스프링의 규칙, 즉 ROLE_USER 같은 식으로 리턴됨
 		  }
      	 });
 		

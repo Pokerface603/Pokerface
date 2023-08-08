@@ -26,10 +26,10 @@ public class JwtExceptionFilter extends OncePerRequestFilter{
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		try {
-			log.info("Jwt Exception Filter Called");
+			log.debug("Jwt Exception Filter Called");
 			filterChain.doFilter(request, response); // JWT 인증 필터로 이동
 		} catch (JwtException e) { // JWT 인증 필터에서 JWT 관련 예외 발생 시 catch 후 응답
-			System.out.println("Jwt Exception Filter에서 예외 catch");
+            log.debug("Jwt Exception Filter에서 예외 catch");
 			setErrorResponse(request, response, e);
 		}
 	}
@@ -44,7 +44,7 @@ public class JwtExceptionFilter extends OncePerRequestFilter{
         
         log.debug(ex.getMessage());
         if(ex.getMessage().equals("JWT 토큰 만료")) {
-        	System.out.println("JWT 토큰 만료");
+            log.debug("JWT 토큰 만료");
         	body.put("status", 5000); // 토큰 만료 시
         }else {
         	body.put("status", 6000); // 시그니처 검증 미 통과 시
