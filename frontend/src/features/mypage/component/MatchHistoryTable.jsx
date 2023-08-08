@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { history } from "./test";
-import { getRatingUpDown, getTicketImg } from "../api/table";
+import { getRatingUpDown, getTicketImg } from "./utils/table";
 import Parchment from "@component/Parchment";
+import { getHistoryTableRow } from "../api/getTableRow";
 
 const MatchHistoryTable = () => {
   // 테스트 데이터 연결 중, api 작업 시 수정
   const table = history;
+
+  useEffect(() => {
+    getHistoryTableRow();
+  }, []);
 
   const makeTableRow = table.map((match) => (
     <tr key={match.id} className="h-20 text-center border-y-2 border-black">
