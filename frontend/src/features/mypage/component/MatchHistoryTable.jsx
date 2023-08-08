@@ -4,6 +4,7 @@ import { getRatingUpDown, getTicketImg } from "../api/table";
 import Parchment from "@component/Parchment";
 
 const MatchHistoryTable = () => {
+  // 테스트 데이터 연결 중, api 작업 시 수정
   const table = history;
 
   const makeTableRow = table.map((match) => (

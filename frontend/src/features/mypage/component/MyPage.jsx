@@ -1,5 +1,4 @@
 import WoodBackground from "@component/WoodBackground";
-import WoodButton from "@component/WoodButton";
 import React from "react";
 import MatchHistoryTable from "./MatchHistoryTable";
 import HistorySummary from "./HistorySummary";
@@ -12,7 +11,6 @@ const MyPage = () => {
 
   return (
     <WoodBackground>
-      {/* 좌측 */}
       <div
         className="grid grid-cols-1 grid-rows-[190px,auto] mr-6 content-stretch justify-center"
         style={{ width: "1000px", height: "880px" }}>
@@ -21,6 +19,7 @@ const MyPage = () => {
             <MyInfo
               width="455px"
               height="160px"
+              // 테스트 데이터 연결 중, api 작업 시 수정
               tier={test.tier}
               nickname={test.nickname}
               reward={test.reward}
@@ -28,21 +27,21 @@ const MyPage = () => {
               wins={test.wins}
             />
           </div>
-
           <BackButton />
         </div>
         <div className="w-full h-full flex items-center overflow-hidden">
           <MatchHistoryTable />
         </div>
       </div>
-      {/* 우측 */}
       <div
         className="grid grid-cols-1 grid-rows-[400px,auto] ml-4 content-stretch justify-center items-center"
         style={{ width: "800px", height: "880px" }}>
-        <div className="w-full h-2/3 flex bg-blue-400">
+        <div className="w-full h-2/3 flex">
           <HistorySummary />
         </div>
-        <div className="w-full h-full bg-blue-900"></div>
+        <div className="w-full h-full bg-blue-900">
+          {/* 그래프 들어갈 위치 */}
+        </div>
       </div>
     </WoodBackground>
   );

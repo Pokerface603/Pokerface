@@ -1,3 +1,5 @@
+// 테스트 파일
+// api 작업 시 삭제 예정
 export const history = [
   {
     id: "1",
