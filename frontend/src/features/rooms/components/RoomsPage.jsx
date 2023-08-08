@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Parchment from "@component/Parchment";
 import WoodBackground from "@component/WoodBackground";
 import Button from "@component/Button";
@@ -10,10 +10,12 @@ import Ranking from "./rank/Ranking";
 import ConnectList from "./connect/ConnectList";
 import Tab from "./Tab";
 import RoomMakeModal from "./RoomMakeModal";
-import { useState } from "react";
+import { getRooms } from "../api/room";
+import Room from "./Room";
 
 const RoomsPage = () => {
   const [showRoomMakeModal, setShowRoomMakeModal] = useState(false);
+  const [rooms, setRooms] = useState([]);
 
   const onClickMakeRoom = () => {
     setShowRoomMakeModal(true);
@@ -22,6 +24,11 @@ const RoomsPage = () => {
   const closeModal = () => {
     setShowRoomMakeModal(false);
   };
+
+  useEffect(async () => {
+    const rooms = await getRooms("NORMAL");
+    setRooms(rooms);
+  }, []);
 
   return (
     <WoodBackground>
@@ -55,13 +62,25 @@ const RoomsPage = () => {
                 >
                   <Tab />
                 </div>
+
+                {/* 방 정보들이 들어가야하는 부분 */}
                 <div
                   style={{
                     width: "1225px",
                     height: "520px",
                     background: "var(--ocher)",
+                    display: "flex",
+                    flexWrap: "wrap",
+                    alignContent: "start",
+                    padding: "15px",
+                    gap: "10px",
                   }}
-                ></div>
+                  className="justify-between"
+                >
+                  {rooms.map((room) => (
+                    <Room />
+                  ))}
+                </div>
               </div>
             </Parchment>
           </div>
