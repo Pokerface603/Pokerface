@@ -5,13 +5,19 @@ export async function getToken(roomData) {
   return await createToken(sessionId);
 }
 
-async function createSession({ roomName, gameMode, isPrivate, roomPassword }) {
+async function createSession({
+  roomName,
+  sessionId,
+  mode,
+  isPrivate,
+  roomPassword,
+}) {
   const response = await axios.post(
     "/sessions",
     {
-      customSessionId: roomName,
+      customSessionId: sessionId,
       title: roomName,
-      gameMode,
+      mode,
       isPrivate,
       roomPassword,
     },
