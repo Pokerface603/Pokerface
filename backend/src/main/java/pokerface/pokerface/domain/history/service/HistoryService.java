@@ -12,6 +12,7 @@ import pokerface.pokerface.domain.history.dto.response.GameLogResponse;
 import pokerface.pokerface.domain.history.dto.response.HistoryResponse;
 import pokerface.pokerface.domain.history.dto.response.RoundLogResponse;
 import pokerface.pokerface.domain.history.entity.History;
+import pokerface.pokerface.domain.history.entity.PlayerType;
 import pokerface.pokerface.domain.history.repository.HistoryRepository;
 import pokerface.pokerface.domain.member.entity.Member;
 import pokerface.pokerface.domain.member.service.MemberService;
@@ -42,10 +43,10 @@ public class HistoryService {
         return historyRepository.findById(historyId).orElseThrow(IllegalAccessError::new);
     }
 
-    public HistoryResponse getHistory(Long historyId){
+    public HistoryResponse getHistory(Long historyId, Long memberId){
         History history = findById(historyId);
 
-        return HistoryResponse.of(history, convertGameLogToData(history.getGameLog()));
+        return HistoryResponse.of(history, convertGameLogToData(history.getGameLog(), isHost(history, memberId)));
     }
 
     @Transactional
@@ -78,25 +79,32 @@ public class HistoryService {
     }
 
     // DB의 게임 로그를 라운드 로그로 분리하는 메소드
-    public GameLogResponse convertGameLogToData(String gameLog){
+    public GameLogResponse convertGameLogToData(String gameLog, boolean isHost){
         return GameLogResponse.of(Pattern.compile("#")
                 .splitAsStream(gameLog)
-                .map(this::convertRoundLogToData)
+                .filter(x -> !x.equals(""))
+                .map(roundLog -> convertRoundLogToData(roundLog, isHost))
                 .collect(Collectors.toList()));
     }
 
     // 분리된 라운드 로그를 라운드 게임 정보로 변환하는 메소드
-    public RoundLogResponse convertRoundLogToData(String roundLog){
+    public RoundLogResponse convertRoundLogToData(String roundLog, boolean isHost){
         StringTokenizer st = new StringTokenizer(roundLog, "$");
-        return RoundLogResponse.of(Integer.parseInt(st.nextToken()),
+        return RoundLogResponse.of(PlayerType.valueOf(st.nextToken().toUpperCase()),
+                Integer.parseInt(st.nextToken()),
                 Integer.parseInt(st.nextToken()),
                 Integer.parseInt(st.nextToken()),
                 Integer.parseInt(st.nextToken()),
                 Integer.parseInt(st.nextToken()),
                 Pattern.compile(",")
                         .splitAsStream(st.nextToken())
+                        .filter(x -> !x.equals(""))
                         .map(Integer::parseInt)
                         .collect(Collectors.toList()),
-                Result.valueOf(st.nextToken()));
+                Result.valueOf(st.nextToken()), isHost);
+    }
+
+    public boolean isHost(History history, Long memberId){
+        return history.getHost().getId().equals(memberId);
     }
 }
