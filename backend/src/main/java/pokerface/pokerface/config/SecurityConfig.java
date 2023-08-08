@@ -39,13 +39,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 //		 HttpBasic: http 요청을 보낼 때 마다 Header 영역에  Authorization이라는 key 값으로 매번 id와 pw를 함께 보내는 방식
 //		 HttpBearer: http 요청 시 Authorization이라는 key 값으로 id, pw가 아닌 Token(ex. JWT)을 보내주는 방식
-			.httpBasic().disable(); // 기본 인증 방식 비활성화
-		
-		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); // 세션을 사용하지 않도록 설정
+			.httpBasic().disable() // 기본 인증 방식 비활성화
+			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); // 세션을 사용하지 않도록 설정
+
 		http.authorizeHttpRequests()
-				.antMatchers("/", "/members/join", "/swagger-ui/**", "/members/check/email/**", "/members/check/nickname/**", "/css/**", "/img/**", "/js/**", "/favicon.ico",
-								"/v3/api-docs", "/swagger-resources/**", "/swagger-ui.html","/swagger-ui/**").permitAll()
-				.anyRequest().authenticated(); // 나머지 요청들은 인증을 필요로 한다.
+				// 1. 테스트를 용이하기 위한 버전
+				.antMatchers("/members/login").authenticated()
+						.anyRequest().permitAll();
+				// 2. 추후 실제로 사용해야하는 버전
+//				.antMatchers("/", "/members", "/members/check/email/**", "/members/check/nickname/**" ,
+//						"/api/swagger-ui/**","/swagger-resources/**", "/swagger-ui.html","/swagger-ui/**").permitAll()
+//				.anyRequest().authenticated(); // 나머지 요청들은 인증을 필요로 한다.
 		
 		/**
 		 * 소셜 로그인 관리	
