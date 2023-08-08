@@ -4,8 +4,8 @@ import Parchment from "@component/Parchment";
 import React, { useState } from "react";
 import ModalHeader from "./ModalHeader";
 import CheckBox from "@component/checkbox/CheckBox";
-import { makeRoom } from "../api/room";
 import { useNavigate } from "react-router-dom";
+import { hashOpenviduTitle } from "@util/hashing";
 
 function RoomMakeModal({ close }) {
   const navigate = useNavigate();
@@ -14,7 +14,8 @@ function RoomMakeModal({ close }) {
     roomName: "",
     roomPassword: "",
     isPrivate: false,
-    gameMode: "NORMAL",
+    mode: "NORMAL",
+    sessionId: "",
   });
 
   const onChangeRoomName = (e) => {
@@ -22,7 +23,11 @@ function RoomMakeModal({ close }) {
       target: { value },
     } = e;
 
-    setRoomData((prevRoomData) => ({ ...prevRoomData, roomName: value }));
+    setRoomData((prevRoomData) => ({
+      ...prevRoomData,
+      roomName: value,
+      sessionId: hashOpenviduTitle(value),
+    }));
   };
 
   const onChangePassword = (e) => {
@@ -33,9 +38,8 @@ function RoomMakeModal({ close }) {
     setRoomData((prevRoomData) => ({ ...prevRoomData, roomPassword: value }));
   };
 
-  const onClickMakeRoom = () => {
-    makeRoom(roomData);
-    navigate(`game/${roomData.roomName}`);
+  const onClickMakeRoom = async () => {
+    navigate(`../game/${roomData.sessionId}`, { state: roomData });
   };
 
   const onToggleSecretRoom = () => {
