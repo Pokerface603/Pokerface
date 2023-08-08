@@ -1,6 +1,8 @@
 package pokerface.pokerface.domain.history.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pokerface.pokerface.domain.history.dto.request.HistoryRequest;
@@ -17,19 +19,21 @@ public class HistoryController {
     private final HistoryService historyService;
 
     @GetMapping
-    public List<HistoryResponse> historyListAll(){
-        return historyService.findAll().stream()
+    public ResponseEntity<List<HistoryResponse>> historyListAll(){
+        return new ResponseEntity<>(historyService.findAll().stream()
                 .map(history -> HistoryResponse.of(history, historyService.convertGameLogToData(history.getGameLog(), true)))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()),
+                HttpStatus.OK);
     }
 
     @GetMapping("/{historyId}/{memberId}")
-    public HistoryResponse getHistory(@PathVariable Long historyId, @PathVariable Long memberId){
-        return historyService.getHistory(historyId, memberId);
+    public ResponseEntity<HistoryResponse> getHistory(@PathVariable Long historyId, @PathVariable Long memberId){
+        return new ResponseEntity<>(historyService.getHistory(historyId, memberId), HttpStatus.OK);
     }
 
     @PostMapping
-    public void historyRegistry(@RequestBody @Validated HistoryRequest historyRequest){
+    public ResponseEntity<Void> historyRegistry(@RequestBody @Validated HistoryRequest historyRequest){
         historyService.save(historyRequest);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
