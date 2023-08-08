@@ -44,12 +44,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.authorizeHttpRequests()
 				// 1. 테스트를 용이하기 위한 버전
-				.antMatchers("/members/login").authenticated()
-						.anyRequest().permitAll();
+//				.antMatchers("/members/login").authenticated()
+//						.anyRequest().permitAll();
 				// 2. 추후 실제로 사용해야하는 버전
-//				.antMatchers("/", "/members", "/members/check/email/**", "/members/check/nickname/**" ,
-//						"/api/swagger-ui/**","/swagger-resources/**", "/swagger-ui.html","/swagger-ui/**").permitAll()
-//				.anyRequest().authenticated(); // 나머지 요청들은 인증을 필요로 한다.
+				.antMatchers("/", "/members", "/members/check/email/**", "/members/check/nickname/**"
+						,"/utils/profile", "/actuator/health",
+						"/api/swagger-ui/**","/swagger-resources/**", "/swagger-ui.html","/swagger-ui/**").permitAll()
+				.anyRequest().authenticated(); // 나머지 요청들은 인증을 필요로 한다.
 		
 		/**
 		 * 소셜 로그인 관리	
