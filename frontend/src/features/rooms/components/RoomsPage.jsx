@@ -11,7 +11,7 @@ import ConnectList from "./connect/ConnectList";
 import Tab from "./Tab";
 import RoomMakeModal from "./RoomMakeModal";
 import { getRooms } from "../api/room";
-import Room from "./Room";
+import Room from "./RoomCard";
 
 const RoomsPage = () => {
   const [showRoomMakeModal, setShowRoomMakeModal] = useState(false);
