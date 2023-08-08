@@ -4,9 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import pokerface.pokerface.config.login.PrincipalDetails;
 import pokerface.pokerface.domain.member.dto.request.MemberJoinReq;
+import pokerface.pokerface.domain.member.entity.Member;
 import pokerface.pokerface.domain.member.service.MemberService;
 
 @RestController
@@ -26,20 +29,22 @@ public class MemberController {
 
         log.debug("/user/join");
 
-        String email = memberJoinReq.getEmail();
-        if(memberService.emailCheck(email)) {
+        if(memberService.emailCheck(memberJoinReq.getEmail())) {
             log.debug("이미 존재하는 이메일 입니다.");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         // 유저 패스워드 암호화
-        String userPassword =  passwordEncoder.encode(memberJoinReq.getPassword());
-        memberJoinReq.setPassword(userPassword);
-
+        memberJoinReq.setPassword(passwordEncoder.encode(memberJoinReq.getPassword()));
         memberService.join(memberJoinReq);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+//    @GetMapping("/login")
+//    public ResponseEntity<Member> findOne(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+//        return new ResponseEntity<>(memberService.findById(principalDetails.getMemberId()), HttpStatus.OK);
+//    }
 
     @GetMapping("/check/email/{email}")
     public ResponseEntity<Boolean> emailDuplicatedCheck(@PathVariable String email) {

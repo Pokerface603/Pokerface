@@ -16,7 +16,8 @@ spring:
 
 logging:
   level:
-    org.hibernate.sql: debug
+    root: info
+    org.hibernate.sql: info
 
 ---
 spring:
