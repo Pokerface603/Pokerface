@@ -9,8 +9,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import pokerface.pokerface.config.login.PrincipalDetails;
 import pokerface.pokerface.domain.member.dto.request.MemberJoinReq;
+import pokerface.pokerface.domain.member.dto.response.RankingRes;
 import pokerface.pokerface.domain.member.entity.Member;
 import pokerface.pokerface.domain.member.service.MemberService;
+
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -54,5 +57,23 @@ public class MemberController {
     @GetMapping("/check/nickname/{nickname}")
     public ResponseEntity<Boolean> nicknameDuplicatedCheck(@PathVariable String nickname) {
         return new ResponseEntity<>(memberService.nicknameCheck(nickname), HttpStatus.OK);
+    }
+
+    /*
+     * 랭킹 관련 API
+     * */
+    @GetMapping("/ranking")
+    public ResponseEntity<List<RankingRes>> findAllRankings(){
+        return new ResponseEntity<>(memberService.findAllRankings(), HttpStatus.OK);
+    }
+
+    @GetMapping("/ranking/top")
+    public ResponseEntity<List<RankingRes>> findTop5Rankings(){
+        return new ResponseEntity<>(memberService.findTop5Rankings(), HttpStatus.OK);
+    }
+
+    @GetMapping("/ranking/{memberId}")
+    public ResponseEntity<RankingRes> findRankingByMemberId(@PathVariable Long memberId){
+        return new ResponseEntity<>(memberService.findRankingByMemberId(memberId), HttpStatus.OK);
     }
 }
