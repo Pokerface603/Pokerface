@@ -25,9 +25,13 @@ const RoomsPage = () => {
     setShowRoomMakeModal(false);
   };
 
-  useEffect(async () => {
-    const rooms = await getRooms("NORMAL");
-    setRooms(rooms);
+  useEffect(() => {
+    async function fetchRoomData() {
+      const rooms = await getRooms("NORMAL");
+      setRooms(rooms);
+    }
+
+    fetchRoomData();
   }, []);
 
   return (
