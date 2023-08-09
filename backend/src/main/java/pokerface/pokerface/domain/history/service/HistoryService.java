@@ -52,8 +52,8 @@ public class HistoryService {
 
     @Transactional
     public void save(HistoryRequest historyRequest) {
-        Member host = memberService.findById(historyRequest.getHostId());
-        Member guest = memberService.findById(historyRequest.getGuestId());
+        Member host = memberService.findByEmail(historyRequest.getHostEmail());
+        Member guest = memberService.findByEmail(historyRequest.getGuestEmail());
         History history = historyRepository.save(historyRequest.toHistory(host, guest));
         Result hostResult = Result.valueOf(historyRequest.getResult());
 
