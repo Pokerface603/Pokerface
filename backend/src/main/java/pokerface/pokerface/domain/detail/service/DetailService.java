@@ -5,6 +5,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
+import pokerface.pokerface.config.error.RestException;
+import pokerface.pokerface.config.error.errorcode.ErrorCode;
 import pokerface.pokerface.domain.detail.dto.request.DetailRequest;
 import pokerface.pokerface.domain.detail.dto.response.DetailCountResponse;
 import pokerface.pokerface.domain.detail.dto.response.DetailResponse;
@@ -32,7 +34,7 @@ public class DetailService {
     }
 
     public Detail findById(Long detailId){
-        return detailRepository.findById(detailId).orElseThrow(IllegalAccessError::new);
+        return detailRepository.findById(detailId).orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND));
     }
 
     public DetailResponse getDetail(Long detailId){
