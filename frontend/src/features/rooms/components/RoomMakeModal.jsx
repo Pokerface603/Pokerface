@@ -6,6 +6,7 @@ import ModalHeader from "./ModalHeader";
 import CheckBox from "@component/checkbox/CheckBox";
 import { useNavigate } from "react-router-dom";
 import { hashOpenviduTitle } from "@util/hashing";
+import { createRoom } from "../api/session";
 
 function RoomMakeModal({ close }) {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ function RoomMakeModal({ close }) {
     roomName: "",
     roomPassword: "",
     isPrivate: false,
-    mode: "NORMAL",
+    gameMode: "NORMAL",
     sessionId: "",
   });
 
@@ -39,7 +40,10 @@ function RoomMakeModal({ close }) {
   };
 
   const onClickMakeRoom = async () => {
-    navigate(`../game/${roomData.sessionId}`, { state: roomData });
+    const token = await createRoom(roomData);
+    navigate(`../game/${roomData.sessionId}`, {
+      state: { token, gameMode: roomData.gameMode },
+    });
   };
 
   const onToggleSecretRoom = () => {
