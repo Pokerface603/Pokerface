@@ -16,7 +16,6 @@ function RoomMakeModal({ close }) {
     roomPassword: "",
     isPrivate: false,
     gameMode: "NORMAL",
-    sessionId: "",
   });
 
   const onChangeRoomName = (e) => {
@@ -27,7 +26,6 @@ function RoomMakeModal({ close }) {
     setRoomData((prevRoomData) => ({
       ...prevRoomData,
       roomName: value,
-      sessionId: hashOpenviduTitle(value),
     }));
   };
 
@@ -40,8 +38,10 @@ function RoomMakeModal({ close }) {
   };
 
   const onClickMakeRoom = async () => {
-    const token = await createRoom(roomData);
-    navigate(`../game/${roomData.sessionId}`, {
+    const sessionId = hashOpenviduTitle(roomData.roomName);
+
+    const token = await createRoom({ ...roomData, sessionId });
+    navigate(`../game/${sessionId}`, {
       state: { token, gameMode: roomData.gameMode },
     });
   };

@@ -3,9 +3,9 @@ import Parchment from "@component/Parchment";
 import Wanted from "@component/Wanted";
 import WoodBackground from "@component/WoodBackground";
 import cowboy from "../../../assets/images/cowboy.svg";
-import LoginFormContent from "./LoginFormContent"; 
+import LoginFormContent from "./LoginFormContent";
 
-const LoginFormPages = () => {
+const LoginFormPage = () => {
   return (
     <>
       <WoodBackground>
@@ -23,4 +23,4 @@ const LoginFormPages = () => {
   );
 };
 
-export default LoginFormPages;
+export default LoginFormPage;

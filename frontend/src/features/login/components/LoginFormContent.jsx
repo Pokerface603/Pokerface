@@ -7,6 +7,7 @@ import { loginUser } from "@store/userSlice";
 import { login } from "../api/api";
 import { useCallback, useState } from "react";
 import { validateEmail } from "@util/emailValidation";
+import { useNavigate } from "react-router-dom";
 
 const LoginFormContent = () => {
   const dispatch = useDispatch();
@@ -20,6 +21,8 @@ const LoginFormContent = () => {
 
   // 이메일 유효성 검사 state
   const [isEmail, setIsEmail] = useState(false);
+
+  const navigate = useNavigate();
 
   const clickLogin = () => {
     if (!email) {
@@ -41,6 +44,7 @@ const LoginFormContent = () => {
                 authorizationRefresh: response.headers["authorization-refresh"],
               })
             );
+            navigate("/lobby");
           }
         })
         .catch((error) => {
