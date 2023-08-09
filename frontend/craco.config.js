@@ -11,6 +11,22 @@ module.exports = {
       "@store": path.resolve(__dirname, "src/stores"),
       "@util": path.resolve(__dirname, "src/utils"),
       "@lib": path.resolve(__dirname, "src/lib"),
+      "@asset": path.resolve(__dirname, "src/assets"),
+    },
+    module: {
+      rules: [
+        {
+          test: /\.svg$/,
+          use: [
+            {
+              loader: "@svgr/webpack",
+              options: {
+                native: true,
+              },
+            },
+          ],
+        },
+      ],
     },
   },
 };

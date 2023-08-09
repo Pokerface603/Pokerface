@@ -5,11 +5,11 @@ import KSvg from "../../assets/images/tier/K.svg";
 import QSvg from "../../assets/images/tier/Q.svg";
 
 const TierBoxSvg = {
-  A: ASvg,
-  J: JSvg,
-  Joker: JokerSvg,
-  K: KSvg,
-  Q: QSvg,
+  ACE: ASvg,
+  JACK: JSvg,
+  JOKER: JokerSvg,
+  KING: KSvg,
+  QUEEN: QSvg,
 };
 
 export default TierBoxSvg;
