@@ -2,9 +2,17 @@ import Button from "@component/Button";
 import TierBox from "@component/TierBox";
 import React from "react";
 import Dividor from "./Dividor";
+import { hashOpenviduTitle } from "@util/hashing";
+import { useNavigate } from "react-router-dom";
 
 function RoomCard({ title, hostName, hostTier, playerCount }) {
-  console.log(title, hostName, hostTier, playerCount);
+  const navigate = useNavigate();
+
+  const enterGameRoom = () => {
+    const sessionId = hashOpenviduTitle(title);
+    navigate(`../game/${sessionId}`);
+  };
+
   return (
     <div
       style={{
@@ -55,6 +63,7 @@ function RoomCard({ title, hostName, hostTier, playerCount }) {
               color={"white"}
               height={"33px"}
               fontSize={"20px"}
+              onClick={enterGameRoom}
             />
           </div>
         </div>
