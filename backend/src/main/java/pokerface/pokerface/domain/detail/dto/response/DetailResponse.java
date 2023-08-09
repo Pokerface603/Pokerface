@@ -14,9 +14,9 @@ import javax.persistence.Enumerated;
 public class DetailResponse {
     private final Long detailId;
 
-    private final Integer preRating;
+    private final Long preRating;
 
-    private final Integer postRating;
+    private final Long postRating;
 
     @Enumerated(EnumType.STRING)
     private Result result;
@@ -25,14 +25,18 @@ public class DetailResponse {
 
     private final GameMode gameMode;
 
+    private final String opponentNickName;
+
     public static DetailResponse of(Detail detail){
         return DetailResponse.builder()
                 .detailId(detail.getId())
-                .preRating(detail.getPreRating())
-                .postRating(detail.getPostRating())
+                .preRating(detail.convertRatingToBounty(detail.getPreRating()))
+                .postRating(detail.convertRatingToBounty(detail.getPostRating()))
                 .result(detail.getResult())
                 .historyId(detail.getHistory().getId())
                 .gameMode(detail.getHistory().getGameMode())
+                .opponentNickName((detail.getHistory().getHost().equals(detail.getMember()) ?
+                        detail.getHistory().getGuest() : detail.getHistory().getHost()).getNickname())
                 .build();
     }
 }

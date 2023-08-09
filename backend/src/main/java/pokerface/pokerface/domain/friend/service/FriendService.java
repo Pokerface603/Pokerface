@@ -2,17 +2,19 @@ package pokerface.pokerface.domain.friend.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import pokerface.pokerface.config.error.RestException;
+import pokerface.pokerface.config.error.errorcode.ErrorCode;
 import pokerface.pokerface.domain.friend.dto.request.FriendRequest;
 import pokerface.pokerface.domain.friend.dto.response.FriendResponse;
 import pokerface.pokerface.domain.friend.entity.Friend;
 import pokerface.pokerface.domain.friend.repository.FriendRepository;
 import pokerface.pokerface.domain.member.service.MemberService;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class FriendService {
     private final FriendRepository friendRepository;
@@ -23,7 +25,7 @@ public class FriendService {
     }
 
     public Friend findById(Long friendId) {
-        return friendRepository.findById(friendId).orElseThrow(IllegalAccessError::new);
+        return friendRepository.findById(friendId).orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND));
     }
 
     public FriendResponse getFriend(Long friendId){
@@ -34,6 +36,7 @@ public class FriendService {
         return friendRepository.findFriendByFromId(fromId);
     }
 
+    @Transactional
     public void save(FriendRequest friendRequest){
         friendRepository.save(friendRequest.toFriend(
                 memberService.findById(friendRequest.getFromId()),

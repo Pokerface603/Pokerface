@@ -12,11 +12,16 @@ spring:
   mvc:
     throw-exception-if-no-handler-found: true
   config:
-    import: openvidu.yml, mysql.yml
+    import: openvidu.yml, mysql.yml, redis.yml, jwt.yml, mail.yml
 
 logging:
   level:
-    org.hibernate.sql: debug
+    root: info
+    pokerface:
+      pokerface: debug
+    org.hibernate.sql: info
+    org.hibernate.type.descriptor.sql: trace
+    org.springframework.security.web.FilterChainProxy: DEBUG
 
 ---
 spring:
