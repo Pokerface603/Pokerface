@@ -66,7 +66,10 @@ public class OpenviduController {
                         .roomPassword((String) params.get("roomPassword"))
                         .build());
 
-        return new ResponseEntity<>(session.getSessionId(), HttpStatus.OK);
+        ConnectionProperties connectionProperties = ConnectionProperties.fromJson(params).build();
+        Connection connection = session.createConnection(connectionProperties);
+
+        return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
     }
 
 
