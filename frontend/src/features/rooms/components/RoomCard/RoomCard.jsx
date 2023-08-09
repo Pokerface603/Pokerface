@@ -4,13 +4,15 @@ import React from "react";
 import Dividor from "./Dividor";
 import { hashOpenviduTitle } from "@util/hashing";
 import { useNavigate } from "react-router-dom";
+import { participateRoom } from "@feature/rooms/api/session";
 
-function RoomCard({ title, hostName, hostTier, playerCount }) {
+function RoomCard({ title, hostName, hostTier, playerCount, gameMode }) {
   const navigate = useNavigate();
 
-  const enterGameRoom = () => {
+  const enterGameRoom = async () => {
     const sessionId = hashOpenviduTitle(title);
-    navigate(`../game/${sessionId}`);
+    const token = await participateRoom(sessionId);
+    navigate(`../game/${sessionId}`, { state: { token, gameMode } });
   };
 
   return (

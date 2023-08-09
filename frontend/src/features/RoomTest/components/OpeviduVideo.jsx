@@ -10,7 +10,13 @@ function OpeviduVideo({ streamManager }) {
   return (
     streamManager && (
       <video
-        style={{ width: "500px", height: "500px" }}
+        style={{
+          width: "500px",
+          height: "500px",
+          position: "absolute",
+          left: "calc(50vw - 250px)",
+          top: "0px",
+        }}
         autoPlay={true}
         ref={videoRef}
       />

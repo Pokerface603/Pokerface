@@ -20,7 +20,7 @@ function LobbyPage() {
   return (
     <div>
       <h1>로비 페이지 입니다. </h1>
-      <Input onChange={onChangeSessionId} value={sessionId} />
+      <Input onChange={onChangeSessionId}  />
       <Button onClick={onClickEnter} label={"방 입장하기"}></Button>
     </div>
   );

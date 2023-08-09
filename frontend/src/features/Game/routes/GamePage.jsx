@@ -1,15 +1,18 @@
 import { OpenVidu } from "openvidu-browser";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { getToken } from "../api/session";
-import OpeviduVideo from "./OpeviduVideo";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import OpeviduVideo from "../../RoomTest/components/OpeviduVideo";
 import Button from "@component/Button";
 import { useRef } from "react";
+import Game from "../components/Game";
 
 function GamePage() {
   const navigate = useNavigate();
-  let ov = new OpenVidu();
+  const {
+    state: { token, gameMode },
+  } = useLocation();
 
+  let ov = new OpenVidu();
   const { sessionId } = useParams();
 
   const [mySession, _setMySession] = useState();
@@ -37,7 +40,6 @@ function GamePage() {
     joinSession();
 
     return () => {
-      console.log("unmounted");
       leaveSession();
     };
   }, []);
@@ -68,26 +70,24 @@ function GamePage() {
       console.warn(exception);
     });
 
-    getToken(sessionId).then((token) => {
-      mySession.connect(token, { clientData: "test" }).then(async () => {
-        const publisher = await ov.initPublisherAsync(undefined, {
-          audioSource: undefined, // The source of audio. If undefined default microphone
-          videoSource: undefined, // The source of video. If undefined default webcam
-          publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
-          publishVideo: true, // Whether you want to start publishing with your video enabled or not
-          resolution: "640x480", // The resolution of your video
-          frameRate: 30, // The frame rate of your video
-          insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
-          mirror: false, // Whether to mirror your local video or not
-        });
+    mySession.connect(token).then(async () => {
+      const publisher = await ov.initPublisherAsync(undefined, {
+        audioSource: undefined, // The source of audio. If undefined default microphone
+        videoSource: undefined, // The source of video. If undefined default webcam
+        publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+        publishVideo: true, // Whether you want to start publishing with your video enabled or not
+        resolution: "640x480", // The resolution of your video
+        frameRate: 30, // The frame rate of your video
+        insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
+        mirror: false, // Whether to mirror your local video or not
+      });
 
-        mySession.publish(publisher);
+      mySession.publish(publisher);
 
-        setSessionInfo({
-          ...sessionInfoRef.current,
-          mainStreamManager: publisher,
-          publisher,
-        });
+      setSessionInfo({
+        ...sessionInfoRef.current,
+        mainStreamManager: publisher,
+        publisher,
       });
     });
   }, [mySession]);
@@ -119,6 +119,7 @@ function GamePage() {
 
   return (
     <div>
+      <Game roomName={sessionId} gameMode={gameMode} />
       {sessionInfo?.subscribers?.map((sub, i) => (
         <OpeviduVideo key={i} streamManager={sub} />
       ))}
