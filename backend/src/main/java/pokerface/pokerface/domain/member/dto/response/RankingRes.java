@@ -13,12 +13,12 @@ import javax.persistence.Enumerated;
 public class RankingRes {
     private final String nickname;
 
-    private final Integer rating;
+    private final Long rating;
 
     @Enumerated(EnumType.STRING)
     private final Tier tier;
 
     public static RankingRes of(Member member){
-        return new RankingRes(member.getNickname(), member.getRating(), member.getTier());
+        return new RankingRes(member.getNickname(), member.convertRatingToBounty(), member.getTier());
     }
 }
