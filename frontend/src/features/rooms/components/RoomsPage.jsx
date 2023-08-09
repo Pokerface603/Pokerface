@@ -9,7 +9,7 @@ import SearchBar from "./SearchBar";
 import Ranking from "./rank/Ranking";
 import ConnectList from "./connect/ConnectList";
 import Tab from "./Tab/Tab";
-import RoomMakeModal from "./RoomMakeModal";
+import RoomMakeModal from "./RoomMakeModal/RoomMakeModal";
 import { getRooms, quickStart, searchRoomsWithKeyword } from "../api/room";
 import Room from "./RoomCard/RoomCard";
 import { getRankers } from "../api/ranker";
