@@ -12,12 +12,14 @@ import Tab from "./Tab/Tab";
 import RoomMakeModal from "./RoomMakeModal";
 import { getRooms, searchRoomsWithKeyword } from "../api/room";
 import Room from "./RoomCard/RoomCard";
+import { getRankers } from "../api/ranker";
 
 const RoomsPage = () => {
   const [showRoomMakeModal, setShowRoomMakeModal] = useState(false);
   const [rooms, setRooms] = useState([]);
   const [mode, setMode] = useState("NORMAL");
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [rankers, setRankers] = useState([]);
 
   const onClickTab = (selectedMode) => {
     setMode(selectedMode);
@@ -54,9 +56,19 @@ const RoomsPage = () => {
     setRooms(rooms);
   }
 
+  async function fetchRankers() {
+    const rankers = await getRankers();
+    setRankers(rankers);
+  }
+
   useEffect(() => {
     fetchRoomData();
   }, [mode]);
+
+  useEffect(() => {
+    // Todo: API 배포 후 주석 풀 예정
+    // fetchRankers();
+  }, []);
 
   return (
     <WoodBackground>
@@ -148,7 +160,16 @@ const RoomsPage = () => {
               <Parchment style={{ width: "450px", height: "320px" }}>
                 <div className="mt-5">
                   {/* 임의의 값 입력 */}
-                  <Ranking nickname={"Hanna"} tier="Joker" reward={"13000"} />
+
+                  {rankers.map(({ nickname, tier, rating }) => {
+                    return (
+                      <Ranking
+                        nickname={nickname}
+                        tier={tier}
+                        reward={rating}
+                      />
+                    );
+                  })}
                 </div>
               </Parchment>
             </div>
