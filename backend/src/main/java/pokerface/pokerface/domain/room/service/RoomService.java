@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pokerface.pokerface.config.error.RestException;
 import pokerface.pokerface.config.error.errorcode.ErrorCode;
 import pokerface.pokerface.domain.history.entity.GameMode;
+import pokerface.pokerface.domain.history.service.HistoryService;
 import pokerface.pokerface.domain.member.entity.Member;
 import pokerface.pokerface.domain.room.dto.request.RoomCreateReq;
 import pokerface.pokerface.domain.room.dto.response.RoomInfoRes;
@@ -23,6 +24,7 @@ import java.util.stream.StreamSupport;
 public class RoomService {
 
     private final RoomRepository roomRepository;
+    private final HistoryService historyService;
 
     public Room findRoomById(String sessionId) {
         return roomRepository.findById(sessionId).orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND));
@@ -39,7 +41,7 @@ public class RoomService {
                 .roomPassword(room.getRoomPassword())
                 .hostName(room.getMembers().get(0).getNickname())
                 .hostTier(room.getMembers().get(0).getTier().toString())
-                .rating(room.getMembers().get(0).getRating())
+                .rating(room.getMembers().get(0).convertRatingToBounty())
                 .playerCount(room.getMembers().size())
                 .build();
     }
@@ -56,7 +58,7 @@ public class RoomService {
                     .roomPassword(room.getRoomPassword())
                     .hostName(room.getMembers().get(0).getNickname())
                     .hostTier(room.getMembers().get(0).getTier().toString())
-                    .rating(room.getMembers().get(0).getRating())
+                    .rating(room.getMembers().get(0).convertRatingToBounty())
                     .playerCount(room.getMembers().size())
                     .build())
                         .collect(Collectors.toList());
@@ -72,7 +74,7 @@ public class RoomService {
                         .roomPassword(room.getRoomPassword())
                         .hostName(room.getMembers().get(0).getNickname())
                         .hostTier(room.getMembers().get(0).getTier().toString())
-                        .rating(room.getMembers().get(0).getRating())
+                        .rating(room.getMembers().get(0).convertRatingToBounty())
                         .playerCount(room.getMembers().size())
                         .build())
                 .collect(Collectors.toList());

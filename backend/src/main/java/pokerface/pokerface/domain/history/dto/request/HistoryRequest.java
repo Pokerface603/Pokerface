@@ -12,9 +12,9 @@ import pokerface.pokerface.domain.member.entity.Member;
 @NoArgsConstructor
 @AllArgsConstructor
 public class HistoryRequest {
-    private Long hostId;
+    private String hostEmail;
 
-    private Long guestId;
+    private String guestEmail;
 
     private String gameMode;
 

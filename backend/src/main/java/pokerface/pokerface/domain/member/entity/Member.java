@@ -6,6 +6,9 @@ import org.hibernate.annotations.DynamicInsert;
 import pokerface.pokerface.global.BaseTime;
 import javax.persistence.*;
 
+import static pokerface.pokerface.global.Constants.BOUNTY_RATIO;
+import static pokerface.pokerface.global.Constants.ROUND_UNIT;
+
 @Entity
 @Getter @Setter
 @NoArgsConstructor
@@ -66,5 +69,9 @@ public class Member extends BaseTime {
         this.email = email;
         this.userPassword = userPassword;
         this.nickname = nickname;
+    }
+
+    public Long convertRatingToBounty(){
+        return Math.round(Math.pow(BOUNTY_RATIO, rating) / ROUND_UNIT) * ROUND_UNIT;
     }
 }

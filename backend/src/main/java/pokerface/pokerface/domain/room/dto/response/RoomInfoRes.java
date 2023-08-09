@@ -25,7 +25,7 @@ public class RoomInfoRes {
 
     private String hostTier;
 
-    private Integer rating;
+    private Long rating;
 
     private int playerCount;
 }

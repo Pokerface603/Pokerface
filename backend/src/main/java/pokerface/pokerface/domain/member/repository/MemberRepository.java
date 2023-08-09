@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pokerface.pokerface.domain.member.entity.Member;
 import pokerface.pokerface.domain.member.entity.SocialType;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -22,4 +23,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByRefreshToken(String refreshToken);
 
     Optional<Member> findBySocialIdAndSocialType(String socialId, SocialType socialType);
+
+    List<Member> findTop5ByOrderByRatingDesc();
 }

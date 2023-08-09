@@ -39,7 +39,7 @@ public class RoundLogResponse {
                 .opponentRemainChips(isHost ? guestRemainChips : hostRemainChips)
                 .seedMoney(seedMoney)
                 .battingMoney(battingMoney)
-                .result(result)
+                .result(isHost ? result : result.reverse())
                 .build();
     }
 }
