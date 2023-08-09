@@ -1,42 +1,16 @@
-import React, { useEffect } from "react";
-import { history } from "./test";
-import { getRatingUpDown, getTicketImg } from "./utils/table";
+import React from "react";
 import Parchment from "@component/Parchment";
-import { getHistoryTableRow } from "../api/getTableRow";
+import MatchHistoryTableBody from "./MatchHistoryTableBody";
 
 const MatchHistoryTable = () => {
-  // 테스트 데이터 연결 중, api 작업 시 수정
-  const table = history;
-
-  useEffect(() => {
-    getHistoryTableRow();
-  }, []);
-
-  const makeTableRow = table.map((match) => (
-    <tr key={match.id} className="h-20 text-center border-y-2 border-black">
-      <td
-        style={{
-          fontFamily: "Unchained-RegularShadow",
-          fontSize: "40px",
-          fontWeight: "normal",
-        }}>
-        {match.res}
-      </td>
-      <td className="flex justify-center">
-        <img
-          className=" shadow-md shadow-slate-500 mt-2 mb-2"
-          src={getTicketImg(match.mode)}
-          alt="tier"
-        />
-      </td>
-      <td>{match.name}</td>
-      <td>{match.rating}</td>
-      <td>{getRatingUpDown(match.rating - match.prevRating)}</td>
-    </tr>
-  ));
-
   return (
-    <Parchment style={{ width: "100%", height: "95%", overflow: "scroll" }}>
+    <Parchment
+      style={{
+        width: "100%",
+        height: "95%",
+        display: "block",
+        overflow: "auto",
+      }}>
       <table
         className="w-full table-auto border-collapse"
         style={{
@@ -53,7 +27,7 @@ const MatchHistoryTable = () => {
           }}>
           Match History
         </caption>
-        <thead>
+        <thead className="sticky top-0">
           <tr className="bg-red-950 text-yellow-100">
             <th className="w-1/5">결과</th>
             <th className="w-1/6 ">모드</th>
@@ -62,7 +36,7 @@ const MatchHistoryTable = () => {
             <th className="w-1/6">변동</th>
           </tr>
         </thead>
-        <tbody>{makeTableRow}</tbody>
+        <MatchHistoryTableBody />
       </table>
     </Parchment>
   );

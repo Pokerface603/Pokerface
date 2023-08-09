@@ -4,11 +4,11 @@ import emotionTicket from "assets/images/ticket/emotion-ticket.svg";
 
 export const getTicketImg = (mode) => {
   switch (mode) {
-    case "blind":
+    case "BLIND":
       return blindTicket;
-    case "normal":
+    case "NORMAL":
       return normalTicket;
-    case "emotion":
+    case "EMOTION":
       return emotionTicket;
     default:
       return "error";
