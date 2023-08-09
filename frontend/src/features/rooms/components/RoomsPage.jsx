@@ -170,17 +170,8 @@ const RoomsPage = () => {
             <div className="h-2/5 flex justify-center items-center">
               <Parchment style={{ width: "450px", height: "320px" }}>
                 <div className="mt-5">
-                  {/* 임의의 값 입력 */}
-
-                  {rankers.map(({ nickname, tier, rating }) => {
-                    return (
-                      <Ranking
-                        nickname={nickname}
-                        tier={tier}
-                        reward={rating}
-                      />
-                    );
-                  })}
+                  {/* 임의의 값 입력 */}'
+                  <Ranking rankers={rankers} />
                 </div>
               </Parchment>
             </div>
