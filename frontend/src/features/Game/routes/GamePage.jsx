@@ -1,7 +1,7 @@
 import { OpenVidu } from "openvidu-browser";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import OpeviduVideo from "../../RoomTest/components/OpeviduVideo";
+import OpeviduVideo from "../components/OpeviduVideo";
 import Button from "@component/Button";
 import { useRef } from "react";
 import Game from "../components/Game";
