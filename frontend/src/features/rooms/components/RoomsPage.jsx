@@ -8,7 +8,7 @@ import Logo from "./Logo";
 import SearchBar from "./SearchBar";
 import Ranking from "./rank/Ranking";
 import ConnectList from "./connect/ConnectList";
-import Tab from "./Tab";
+import Tab from "./Tab/Tab";
 import RoomMakeModal from "./RoomMakeModal";
 import { getRooms } from "../api/room";
 import Room from "./RoomCard/RoomCard";
@@ -16,6 +16,11 @@ import Room from "./RoomCard/RoomCard";
 const RoomsPage = () => {
   const [showRoomMakeModal, setShowRoomMakeModal] = useState(false);
   const [rooms, setRooms] = useState([]);
+  const [mode, setMode] = useState("NORMAL");
+
+  const onClickTab = (selectedMode) => {
+    setMode(selectedMode);
+  };
 
   const onClickMakeRoom = () => {
     setShowRoomMakeModal(true);
@@ -25,14 +30,14 @@ const RoomsPage = () => {
     setShowRoomMakeModal(false);
   };
 
-  useEffect(() => {
-    async function fetchRoomData() {
-      const rooms = await getRooms("NORMAL");
-      setRooms(rooms);
-    }
+  async function fetchRoomData() {
+    const rooms = await getRooms(mode);
+    setRooms(rooms);
+  }
 
+  useEffect(() => {
     fetchRoomData();
-  }, []);
+  }, [mode]);
 
   return (
     <WoodBackground>
@@ -64,7 +69,7 @@ const RoomsPage = () => {
                     background: "var(--ocher)",
                   }}
                 >
-                  <Tab />
+                  <Tab onClickTab={onClickTab} />
                 </div>
 
                 {/* 방 정보들이 들어가야하는 부분 */}
