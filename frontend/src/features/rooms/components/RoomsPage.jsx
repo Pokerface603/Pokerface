@@ -10,16 +10,21 @@ import Ranking from "./rank/Ranking";
 import ConnectList from "./connect/ConnectList";
 import Tab from "./Tab/Tab";
 import RoomMakeModal from "./RoomMakeModal";
-import { getRooms } from "../api/room";
+import { getRooms, searchRoomsWithKeyword } from "../api/room";
 import Room from "./RoomCard/RoomCard";
 
 const RoomsPage = () => {
   const [showRoomMakeModal, setShowRoomMakeModal] = useState(false);
   const [rooms, setRooms] = useState([]);
   const [mode, setMode] = useState("NORMAL");
+  const [searchKeyword, setSearchKeyword] = useState("");
 
   const onClickTab = (selectedMode) => {
     setMode(selectedMode);
+
+    if (mode === selectedMode) {
+      fetchRoomData();
+    }
   };
 
   const onClickMakeRoom = () => {
@@ -30,8 +35,22 @@ const RoomsPage = () => {
     setShowRoomMakeModal(false);
   };
 
+  const onInputSearchKeyword = (e) => {
+    const {
+      target: { value },
+    } = e;
+
+    setSearchKeyword(value);
+  };
+
   async function fetchRoomData() {
     const rooms = await getRooms(mode);
+    setRooms(rooms);
+  }
+
+  async function searchRooms() {
+    const rooms = await searchRoomsWithKeyword(mode, searchKeyword);
+    setSearchKeyword("");
     setRooms(rooms);
   }
 
@@ -49,7 +68,11 @@ const RoomsPage = () => {
                 <div className="col-span-2 grid mb-3">
                   <Logo />
                   <div style={{ width: "660px" }}>
-                    <SearchBar />
+                    <SearchBar
+                      onClickSearch={searchRooms}
+                      onInputSearchKeyword={onInputSearchKeyword}
+                      searchKeyword={searchKeyword}
+                    />
                   </div>
                 </div>
                 <div>
