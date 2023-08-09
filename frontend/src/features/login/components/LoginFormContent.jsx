@@ -4,21 +4,21 @@ import TextButton from "@component/TextButton";
 import KakaoLogo from "../../../assets/images/kakao-logo.svg";
 import { useDispatch } from "react-redux";
 import { loginUser } from "@store/userSlice";
-import { loginAPI } from "../api/api";
+import { login } from "../api/api";
 import { useCallback, useState } from "react";
-
+import { validateEmail } from "@util/emailValidation";
 
 const LoginFormContent = () => {
   const dispatch = useDispatch();
 
-  // 이메일, 비밀번호 확인
+  // 이메일, 비밀번호 확인 state
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // 오류 메시지 상태 저장
+  // 오류 메시지 상태 저장 state
   const [emailMessage, setEmailMessage] = useState("");
 
-  // 이메일 유효성 검사
+  // 이메일 유효성 검사 state
   const [isEmail, setIsEmail] = useState(false);
 
   const clickLogin = () => {
@@ -29,47 +29,39 @@ const LoginFormContent = () => {
     } else if (isEmail === false) {
       return alert("이메일 형식을 확인해주세요.");
     } else {
-      loginAPI(email, password).then((response) => {
-        // 로그인 성공
-        if (response.status === 200) {
-          dispatch(
-            loginUser({
-              nickname: response.data.nickname,
-              email: response.data.email,
-              authorization: response.headers["authorization"],
-              authorizationRefresh: response.headers["authorization-refresh"],
-            })
-          );
-        }
-      }).catch((error) => {
-        if (error.response.status === 400) {
-          // 로그인 실패  
-          alert(
-            "아이디 또는 비밀번호를 잘못 입력했습니다. 입력하신 내용을 다시 확인해주세요."
-          );
-        }
-      });
+      login(email, password)
+        .then((response) => {
+          // 로그인 성공
+          if (response.status === 200) {
+            dispatch(
+              loginUser({
+                nickname: response.data.nickname,
+                email: response.data.email,
+                authorization: response.headers["authorization"],
+                authorizationRefresh: response.headers["authorization-refresh"],
+              })
+            );
+          }
+        })
+        .catch((error) => {
+          if (error.response.status === 400) {
+            // 로그인 실패
+            alert(
+              "아이디 또는 비밀번호를 잘못 입력했습니다. \n입력하신 내용을 다시 확인해주세요."
+            );
+            setEmail("");
+            setPassword("");
+          }
+        });
     }
   };
 
   // 이메일 유효성 검사
-  const onChangeEmail = useCallback(
-    (e) => {
-      const emailRegex =
-        /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
-      const emailCurrent = e.target.value;
-      setEmail(emailCurrent);
-
-      if (!emailRegex.test(emailCurrent)) {
-        setEmailMessage("이메일 형식이 올바르지 않습니다.");
-        setIsEmail(false);
-      } else {
-        setEmailMessage("유효한 이메일 형식입니다.");
-        setIsEmail(true);
-      }
-    },
-    []
-  );
+  const onChangeEmail = useCallback((e) => {
+    const emailCurrent = e.target.value;
+    setEmail(emailCurrent);
+    validateEmail(emailCurrent, setEmailMessage, setIsEmail);
+  }, []);
 
   // 비밀번호 입력
   const onChangePassword = (e) => {
@@ -86,6 +78,7 @@ const LoginFormContent = () => {
             placeholder={"ID(E-MAIL)"}
             type="email"
             id="email"
+            value={email}
             onChange={onChangeEmail}
           />
           {email.length > 0 && (
@@ -105,9 +98,10 @@ const LoginFormContent = () => {
             placeholder="PASSWORD"
             type="password"
             id="password"
+            value={password}
             onChange={onChangePassword}
           />
-          <div className="flex  items-center justify-center mt-3 gap-7">
+          <div className="flex items-center justify-center mt-3 gap-7">
             <TextButton
               width="82px"
               height="28px"
