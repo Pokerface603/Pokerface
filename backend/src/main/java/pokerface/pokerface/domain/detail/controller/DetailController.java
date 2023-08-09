@@ -1,6 +1,9 @@
 package pokerface.pokerface.domain.detail.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,11 +29,8 @@ public class DetailController {
     }
 
     @GetMapping("/member/{memberId}")
-    public ResponseEntity<List<DetailResponse>> detailListByMemberId(@PathVariable Long memberId){
-        return new ResponseEntity<>(detailService.findByMemberId(memberId).stream()
-                .map(DetailResponse::of)
-                .collect(Collectors.toList()),
-                HttpStatus.OK);
+    public ResponseEntity<List<DetailResponse>> detailListPagingByMemberId(@PageableDefault(page = 0, size = 10, sort = "memberId", direction = Sort.Direction.DESC) Pageable pageable, @PathVariable Long memberId){
+        return new ResponseEntity<>(detailService.findPagingByMemberId(pageable, memberId), HttpStatus.OK);
     }
 
     @GetMapping("/{detailId}")

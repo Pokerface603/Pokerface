@@ -1,6 +1,7 @@
 package pokerface.pokerface.domain.detail.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -24,8 +25,10 @@ public class DetailService {
         return detailRepository.findAll();
     }
 
-    public List<Detail> findByMemberId(Long memberId) {
-        return detailRepository.findDetailByMemberId(memberId);
+    public List<DetailResponse> findPagingByMemberId(Pageable pageable, Long memberId) {
+        return detailRepository.findPagingByMemberId(pageable, memberId).stream()
+                .map(DetailResponse::of)
+                .collect(Collectors.toList());
     }
 
     public Detail findById(Long detailId){
