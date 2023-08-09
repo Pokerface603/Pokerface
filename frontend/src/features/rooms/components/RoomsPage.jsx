@@ -9,8 +9,20 @@ import SearchBar from "./SearchBar";
 import Ranking from "./rank/Ranking";
 import ConnectList from "./connect/ConnectList";
 import Tab from "./Tab";
+import RoomMakeModal from "./RoomMakeModal";
+import { useState } from "react";
 
 const RoomsPage = () => {
+  const [showRoomMakeModal, setShowRoomMakeModal] = useState(false);
+
+  const onClickMakeRoom = () => {
+    setShowRoomMakeModal(true);
+  };
+
+  const closeModal = () => {
+    setShowRoomMakeModal(false);
+  };
+
   return (
     <WoodBackground>
       <div className="grid grid-flow-col gap-4">
@@ -19,13 +31,13 @@ const RoomsPage = () => {
             <div className="h-1/4">
               <div className="grid grid-cols-3 gap-10 h-full">
                 <div className="col-span-2 grid mb-3">
-                    <Logo />
+                  <Logo />
                   <div style={{ width: "660px" }}>
                     <SearchBar />
                   </div>
                 </div>
                 <div>
-                  <StartButton />
+                  <StartButton onClickCreateRoom={onClickMakeRoom} />
                 </div>
               </div>
             </div>
@@ -112,6 +124,7 @@ const RoomsPage = () => {
           </div>
         </div>
       </div>
+      {showRoomMakeModal && <RoomMakeModal close={closeModal} />}
     </WoodBackground>
   );
 };

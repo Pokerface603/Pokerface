@@ -1,4 +1,13 @@
-const Input = ({ type, onChange, value, placeholder, id, width, height }) => {
+const Input = ({
+  type,
+  onChange,
+  value,
+  placeholder,
+  id,
+  width,
+  height,
+  style,
+}) => {
   return (
     <input
       type={type}
@@ -14,6 +23,7 @@ const Input = ({ type, onChange, value, placeholder, id, width, height }) => {
         height,
         fontFamily: "Unchained-Spaghetti",
         fontSize: "40px",
+        ...style,
       }}
     />
   );

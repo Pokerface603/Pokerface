@@ -10,10 +10,17 @@ module.exports = {
         "email-check-ticket":
           "url('/src/assets/images/email-check-ticket.svg')",
       },
+      extend: {
+        backgroundColor: ["checked"],
+        borderColor: ["checked"],
+      },
+    },
+    fontFamily: {
+      nexonGothic: ["NexonGothic"],
       colors: {
         ocher: "#C59C70",
         brown_dark: "#482613",
-      }
+      },
     },
   },
   plugins: [],
