@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pokerface.pokerface.domain.detail.dto.request.DetailRequest;
 import pokerface.pokerface.domain.detail.entity.Result;
+import pokerface.pokerface.domain.detail.repository.DetailRepository;
 import pokerface.pokerface.domain.detail.service.DetailService;
 import pokerface.pokerface.domain.history.dto.request.HistoryRequest;
 import pokerface.pokerface.domain.history.dto.response.GameLogResponse;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class HistoryService {
     private final HistoryRepository historyRepository;
+    private final DetailRepository detailRepository;
     private final DetailService detailService;
     private final MemberService memberService;
 
@@ -62,8 +64,8 @@ public class HistoryService {
 
     public Integer calculateRating(Member player, Member opponent, Result result){
         double expectRate = 1 / (Math.pow(10, (double)(opponent.getRating() - player.getRating())/RATING_SCALE) + 1);
-        Double playerCount = calculateCount(detailService.countByMemberId(player.getId()));
-        Double opponentCount = calculateCount(detailService.countByMemberId(opponent.getId()));
+        Double playerCount = calculateCount(detailRepository.countByMemberId(player.getId()));
+        Double opponentCount = calculateCount(detailRepository.countByMemberId(opponent.getId()));
 
         return (int)Math.round(player.getRating() + (result.getValue() - expectRate) * (RATING_WEIGHT * opponentCount) / (playerCount + opponentCount));
     }

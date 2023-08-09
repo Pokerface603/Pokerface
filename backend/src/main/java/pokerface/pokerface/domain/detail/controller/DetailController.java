@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pokerface.pokerface.domain.detail.dto.response.DetailCountResponse;
 import pokerface.pokerface.domain.detail.dto.response.DetailResponse;
 import pokerface.pokerface.domain.detail.service.DetailService;
 
@@ -38,12 +39,7 @@ public class DetailController {
     }
 
     @GetMapping("/count/{memberId}")
-    public ResponseEntity<Long> countByMemberId(@PathVariable Long memberId){
+    public ResponseEntity<DetailCountResponse> countByMemberId(@PathVariable Long memberId){
         return new ResponseEntity<>(detailService.countByMemberId(memberId), HttpStatus.OK);
-    }
-
-    @GetMapping("/count/{memberId}/win")
-    public ResponseEntity<Long> countWinByMemberId(@PathVariable Long memberId){
-        return new ResponseEntity<>(detailService.countWinByMemberId(memberId), HttpStatus.OK);
     }
 }

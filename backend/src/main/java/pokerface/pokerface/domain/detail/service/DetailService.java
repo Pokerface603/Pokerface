@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 import pokerface.pokerface.domain.detail.dto.request.DetailRequest;
+import pokerface.pokerface.domain.detail.dto.response.DetailCountResponse;
 import pokerface.pokerface.domain.detail.dto.response.DetailResponse;
 import pokerface.pokerface.domain.detail.entity.Detail;
 import pokerface.pokerface.domain.detail.repository.DetailRepository;
@@ -40,11 +41,7 @@ public class DetailService {
         detailRepository.save(detailRequest.toDetail(history, member));
     }
 
-    public Long countByMemberId(Long memberId){
-        return detailRepository.countByMemberId(memberId);
-    }
-
-    public Long countWinByMemberId(Long memberId){
-        return detailRepository.countWinByMemberId(memberId);
+    public DetailCountResponse countByMemberId(Long memberId){
+        return DetailCountResponse.of(detailRepository.countByMemberId(memberId), detailRepository.countWinByMemberId(memberId));
     }
 }
