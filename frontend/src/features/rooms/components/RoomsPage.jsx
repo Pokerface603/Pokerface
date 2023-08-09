@@ -11,7 +11,7 @@ import ConnectList from "./connect/ConnectList";
 import Tab from "./Tab";
 import RoomMakeModal from "./RoomMakeModal";
 import { getRooms } from "../api/room";
-import Room from "./RoomCard";
+import Room from "./RoomCard/RoomCard";
 
 const RoomsPage = () => {
   const [showRoomMakeModal, setShowRoomMakeModal] = useState(false);
@@ -78,7 +78,7 @@ const RoomsPage = () => {
                   className="justify-between"
                 >
                   {rooms.map((room) => (
-                    <Room />
+                    <Room {...room} />
                   ))}
                 </div>
               </div>
