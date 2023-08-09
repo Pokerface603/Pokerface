@@ -18,6 +18,7 @@ function RoomCard({ title, hostName, hostTier, playerCount, gameMode }) {
   return (
     <div
       style={{
+        display: "inline-block",
         border: "6px solid #CCC0BB",
         borderRadius: "18px",
       }}
