@@ -6,6 +6,8 @@ import org.springframework.http.MediaType;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import pokerface.pokerface.config.error.RestException;
+import pokerface.pokerface.config.error.errorcode.ErrorCode;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -41,7 +43,7 @@ public class JwtExceptionFilter extends OncePerRequestFilter{
         res.setContentType(MediaType.APPLICATION_JSON_VALUE);
         final Map<String, Object> body = new HashMap<>(); // 응답 body
 
-        log.debug(ex.getMessage());
+        log.debug("jwt 에러 필터 : {}", ex.getMessage());
 
         if(ex.getMessage().equals("이메일 인증이 필요합니다.")) {
             return;

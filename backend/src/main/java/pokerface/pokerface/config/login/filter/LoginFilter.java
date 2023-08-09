@@ -99,6 +99,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter{
 		PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
 		Member member = principalDetails.getMember();
 
+		log.debug("member.getEmailAuth : {}", member.getEmailAuth());
+
 		if (!member.getEmailAuth()) {
 			throw new RestException(ErrorCode.EMAIL_NOT_AUTHENTICATED);
 		}

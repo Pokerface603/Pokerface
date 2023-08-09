@@ -48,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //						.anyRequest().permitAll();
 				// 2. 추후 실제로 사용해야하는 버전
 				.antMatchers("/",  "/members","/members/check/email/**", "/members/check/nickname/**"
-						,"/utils/profile", "/actuator/health", "/members/email/confirm",
+						,"/utils/profile", "/actuator/health", "/members/signUpConfirm/**",
 						"/api/swagger-ui/**","/swagger-resources/**", "/swagger-ui.html","/swagger-ui/**").permitAll()
 				.anyRequest().authenticated(); // 나머지 요청들은 인증을 필요로 한다.
 		

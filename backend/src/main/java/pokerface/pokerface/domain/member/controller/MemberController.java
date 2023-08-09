@@ -39,8 +39,13 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/email/confirm")
+    @GetMapping("/signUpConfirm")
     public ResponseEntity<Void> emailConfirm(@RequestParam String email, @RequestParam String authKey) {
+        log.debug("=====email confirm called======");
+
+        log.debug("email : {}", email);
+        log.debug("authKey : {}", authKey);
+
         memberService.updateEmailAuth(email, authKey);
         return new ResponseEntity<>(HttpStatus.OK);
     }
