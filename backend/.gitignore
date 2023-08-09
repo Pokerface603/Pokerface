@@ -10,6 +10,7 @@ openvidu.yml
 mysql.yml
 redis.yml
 jwt.yml
+mail.yml
 
 ### STS ###
 .apt_generated

@@ -47,6 +47,11 @@ public class Member extends BaseTime {
     @ColumnDefault("'ROLE_USER'")
     private Role userRole;
 
+    private String authKey;
+
+    @ColumnDefault("false")
+    private Boolean emailAuth;
+
     @ColumnDefault("'Y'")
     private String status;
 
@@ -65,10 +70,11 @@ public class Member extends BaseTime {
     }
 
     @Builder
-    public Member(String email, String userPassword, String nickname) {
+    public Member(String email, String userPassword, String nickname, String authKey) {
         this.email = email;
         this.userPassword = userPassword;
         this.nickname = nickname;
+        this.authKey = authKey;
     }
 
     public Long convertRatingToBounty(){

@@ -10,4 +10,5 @@ public class MemberJoinReq {
     private String email;
     private String nickname;
     private String password;
+    private String authKey;
 }
