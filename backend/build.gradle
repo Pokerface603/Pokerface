@@ -49,6 +49,8 @@ dependencies {
 	implementation group: 'io.openvidu', name: 'openvidu-java-client', version: '2.28.0'
 	implementation group: 'com.auth0', name: 'java-jwt', version: '3.10.2'
 	implementation "org.springframework.boot:spring-boot-starter-actuator"
+	implementation group: 'javax.mail', name: 'mail', version: '1.4.7'
+	implementation group: 'org.springframework', name: 'spring-context-support', version: '6.0.11'
 }
 
 test {

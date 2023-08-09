@@ -4,12 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import pokerface.pokerface.config.login.PrincipalDetails;
+import pokerface.pokerface.config.email.service.MailService;
 import pokerface.pokerface.domain.member.dto.request.MemberJoinReq;
-import pokerface.pokerface.domain.member.entity.Member;
 import pokerface.pokerface.domain.member.service.MemberService;
 
 @RestController
@@ -20,34 +18,33 @@ public class MemberController {
 
     private final MemberService memberService;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final MailService mailService;
 
     /**
      * 회원 가입
      */
     @PostMapping()
-    public ResponseEntity<Void> join(@RequestBody MemberJoinReq memberJoinReq) throws Exception{
+    public ResponseEntity<Void> join(@RequestBody MemberJoinReq memberJoinReq) throws Exception {
+        log.debug("====join Called====");
 
-        log.debug("/user/join");
+        String authKey = mailService.sendEmail(memberJoinReq.getEmail()); // 이메일 인증 authKey 저장
+        memberJoinReq.setAuthKey(authKey);
 
-        if(memberService.emailCheck(memberJoinReq.getEmail())) {
-            log.debug("이미 존재하는 이메일 입니다.");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        // 유저 패스워드 암호화
-        memberJoinReq.setPassword(passwordEncoder.encode(memberJoinReq.getPassword()));
+        memberJoinReq.setPassword(passwordEncoder.encode(memberJoinReq.getPassword())); // 회원가입 진행
         memberService.join(memberJoinReq);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-//    @GetMapping("/login")
-//    public ResponseEntity<Member> findOne(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-//        return new ResponseEntity<>(memberService.findById(principalDetails.getMemberId()), HttpStatus.OK);
-//    }
+    @GetMapping("/email/confirm")
+    public ResponseEntity<Void> emailConfirm(@RequestParam String email, @RequestParam String authKey) {
+        memberService.updateEmailAuth(email, authKey);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @GetMapping("/check/email/{email}")
     public ResponseEntity<Boolean> emailDuplicatedCheck(@PathVariable String email) {
+
         return new ResponseEntity<>(memberService.emailCheck(email), HttpStatus.OK);
     }
 

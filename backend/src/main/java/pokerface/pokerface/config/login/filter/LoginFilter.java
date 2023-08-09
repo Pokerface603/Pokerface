@@ -9,6 +9,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.util.AntPathMatcher;
+import pokerface.pokerface.config.error.RestException;
+import pokerface.pokerface.config.error.errorcode.ErrorCode;
 import pokerface.pokerface.config.jwt.service.JwtService;
 import pokerface.pokerface.config.login.PrincipalDetails;
 import pokerface.pokerface.domain.member.dto.request.MemberLoginReq;
@@ -93,10 +95,14 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter{
 			Authentication authResult) throws IOException, ServletException {
 		
 		log.debug("로그인 성공");
-		
+
 		PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
 		Member member = principalDetails.getMember();
-		
+
+		if (!member.getEmailAuth()) {
+			throw new RestException(ErrorCode.EMAIL_NOT_AUTHENTICATED);
+		}
+
 		String accessToken = jwtService.createAccessToken(member.getEmail(), member.getNickname());
 		String refreshToken = jwtService.createRefreshToken();
 

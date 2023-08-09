@@ -48,7 +48,19 @@ public class MemberService {
                 .email(memberJoinReq.getEmail())
                 .nickname(memberJoinReq.getNickname())
                 .userPassword(memberJoinReq.getPassword())
+                .authKey(memberJoinReq.getAuthKey())
                 .build());
+    }
+
+    public void updateEmailAuth(String email, String authKey) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND));
+
+        if (!member.getAuthKey().equals(authKey)) { // authKey 불일치
+            throw new RestException(ErrorCode.INVALID_AUTHKEY);
+        }
+
+        member.setEmailAuth(true);
     }
 
     public Optional<Member> findByRefreshToken(String refreshToken) {

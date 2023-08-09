@@ -39,15 +39,21 @@ public class JwtExceptionFilter extends OncePerRequestFilter{
      */
     public void setErrorResponse(HttpServletRequest req, HttpServletResponse res, Throwable ex) throws IOException {
         res.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        
         final Map<String, Object> body = new HashMap<>(); // 응답 body
-        
+
         log.debug(ex.getMessage());
+
+        if(ex.getMessage().equals("이메일 인증이 필요합니다.")) {
+            return;
+        }
+
         if(ex.getMessage().equals("JWT 토큰 만료")) {
-            log.debug("JWT 토큰 만료");
-        	body.put("status", 5000); // 토큰 만료 시
-        }else {
-        	body.put("status", 6000); // 시그니처 검증 미 통과 시
+            body.put("status", 5000); // 토큰 만료 시
+        }
+
+        if(ex.getMessage().equals("시그니처 검증 미 통과") || ex.getMessage().equals("JWT token compact of handler are invalid."))
+        {
+            body.put("status", 6000); // 시그니처 검증 미 통과 시
         }
 
         body.put("error", "Unauthorized");
