@@ -2,7 +2,7 @@ import React from "react";
 import WoodButton from "@component/WoodButton";
 import WoodStick from "../../../assets/images/rooms/wood-stick.svg";
 
-const Button = ({ onClickCreateRoom }) => {
+const Button = ({ onClickCreateRoom, onQuickStart }) => {
   return (
     <div className="flex justify-center items-center relative">
       <img src={WoodStick} alt="wood stick" />
@@ -12,7 +12,7 @@ const Button = ({ onClickCreateRoom }) => {
             width="325px"
             height="60px"
             text="QUICK START"
-            onClick={onclick}
+            onClick={onQuickStart}
             fontSize="40px"
           />
         </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Parchment from "@component/Parchment";
 import WoodBackground from "@component/WoodBackground";
 import Button from "@component/Button";
@@ -8,12 +8,29 @@ import Logo from "./Logo";
 import SearchBar from "./SearchBar";
 import Ranking from "./rank/Ranking";
 import ConnectList from "./connect/ConnectList";
-import Tab from "./Tab";
+import Tab from "./Tab/Tab";
 import RoomMakeModal from "./RoomMakeModal";
-import { useState } from "react";
+import { getRooms, quickStart, searchRoomsWithKeyword } from "../api/room";
+import Room from "./RoomCard/RoomCard";
+import { getRankers } from "../api/ranker";
+import { useNavigate } from "react-router-dom";
 
 const RoomsPage = () => {
   const [showRoomMakeModal, setShowRoomMakeModal] = useState(false);
+  const [rooms, setRooms] = useState([]);
+  const [mode, setMode] = useState("NORMAL");
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [rankers, setRankers] = useState([]);
+
+  const navigate = useNavigate();
+
+  const onClickTab = (selectedMode) => {
+    setMode(selectedMode);
+
+    if (mode === selectedMode) {
+      fetchRoomData();
+    }
+  };
 
   const onClickMakeRoom = () => {
     setShowRoomMakeModal(true);
@@ -22,6 +39,44 @@ const RoomsPage = () => {
   const closeModal = () => {
     setShowRoomMakeModal(false);
   };
+
+  const onInputSearchKeyword = (e) => {
+    const {
+      target: { value },
+    } = e;
+
+    setSearchKeyword(value);
+  };
+
+  const onQuickStart = async () => {
+    const { token, sessionId } = await quickStart();
+    navigate(`game/${sessionId}`);
+  };
+
+  async function fetchRoomData() {
+    const rooms = await getRooms(mode);
+    setRooms(rooms);
+  }
+
+  async function searchRooms() {
+    const rooms = await searchRoomsWithKeyword(mode, searchKeyword);
+    setSearchKeyword("");
+    setRooms(rooms);
+  }
+
+  async function fetchRankers() {
+    const rankers = await getRankers();
+    setRankers(rankers);
+  }
+
+  useEffect(() => {
+    fetchRoomData();
+  }, [mode]);
+
+  useEffect(() => {
+    // Todo: API 배포 후 주석 풀 예정
+    // fetchRankers();
+  }, []);
 
   return (
     <WoodBackground>
@@ -33,11 +88,18 @@ const RoomsPage = () => {
                 <div className="col-span-2 grid mb-3">
                   <Logo />
                   <div style={{ width: "660px" }}>
-                    <SearchBar />
+                    <SearchBar
+                      onClickSearch={searchRooms}
+                      onInputSearchKeyword={onInputSearchKeyword}
+                      searchKeyword={searchKeyword}
+                    />
                   </div>
                 </div>
                 <div>
-                  <StartButton onClickCreateRoom={onClickMakeRoom} />
+                  <StartButton
+                    onClickCreateRoom={onClickMakeRoom}
+                    onQuickStart={onQuickStart}
+                  />
                 </div>
               </div>
             </div>
@@ -53,15 +115,27 @@ const RoomsPage = () => {
                     background: "var(--ocher)",
                   }}
                 >
-                  <Tab />
+                  <Tab onClickTab={onClickTab} />
                 </div>
+
+                {/* 방 정보들이 들어가야하는 부분 */}
                 <div
                   style={{
                     width: "1225px",
                     height: "520px",
                     background: "var(--ocher)",
+                    display: "flex",
+                    flexWrap: "wrap",
+                    alignContent: "start",
+                    padding: "15px",
+                    gap: "10px",
                   }}
-                ></div>
+                  className="justify-between"
+                >
+                  {rooms.map((room) => (
+                    <Room {...room} />
+                  ))}
+                </div>
               </div>
             </Parchment>
           </div>
@@ -96,8 +170,8 @@ const RoomsPage = () => {
             <div className="h-2/5 flex justify-center items-center">
               <Parchment style={{ width: "450px", height: "320px" }}>
                 <div className="mt-5">
-                  {/* 임의의 값 입력 */}
-                  <Ranking nickname={"Hanna"} tier="Joker" reward={"13000"} />
+                  {/* 임의의 값 입력 */}'
+                  <Ranking rankers={rankers} />
                 </div>
               </Parchment>
             </div>
