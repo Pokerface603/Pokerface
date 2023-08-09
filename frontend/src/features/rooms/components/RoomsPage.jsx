@@ -10,9 +10,10 @@ import Ranking from "./rank/Ranking";
 import ConnectList from "./connect/ConnectList";
 import Tab from "./Tab/Tab";
 import RoomMakeModal from "./RoomMakeModal";
-import { getRooms, searchRoomsWithKeyword } from "../api/room";
+import { getRooms, quickStart, searchRoomsWithKeyword } from "../api/room";
 import Room from "./RoomCard/RoomCard";
 import { getRankers } from "../api/ranker";
+import { useNavigate } from "react-router-dom";
 
 const RoomsPage = () => {
   const [showRoomMakeModal, setShowRoomMakeModal] = useState(false);
@@ -20,6 +21,8 @@ const RoomsPage = () => {
   const [mode, setMode] = useState("NORMAL");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [rankers, setRankers] = useState([]);
+
+  const navigate = useNavigate();
 
   const onClickTab = (selectedMode) => {
     setMode(selectedMode);
@@ -43,6 +46,11 @@ const RoomsPage = () => {
     } = e;
 
     setSearchKeyword(value);
+  };
+
+  const onQuickStart = async () => {
+    const { token, sessionId } = await quickStart();
+    navigate(`game/${sessionId}`);
   };
 
   async function fetchRoomData() {
@@ -88,7 +96,10 @@ const RoomsPage = () => {
                   </div>
                 </div>
                 <div>
-                  <StartButton onClickCreateRoom={onClickMakeRoom} />
+                  <StartButton
+                    onClickCreateRoom={onClickMakeRoom}
+                    onQuickStart={onQuickStart}
+                  />
                 </div>
               </div>
             </div>
