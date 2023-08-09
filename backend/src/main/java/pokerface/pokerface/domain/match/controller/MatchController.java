@@ -19,7 +19,7 @@ public class MatchController {
     private final RoomService roomService;
 
     @GetMapping("/{memberId}")
-    public ResponseEntity<RoomInfoRes> findRoomByRating(@PathVariable Long memberId) throws InterruptedException{
-        return new ResponseEntity<>(roomService.findRoomInfoById(matchService.findRoomByRating(memberId)), HttpStatus.OK);
+    public ResponseEntity<RoomInfoRes> findRoomByRating(@PathVariable Long memberId){
+        return new ResponseEntity<>(matchService.findRoomByRating(memberId), HttpStatus.OK);
     }
 }
