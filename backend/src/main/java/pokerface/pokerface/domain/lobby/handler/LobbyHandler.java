@@ -9,6 +9,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Log4j2
@@ -35,11 +36,17 @@ public class LobbyHandler extends TextWebSocketHandler {
         log.info(session + " 클라이언트 접속");
     }
 
-    /* Client가 접속 해제 시 호출되는 메서드드 */
+    /* Client가 접속 해제 시 호출되는 메서드 */
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 
         log.info(session + " 클라이언트 접속 해제");
         list.remove(session);
+    }
+
+    /* 인터셉트한 HttpSession에서 현재 접속한 멤버의 정보를 획득 후 반환하는 메서드*/
+    public List<String> connectionMemberList(){
+        return list.stream().map(webSocketSession -> webSocketSession.getPrincipal().getName())
+                .collect(Collectors.toList());
     }
 }

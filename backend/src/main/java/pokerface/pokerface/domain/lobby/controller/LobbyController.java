@@ -5,6 +5,9 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pokerface.pokerface.domain.lobby.handler.LobbyHandler;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/lobbies")
@@ -12,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Log4j2
 public class LobbyController {
 
-    @GetMapping
-    public String chatGet(){
-        log.info("@lobbyController, lobby GET()");
+    private final LobbyHandler lobbyHandler;
 
-        return "lobby";
+    @GetMapping
+    public List<String> getConnectionMembers(){
+        return lobbyHandler.connectionMemberList();
     }
 }
