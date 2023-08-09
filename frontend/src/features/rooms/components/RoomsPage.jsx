@@ -14,6 +14,7 @@ import { getRooms, quickStart, searchRoomsWithKeyword } from "../api/room";
 import Room from "./RoomCard/RoomCard";
 import { getRankers } from "../api/ranker";
 import { useNavigate } from "react-router-dom";
+import Navigator from "./Paging/Navigator";
 
 const RoomsPage = () => {
   const [showRoomMakeModal, setShowRoomMakeModal] = useState(false);
@@ -21,6 +22,7 @@ const RoomsPage = () => {
   const [mode, setMode] = useState("NORMAL");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [rankers, setRankers] = useState([]);
+  const [curPage, setCurPage] = useState(1);
 
   const navigate = useNavigate();
 
@@ -51,6 +53,32 @@ const RoomsPage = () => {
   const onQuickStart = async () => {
     const { token, sessionId } = await quickStart();
     navigate(`game/${sessionId}`);
+  };
+
+  const getTotalPageNumber = () => {
+    if (!rooms) {
+      return 0;
+    }
+
+    const totalRooms = rooms.length;
+
+    if (totalRooms % 6 === 0) {
+      return parseInt(totalRooms / 6);
+    }
+
+    return parseInt(totalRooms / 6) + 1;
+  };
+
+  const calStartRoomIdx = () => {
+    return 6 * (curPage - 1);
+  };
+
+  const calEndRoomIdx = () => {
+    return 6 * curPage - 1;
+  };
+
+  const navigatePage = (pageNumber) => {
+    setCurPage(pageNumber);
   };
 
   async function fetchRoomData() {
@@ -124,17 +152,35 @@ const RoomsPage = () => {
                     width: "1225px",
                     height: "520px",
                     background: "var(--ocher)",
-                    display: "flex",
-                    flexWrap: "wrap",
                     alignContent: "start",
                     padding: "15px",
-                    gap: "10px",
                   }}
-                  className="justify-between"
+                  className="justify-between flex flex-col"
                 >
-                  {rooms.map((room) => (
-                    <Room {...room} />
-                  ))}
+                  <div
+                    className="w-full flex flex-wrap content-start"
+                    style={{
+                      gap: "10px",
+                      flex: "1 0 auto",
+                    }}
+                  >
+                    {rooms
+                      .filter((_, idx) => {
+                        return (
+                          calStartRoomIdx() <= idx && idx <= calEndRoomIdx()
+                        );
+                      })
+                      .map((room) => (
+                        <Room id={room.title} {...room} />
+                      ))}
+                  </div>
+
+                  <div className="flex justify-center w-full">
+                    <Navigator
+                      totalPage={getTotalPageNumber()}
+                      onClickPage={navigatePage}
+                    />
+                  </div>
                 </div>
               </div>
             </Parchment>
@@ -170,7 +216,6 @@ const RoomsPage = () => {
             <div className="h-2/5 flex justify-center items-center">
               <Parchment style={{ width: "450px", height: "320px" }}>
                 <div className="mt-5">
-                  {/* 임의의 값 입력 */}'
                   <Ranking rankers={rankers} />
                 </div>
               </Parchment>
