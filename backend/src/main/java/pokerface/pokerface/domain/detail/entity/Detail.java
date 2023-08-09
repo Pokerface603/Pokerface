@@ -9,6 +9,9 @@ import pokerface.pokerface.global.BaseTime;
 
 import javax.persistence.*;
 
+import static pokerface.pokerface.global.Constants.BOUNTY_RATIO;
+import static pokerface.pokerface.global.Constants.ROUND_UNIT;
+
 @Entity
 @Getter
 @Setter
@@ -39,5 +42,9 @@ public class Detail extends BaseTime {
         this.result = result;
         this.history = history;
         this.member = member;
+    }
+
+    public Long convertRatingToBounty(Integer rating){
+        return Math.round(Math.pow(BOUNTY_RATIO, rating) / ROUND_UNIT) * ROUND_UNIT;
     }
 }
