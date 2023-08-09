@@ -16,6 +16,7 @@ import pokerface.pokerface.domain.history.entity.History;
 import pokerface.pokerface.domain.member.entity.Member;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -23,8 +24,10 @@ import java.util.List;
 public class DetailService {
     private final DetailRepository detailRepository;
 
-    public List<Detail> findAll(){
-        return detailRepository.findAll();
+    public List<DetailResponse> findAll(){
+        return detailRepository.findAll().stream()
+                .map(DetailResponse::of)
+                .collect(Collectors.toList());
     }
 
     public List<DetailResponse> findPagingByMemberId(Pageable pageable, Long memberId) {

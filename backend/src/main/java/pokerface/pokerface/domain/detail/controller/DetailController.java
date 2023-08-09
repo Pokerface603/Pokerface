@@ -12,7 +12,6 @@ import pokerface.pokerface.domain.detail.dto.response.DetailResponse;
 import pokerface.pokerface.domain.detail.service.DetailService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/details")
@@ -22,10 +21,7 @@ public class DetailController {
 
     @GetMapping
     public ResponseEntity<List<DetailResponse>> detailListAll(){
-        return new ResponseEntity<>(detailService.findAll().stream()
-                .map(DetailResponse::of)
-                .collect(Collectors.toList()),
-                HttpStatus.OK);
+        return new ResponseEntity<>(detailService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/member/{memberId}")
