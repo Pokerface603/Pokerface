@@ -20,7 +20,6 @@ function RoomMakeModal({ close }) {
   });
 
   const onSelectMode = (gameMode) => {
-    console.log(gameMode);
     setRoomData((prevRoomData) => ({
       ...prevRoomData,
       gameMode,
