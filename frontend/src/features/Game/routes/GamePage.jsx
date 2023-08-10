@@ -139,8 +139,6 @@ function GamePage() {
           }}
         />
       )}
-
-      <Button label={"나가기"} onClick={leaveSession}></Button>
     </div>
   );
 }
