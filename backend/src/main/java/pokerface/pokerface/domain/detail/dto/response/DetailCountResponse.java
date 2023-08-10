@@ -19,7 +19,7 @@ public class DetailCountResponse {
                 .totalCount(totalCount)
                 .winCount(winCount)
                 .loseCount(totalCount - winCount)
-                .winRate(Math.round((float)winCount / totalCount))
+                .winRate(Math.round((float)winCount / totalCount * 100))
                 .build();
     }
 }
