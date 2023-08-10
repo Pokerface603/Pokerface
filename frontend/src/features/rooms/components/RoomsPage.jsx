@@ -28,6 +28,7 @@ const RoomsPage = () => {
 
   const onClickTab = (selectedMode) => {
     setMode(selectedMode);
+    setCurPage(1);
 
     if (mode === selectedMode) {
       fetchRoomData();
@@ -90,6 +91,7 @@ const RoomsPage = () => {
     const rooms = await searchRoomsWithKeyword(mode, searchKeyword);
     setSearchKeyword("");
     setRooms(rooms);
+    setCurPage(1);
   }
 
   async function fetchRankers() {
