@@ -11,10 +11,9 @@ function OpeviduVideo({ streamManager }) {
     streamManager && (
       <video
         style={{
-          width: "500px",
-          height: "500px",
+          width: "400px",
           position: "absolute",
-          left: "calc(50vw - 250px)",
+          left: "calc(50vw - 200px)",
           top: "0px",
         }}
         autoPlay={true}
