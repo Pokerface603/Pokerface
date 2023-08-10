@@ -5,6 +5,7 @@ import Dividor from "./Dividor";
 import { hashOpenviduTitle } from "@util/hashing";
 import { useNavigate } from "react-router-dom";
 import { participateRoom } from "@feature/rooms/api/session";
+import { roomColor } from "../constants/RoomColor";
 
 function RoomCard({ title, hostName, hostTier, playerCount, gameMode }) {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ function RoomCard({ title, hostName, hostTier, playerCount, gameMode }) {
     <div
       style={{
         display: "inline-block",
-        border: "6px solid #CCC0BB",
+        border: `6px solid ${roomColor[hostTier]}`,
         borderRadius: "18px",
       }}
     >
@@ -30,7 +31,7 @@ function RoomCard({ title, hostName, hostTier, playerCount, gameMode }) {
           padding: "12px 15px",
           gap: "3px",
         }}
-        className="bg-room box-border bg-cover flex items-center "
+        className="bg-room box-border bg-cover flex items-center"
       >
         <TierBox tier={hostTier} />
         <div
