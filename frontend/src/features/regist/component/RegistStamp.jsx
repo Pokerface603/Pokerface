@@ -1,7 +1,7 @@
 import React from "react";
 import stamp from "assets/images/stamp.svg";
 
-const RegistStamp = (onClick) => {
+const RegistStamp = ({ onClick }) => {
   return (
     <img
       src={stamp}
