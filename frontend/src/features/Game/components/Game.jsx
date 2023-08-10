@@ -26,6 +26,7 @@ export default function Game({ roomName, gameMode }) {
     const info = {
       userId: "daeyoung@ssafy.com",
       roomName,
+      gameMode,
     };
 
     // 게임을 준비하기 위해 정보를 담고 있는 객체를 보내는 함수
@@ -71,7 +72,10 @@ export default function Game({ roomName, gameMode }) {
 
   return (
     <Fragment>
-      <Unity unityProvider={unityProvider} style={{ width: "100%" }}></Unity>
+      <Unity
+        unityProvider={unityProvider}
+        style={{ width: "100vw", height: "100vh" }}
+      ></Unity>
     </Fragment>
   );
 }
