@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pokerface.pokerface.domain.lobby.handler.LobbyHandler;
+import pokerface.pokerface.domain.member.dto.response.MemberLoginRes;
+import pokerface.pokerface.domain.member.service.MemberService;
 
 import java.util.List;
 
@@ -16,9 +18,10 @@ import java.util.List;
 public class LobbyController {
 
     private final LobbyHandler lobbyHandler;
+    private final MemberService memberService;
 
     @GetMapping
-    public List<String> getConnectionMembers(){
-        return lobbyHandler.connectionMemberList();
+    public List<MemberLoginRes> getConnectionMembers(){
+        return memberService.findByEmails(lobbyHandler.connectionMemberList());
     }
 }

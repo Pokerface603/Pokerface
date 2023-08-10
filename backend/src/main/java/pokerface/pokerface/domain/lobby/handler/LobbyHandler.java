@@ -73,7 +73,6 @@ public class LobbyHandler extends TextWebSocketHandler {
 
     /* 인터셉트한 HttpSession에서 현재 접속한 멤버의 정보를 획득 후 반환하는 메서드*/
     public List<String> connectionMemberList(){
-        return list.stream().map(webSocketSession -> webSocketSession.getPrincipal().getName())
-                .collect(Collectors.toList());
+        return new ArrayList<>(sessions.keySet());
     }
 }
