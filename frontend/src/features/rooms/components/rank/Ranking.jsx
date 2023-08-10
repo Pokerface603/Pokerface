@@ -1,6 +1,7 @@
 import React from "react";
 import Saloon from "../../../../assets/images/rooms/saloon.svg";
 import Frame from "../Frame";
+import RankingItem from "./RankingItem";
 
 const Ranking = ({ rankers }) => {
   return (
@@ -20,8 +21,15 @@ const Ranking = ({ rankers }) => {
         </p>
       </div>
 
-      {rankers.map(({ nickname, tier, rating }) => {
-        return <Ranking nickname={nickname} tier={tier} reward={rating} />;
+      {rankers.map(({ nickname, tier, rating }, ranking) => {
+        return (
+          <RankingItem
+            nickname={nickname}
+            tier={tier}
+            reward={rating}
+            ranking={ranking + 1}
+          />
+        );
       })}
 
       <img

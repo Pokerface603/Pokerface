@@ -28,6 +28,7 @@ const RoomsPage = () => {
 
   const onClickTab = (selectedMode) => {
     setMode(selectedMode);
+    setCurPage(1);
 
     if (mode === selectedMode) {
       fetchRoomData();
@@ -90,11 +91,13 @@ const RoomsPage = () => {
     const rooms = await searchRoomsWithKeyword(mode, searchKeyword);
     setSearchKeyword("");
     setRooms(rooms);
+    setCurPage(1);
   }
 
   async function fetchRankers() {
-    const rankers = await getRankers();
-    setRankers(rankers);
+    const curRankers = await getRankers();
+
+    setRankers((prevRankers) => curRankers);
   }
 
   useEffect(() => {
@@ -103,7 +106,7 @@ const RoomsPage = () => {
 
   useEffect(() => {
     // Todo: API 배포 후 주석 풀 예정
-    // fetchRankers();
+    fetchRankers();
   }, []);
 
   return (
