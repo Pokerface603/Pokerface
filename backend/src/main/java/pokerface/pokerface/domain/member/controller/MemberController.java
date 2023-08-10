@@ -74,8 +74,8 @@ public class MemberController {
         return new ResponseEntity<>(memberService.findTop5Rankings(), HttpStatus.OK);
     }
 
-    @GetMapping("/ranking/{memberId}")
-    public ResponseEntity<RankingRes> findRankingByMemberId(@PathVariable Long memberId){
-        return new ResponseEntity<>(memberService.findRankingByMemberId(memberId), HttpStatus.OK);
+    @GetMapping("/ranking/{email}")
+    public ResponseEntity<RankingRes> findRankingByEmail(@PathVariable String email){
+        return new ResponseEntity<>(memberService.findRankingByEmail(email), HttpStatus.OK);
     }
 }

@@ -43,4 +43,10 @@ public class FriendService {
                 memberService.findById(friendRequest.getToId())
         ));
     }
+
+    @Transactional
+    public void save(String firstMemberEmail, String secondMemberEmail){
+        friendRepository.save(new Friend(memberService.findByEmail(firstMemberEmail), memberService.findByEmail(secondMemberEmail)));
+        friendRepository.save(new Friend(memberService.findByEmail(secondMemberEmail), memberService.findByEmail(firstMemberEmail)));
+    }
 }

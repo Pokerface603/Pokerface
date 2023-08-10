@@ -78,6 +78,6 @@ public class Member extends BaseTime {
     }
 
     public Long convertRatingToBounty(){
-        return Math.round(Math.pow(BOUNTY_RATIO, rating) / ROUND_UNIT) * ROUND_UNIT;
+        return Math.round(Math.pow(BOUNTY_RATIO, rating)) * ROUND_UNIT;
     }
 }
