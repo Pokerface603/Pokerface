@@ -160,12 +160,17 @@ public class RoomService {
     }
 
     @Transactional
-    public void removeMember(String sessionId, Member member) {
+    public void removeMember(String sessionId, String email) {
         Room room = findRoomById(sessionId);
+
+        if (room.getMembers().size() == 1) { // 방에 한명만 남았는데 나가는 경우 방을 삭제
+            roomRepository.deleteById(sessionId);
+            return;
+        }
 
         List<Member> newMembers = new ArrayList<>();
         for (Member originMember : room.getMembers()) {
-            if (originMember.getId().equals(member.getId())) {
+            if (originMember.getEmail().equals(email)) {
                 continue;
             }
             newMembers.add(originMember);

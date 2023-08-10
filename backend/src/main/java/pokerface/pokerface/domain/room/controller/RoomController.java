@@ -8,10 +8,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import pokerface.pokerface.config.login.PrincipalDetails;
 import pokerface.pokerface.domain.history.entity.GameMode;
+import pokerface.pokerface.domain.room.dto.request.DisconnectReq;
 import pokerface.pokerface.domain.room.dto.request.FindByGameModeAndTitle;
 import pokerface.pokerface.domain.room.dto.request.FindByGameModeReq;
 import pokerface.pokerface.domain.room.dto.response.RoomInfoRes;
 import pokerface.pokerface.domain.room.dto.response.RoomPageInfoRes;
+import pokerface.pokerface.domain.room.entity.Room;
+import pokerface.pokerface.domain.room.repository.RoomRepository;
 import pokerface.pokerface.domain.room.service.RoomService;
 
 import java.util.List;
@@ -23,6 +26,7 @@ import java.util.List;
 public class RoomController {
 
     private final RoomService roomService;
+    private final RoomRepository roomRepository;
 
     /**
      * 모든 방 정보 조회
@@ -36,8 +40,8 @@ public class RoomController {
      * 세션 아이디로 방 정보 조회
      */
     @GetMapping("/{sessionId}")
-    public ResponseEntity<RoomInfoRes> findRoomInfoById(@PathVariable String sessionId) {
-        return new ResponseEntity<>(roomService.findRoomInfoById(sessionId), HttpStatus.OK);
+    public ResponseEntity<Room> findRoomInfoById(@PathVariable String sessionId) {
+        return new ResponseEntity<>(roomRepository.findById(sessionId).orElseGet(null), HttpStatus.OK);
     }
 
     /**
@@ -81,23 +85,13 @@ public class RoomController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    /**
-     * 방장이 강제 퇴장시키는 경우
-     */
-    @PostMapping("/{sessionId}/{email}")
-    public ResponseEntity<Void> removeMember(@PathVariable String sessionId,
-                                             @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        roomService.removeMember(sessionId, principalDetails.getMember());
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 
     /**
      * 참가자가 스스로 나간 경우
      */
-    @PostMapping("/{sessionId}/{email}/disconnections")
-    public ResponseEntity<Void> disConnection(@PathVariable("sessionId") String sessionId,
-                                              @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        roomService.removeMember(sessionId, principalDetails.getMember());
+    @PostMapping("/disconnect")
+    public ResponseEntity<Void> disConnect(@RequestBody DisconnectReq disconnectReq) {
+        roomService.removeMember(disconnectReq.getSessionId(), disconnectReq.getEmail());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
