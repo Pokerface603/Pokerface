@@ -44,6 +44,12 @@ const LoginFormContent = () => {
                 authorizationRefresh: response.headers["authorization-refresh"],
               })
             );
+
+            localStorage.setItem(
+              "authorization",
+              response.headers["authorization"]
+            );
+
             navigate("/lobby");
           }
         })
