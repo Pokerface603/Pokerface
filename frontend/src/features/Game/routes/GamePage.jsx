@@ -1,10 +1,11 @@
 import { OpenVidu } from "openvidu-browser";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import OpeviduVideo from "../../RoomTest/components/OpeviduVideo";
+import OpeviduVideo from "../components/OpeviduVideo";
 import Button from "@component/Button";
 import { useRef } from "react";
 import Game from "../components/Game";
+import { ReactComponent as Avatar } from "@asset/images/BlindAvatar.svg";
 
 function GamePage() {
   const navigate = useNavigate();
@@ -54,7 +55,7 @@ function GamePage() {
     setSessionInfo({ ...sessionInfoRef.current, subscribers });
   };
   useEffect(() => {
-    if (!mySession) {
+    if (!mySession || !needCamera()) {
       return;
     }
 
@@ -104,7 +105,7 @@ function GamePage() {
   };
 
   const joinSession = async () => {
-    if (mySession) {
+    if (mySession || !needCamera()) {
       return;
     }
 
@@ -117,12 +118,27 @@ function GamePage() {
     navigate("/");
   };
 
+  const needCamera = () => {
+    return gameMode === "NORMAL" || gameMode === "EMOTION";
+  };
+
   return (
     <div>
       <Game roomName={sessionId} gameMode={gameMode} />
-      {sessionInfo?.subscribers?.map((sub, i) => (
-        <OpeviduVideo key={i} streamManager={sub} />
-      ))}
+      {needCamera() &&
+        sessionInfo?.subscribers?.map((sub, i) => (
+          <OpeviduVideo key={i} streamManager={sub} />
+        ))}
+      {!needCamera() && (
+        <Avatar
+          style={{
+            height: "450px",
+            position: "absolute",
+            left: "calc(50vw - 337.5px)",
+            top: "20px",
+          }}
+        />
+      )}
 
       <Button label={"나가기"} onClick={leaveSession}></Button>
     </div>
