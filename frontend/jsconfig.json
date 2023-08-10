@@ -6,10 +6,11 @@
       "@config/*": ["./config/*"],
       "@feature/*": ["./features/*"],
       "@hook/*": ["./hooks/*"],
-      "@page/*": ["./pages/*"],
+      "@route/*": ["./routes/*"],
       "@store/*": ["./stores/*"],
       "@util/*": ["./utils/*"],
-      "@lib/*": ["src/lib/*"]
+      "@lib/*": ["./lib/*"],
+      "@asset/*": ["./assets/*"]
     }
   },
   "include": ["src"]
