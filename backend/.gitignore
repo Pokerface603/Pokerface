@@ -11,6 +11,7 @@ mysql.yml
 redis.yml
 jwt.yml
 mail.yml
+oauth.yml
 
 ### STS ###
 .apt_generated
