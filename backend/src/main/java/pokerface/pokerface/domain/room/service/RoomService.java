@@ -13,10 +13,10 @@ import pokerface.pokerface.domain.room.dto.response.RoomInfoRes;
 import pokerface.pokerface.domain.room.entity.Room;
 import pokerface.pokerface.domain.room.repository.RoomRepository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 @Transactional(readOnly = true)
@@ -25,6 +25,7 @@ public class RoomService {
 
     private final RoomRepository roomRepository;
     private final HistoryService historyService;
+    private final int pageSize = 6;
 
     public Room findRoomById(String sessionId) {
         return roomRepository.findById(sessionId).orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND));
@@ -47,25 +48,45 @@ public class RoomService {
     }
 
     public List<RoomInfoRes> findAllRoomInfos() {
-        Iterable<Room> rooms = roomRepository.findAll();
-
-        return StreamSupport.stream(rooms.spliterator(), false)
+        return roomRepository.findAllByOrderByCreatedAtDesc().stream()
                 .map(room -> RoomInfoRes.builder()
-                    .gameMode(room.getGameMode())
-                    .sessionId(room.getSessionId())
-                    .title(room.getTitle())
-                    .isPrivate(room.getIsPrivate())
-                    .roomPassword(room.getRoomPassword())
-                    .hostName(room.getMembers().get(0).getNickname())
-                    .hostTier(room.getMembers().get(0).getTier().toString())
-                    .rating(room.getMembers().get(0).convertRatingToBounty())
-                    .playerCount(room.getMembers().size())
-                    .build())
-                        .collect(Collectors.toList());
+                        .gameMode(room.getGameMode())
+                        .sessionId(room.getSessionId())
+                        .title(room.getTitle())
+                        .isPrivate(room.getIsPrivate())
+                        .roomPassword(room.getRoomPassword())
+                        .hostName(room.getMembers().get(0).getNickname())
+                        .hostTier(room.getMembers().get(0).getTier().toString())
+                        .rating(room.getMembers().get(0).convertRatingToBounty())
+                        .playerCount(room.getMembers().size())
+                        .build())
+                .collect(Collectors.toList());
     }
 
-    public List<RoomInfoRes> findRoomsByGameMode(GameMode gameMode) {
-        return roomRepository.findAllByGameMode(gameMode).stream()
+    public List<RoomInfoRes> findByGameMode(GameMode gameMode) {
+        return roomRepository.findAllByGameModeOrderByCreatedAtDesc(gameMode).stream()
+                .map(room -> RoomInfoRes.builder()
+                        .gameMode(room.getGameMode())
+                        .sessionId(room.getSessionId())
+                        .title(room.getTitle())
+                        .isPrivate(room.getIsPrivate())
+                        .roomPassword(room.getRoomPassword())
+                        .hostName(room.getMembers().get(0).getNickname())
+                        .hostTier(room.getMembers().get(0).getTier().toString())
+                        .rating(room.getMembers().get(0).convertRatingToBounty())
+                        .playerCount(room.getMembers().size())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    public Integer findByGameModeRoomsCount(GameMode gameMode) {
+        return roomRepository.findAllByGameModeOrderByCreatedAtDesc(gameMode).size() / pageSize + 1;
+    }
+
+    public List<RoomInfoRes> findByGameModeWithPaging(GameMode gameMode, int pageNum) {
+        return roomRepository.findAllByGameModeOrderByCreatedAtDesc(gameMode).stream()
+                .skip(6 * (pageNum - 1))
+                .limit(pageSize)
                 .map(room -> RoomInfoRes.builder()
                         .gameMode(room.getGameMode())
                         .sessionId(room.getSessionId())
@@ -89,9 +110,16 @@ public class RoomService {
                 .collect(Collectors.toList());
     }
 
-    public List<RoomInfoRes> findRoomsByGameModeAndTitle(GameMode gameMode, String title) {
-        return findRoomsByGameMode(gameMode).stream()
+    public Integer findByGameModeAndTitleRoomsCount(GameMode gameMode, String title) {
+        return (int) findByGameMode(gameMode).stream()
+                .filter(roomInfoRes -> roomInfoRes.getTitle().contains(title)).count() / pageSize + 1;
+    }
+
+    public List<RoomInfoRes> findByGameModeAndTitleWithPaging(GameMode gameMode, String title, int pageNum) {
+        return findByGameMode(gameMode).stream()
                 .filter(roomInfoRes -> roomInfoRes.getTitle().contains(title))
+                .skip(6 * (pageNum - 1))
+                .limit(pageSize)
                 .collect(Collectors.toList());
     }
 
@@ -104,6 +132,7 @@ public class RoomService {
                 .isPrivate(roomCreateReq.isPrivate())
                 .roomPassword(roomCreateReq.getRoomPassword())
                 .members(List.of(member))
+                .createdAt(LocalDateTime.now())
                 .build());
     }
 
@@ -121,6 +150,7 @@ public class RoomService {
                 .isPrivate(room.getIsPrivate())
                 .roomPassword(room.getRoomPassword())
                 .members(members)
+                .createdAt(room.getCreatedAt())
                 .build());
     }
 
