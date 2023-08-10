@@ -93,8 +93,9 @@ const RoomsPage = () => {
   }
 
   async function fetchRankers() {
-    const rankers = await getRankers();
-    setRankers(rankers);
+    const curRankers = await getRankers();
+
+    setRankers((prevRankers) => curRankers);
   }
 
   useEffect(() => {
@@ -103,7 +104,7 @@ const RoomsPage = () => {
 
   useEffect(() => {
     // Todo: API 배포 후 주석 풀 예정
-    // fetchRankers();
+    fetchRankers();
   }, []);
 
   return (
