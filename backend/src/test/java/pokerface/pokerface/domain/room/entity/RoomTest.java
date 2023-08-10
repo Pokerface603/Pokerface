@@ -58,7 +58,7 @@ class RoomTest {
     @Test
     @Transactional
     void createRoom() {
-        Room createdRoom = roomService.createRoom("sessionB",
+        Room createdRoom = roomService.createRoom("sessionB", memberRepository.findById(3L).orElse(null),
                 new RoomCreateReq("하이하이", GameMode.NORMAL, false, null));
 
         System.out.println("createdRoom = " + createdRoom);
@@ -82,23 +82,25 @@ class RoomTest {
     @Test
     @Transactional
     void removeMember() {
-        String sessionId = "sessionA";
-        Room findRoom = roomRepository.findById(sessionId).orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND));
+        String sessionId = "sessionC";
 
+        Room findRoom = roomRepository.findById(sessionId).orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND));
         System.out.println("findRoom = " + findRoom);
 
-        roomService.removeMember(sessionId, "test1");
+        roomService.removeMember(sessionId, memberRepository.findById(4L)
+                .orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND)));
 
-        System.out.println("roomInfo = " + roomRepository.findById(sessionId));
+        System.out.println("roomInfo = " + roomRepository.findById(sessionId)
+                .orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND)));
     }
 
     @Test
     @Transactional
     void findRoomsByMode() {
-        List<RoomInfoRes> roomsByMode = roomService.findRoomsByGameMode(GameMode.NORMAL);
+        List<RoomInfoRes> roomsByMode = roomService.findByGameMode(GameMode.NORMAL);
         System.out.println("roomsByMode.size() = " + roomsByMode.size());
 
-        roomService.findRoomsByGameMode(GameMode.NORMAL).forEach(System.out::println);
+        roomService.findByGameMode(GameMode.NORMAL).forEach(System.out::println);
         }
 
     @Test
@@ -112,5 +114,14 @@ class RoomTest {
     @Transactional
     void findAllRoomByTitle() {
         roomService.findRoomsByTitle("안녕").forEach(System.out::print);
+    }
+
+    @Test
+    @Transactional
+    void joinRoom() {
+        String sessionId = "sessionC";
+        Member member = memberRepository.findById(4L).orElse(null);
+        System.out.println("member = " + member);
+        roomService.joinRoom(sessionId, member);
     }
 }

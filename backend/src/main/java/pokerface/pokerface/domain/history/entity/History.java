@@ -18,6 +18,7 @@ public class History extends BaseTime {
     @Enumerated(EnumType.STRING)
     private GameMode gameMode;
 
+    @Column(columnDefinition = "TEXT")
     private String gameLog;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -9,6 +9,9 @@ build/
 openvidu.yml
 mysql.yml
 redis.yml
+jwt.yml
+mail.yml
+oauth.yml
 
 ### STS ###
 .apt_generated
@@ -223,3 +226,4 @@ gradle-app.setting
 ### Gradle Patch ###
 # Java heap dump
 *.hprof
+
