@@ -7,11 +7,17 @@ import { useRef } from "react";
 const MatchHistoryTableBody = () => {
   const [tableBody, setTableBody] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
+  const [hasMorePage, setHasMorePage] = useState(true);
 
   const loaderRef = useRef(null);
+  const initialLoadRef = useRef(true);
 
   useEffect(() => {
+    if (initialLoadRef.current || !hasMorePage) {
+      initialLoadRef.current = false;
+      return;
+    }
     fetchData();
   }, [page]);
 
@@ -19,7 +25,7 @@ const MatchHistoryTableBody = () => {
     const observer = new IntersectionObserver(handleObserver, {
       root: null,
       rootMargin: "0px",
-      threshold: 1.0,
+      threshold: 0.75,
     });
 
     if (loaderRef.current) {
@@ -36,8 +42,11 @@ const MatchHistoryTableBody = () => {
   const fetchData = async () => {
     try {
       setIsLoading(true);
-      const newData = await getHistoryTableRow(3);
+      const newData = await getHistoryTableRow(3, page);
       setTableBody((prevData) => [...prevData, ...newData]);
+      if (newData.length < 10) {
+        setHasMorePage(false);
+      }
       setIsLoading(false);
     } catch (error) {
       console.log("error:", error);
@@ -73,25 +82,29 @@ const MatchHistoryTableBody = () => {
               alt="tier"
             />
           </td>
-          <td>{match.opponentId}</td>
+          <td>{match.opponentNickName}</td>
           <td>{match.postRating}</td>
           <td>{getRatingUpDown(match.postRating - match.preRating)}</td>
         </tr>
       ));
-    } else
-      return (
-        <tr>
-          <td colSpan="5">No data available</td>
-        </tr>
-      );
+    }
   };
   return (
     <tbody>
       {makeTableRow()}
-      <tr ref={loaderRef}></tr>
+      <tr className="h-1" ref={loaderRef}></tr>
       {isLoading && (
         <tr>
-          <td>Loading..</td>
+          <td className="text-center" colSpan={"5"}>
+            Loading..
+          </td>
+        </tr>
+      )}
+      {!hasMorePage && (
+        <tr>
+          <td className="text-center" colSpan="5">
+            전적의 마지막 입니다.
+          </td>
         </tr>
       )}
     </tbody>

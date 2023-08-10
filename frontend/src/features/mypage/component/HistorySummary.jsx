@@ -4,6 +4,7 @@ import SummaryCard from "./SummaryCard";
 import { useEffect } from "react";
 import { useState } from "react";
 import { getTotalRecord } from "../api/getTotalRecord";
+
 const HistorySummary = () => {
   const [win, setWin] = useState("");
   const [lose, setLose] = useState("");
@@ -13,13 +14,10 @@ const HistorySummary = () => {
     const fetchData = async () => {
       try {
         const data = await getTotalRecord(3);
-        setWin(data);
-        setLose(data);
-        setWinrate(data);
         // test중, 차후 api에 맞게 수정 예정
-        // setWin(data.win);
-        // setLose(data.lose);
-        // setWinrate(data.winrate);
+        setWin(data.winCount);
+        setLose(data.loseCount);
+        setWinrate(data.winRate);
       } catch (error) {
         console.log("error");
       }
