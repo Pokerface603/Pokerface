@@ -17,3 +17,10 @@ export const quickStart = async () => {
   const data = await axios.get(`/matches/{member_id}`);
   return data;
 };
+
+export const leaveRoom = async ({ email, sessionId }) => {
+  await axios.post(`/rooms/disconnect`, {
+    email,
+    sessionId,
+  });
+};
