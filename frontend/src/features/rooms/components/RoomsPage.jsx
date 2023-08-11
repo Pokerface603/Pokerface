@@ -9,11 +9,12 @@ import SearchBar from "./SearchBar";
 import Ranking from "./rank/Ranking";
 import ConnectList from "./connect/ConnectList";
 import Tab from "./Tab/Tab";
-import RoomMakeModal from "./RoomMakeModal";
+import RoomMakeModal from "./RoomMakeModal/RoomMakeModal";
 import { getRooms, quickStart, searchRoomsWithKeyword } from "../api/room";
 import Room from "./RoomCard/RoomCard";
 import { getRankers } from "../api/ranker";
 import { useNavigate } from "react-router-dom";
+import Navigator from "./Paging/Navigator";
 
 const RoomsPage = () => {
   const [showRoomMakeModal, setShowRoomMakeModal] = useState(false);
@@ -21,6 +22,10 @@ const RoomsPage = () => {
   const [mode, setMode] = useState("NORMAL");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [rankers, setRankers] = useState([]);
+  const [pageInfo, setpageInfo] = useState({
+    totalPageCount: 0,
+    curPage: 1,
+  });
 
   const navigate = useNavigate();
 
@@ -28,7 +33,7 @@ const RoomsPage = () => {
     setMode(selectedMode);
 
     if (mode === selectedMode) {
-      fetchRoomData();
+      fetchRoomData(1);
     }
   };
 
@@ -53,9 +58,21 @@ const RoomsPage = () => {
     navigate(`game/${sessionId}`);
   };
 
-  async function fetchRoomData() {
-    const rooms = await getRooms(mode);
+  const navigatePage = (pageNumber) => {
+    fetchRoomData(pageNumber);
+  };
+
+  async function fetchRoomData(pageNumber) {
+    const { totalPageCount, roomInfoResList: rooms } = await getRooms(
+      pageNumber,
+      mode
+    );
+
     setRooms(rooms);
+    setpageInfo((prevPageInfo) => ({
+      totalPageCount,
+      curPage: pageNumber,
+    }));
   }
 
   async function searchRooms() {
@@ -65,17 +82,18 @@ const RoomsPage = () => {
   }
 
   async function fetchRankers() {
-    const rankers = await getRankers();
-    setRankers(rankers);
+    const curRankers = await getRankers();
+
+    setRankers((prevRankers) => curRankers);
   }
 
   useEffect(() => {
-    fetchRoomData();
+    fetchRoomData(1);
   }, [mode]);
 
   useEffect(() => {
     // Todo: API 배포 후 주석 풀 예정
-    // fetchRankers();
+    fetchRankers();
   }, []);
 
   return (
@@ -124,17 +142,29 @@ const RoomsPage = () => {
                     width: "1225px",
                     height: "520px",
                     background: "var(--ocher)",
-                    display: "flex",
-                    flexWrap: "wrap",
                     alignContent: "start",
                     padding: "15px",
-                    gap: "10px",
                   }}
-                  className="justify-between"
+                  className="justify-between flex flex-col"
                 >
-                  {rooms.map((room) => (
-                    <Room {...room} />
-                  ))}
+                  <div
+                    className="w-full flex flex-wrap content-start"
+                    style={{
+                      gap: "10px",
+                      flex: "1 0 auto",
+                    }}
+                  >
+                    {rooms.map((room) => (
+                      <Room id={room.title} {...room} />
+                    ))}
+                  </div>
+
+                  <div className="flex justify-center w-full">
+                    <Navigator
+                      totalPage={pageInfo.totalPageCount}
+                      onClickPage={navigatePage}
+                    />
+                  </div>
                 </div>
               </div>
             </Parchment>
@@ -170,7 +200,6 @@ const RoomsPage = () => {
             <div className="h-2/5 flex justify-center items-center">
               <Parchment style={{ width: "450px", height: "320px" }}>
                 <div className="mt-5">
-                  {/* 임의의 값 입력 */}'
                   <Ranking rankers={rankers} />
                 </div>
               </Parchment>

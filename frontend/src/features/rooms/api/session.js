@@ -1,14 +1,9 @@
 import { axios } from "@lib/axios";
 
-export async function getToken(roomData) {
-  const sessionId = await createSession(roomData);
-  return await createToken(sessionId);
-}
-
-async function createSession({
+export async function createRoom({
   roomName,
   sessionId,
-  mode,
+  gameMode,
   isPrivate,
   roomPassword,
 }) {
@@ -17,7 +12,7 @@ async function createSession({
     {
       customSessionId: sessionId,
       title: roomName,
-      mode,
+      gameMode,
       isPrivate,
       roomPassword,
     },
@@ -25,16 +20,23 @@ async function createSession({
       headers: { "Content-Type": "application/json" },
     }
   );
-  return response.data; // The sessionId
+
+  return response.data;
 }
 
-async function createToken(sessionId) {
-  const response = await axios.post(
-    "/sessions/" + sessionId + "/connections",
-    {},
-    {
-      headers: { "Content-Type": "application/json" },
-    }
-  );
+export async function participateRoom(sessionId) {
+  const response = await axios
+    .post(
+      "/sessions/" + sessionId + "/connections",
+      {
+        password: "",
+      },
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    )
+    .catch((error) => {
+      console.log(error);
+    });
   return response.data;
 }

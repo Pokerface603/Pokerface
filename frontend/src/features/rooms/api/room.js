@@ -1,12 +1,10 @@
-import { getToken } from "./session";
 import { axios } from "@lib/axios";
 
-export const makeRoom = async (roomData) => {
-  return await getToken(roomData);
-};
-
-export const getRooms = async (mode) => {
-  const { data } = await axios.get(`/rooms/mode/${mode}`);
+export const getRooms = async (pageNum, mode) => {
+  const { data } = await axios.post(`/rooms/findByGameMode`, {
+    pageNum,
+    gameMode: mode,
+  });
   return data;
 };
 
