@@ -1,7 +1,7 @@
 import React, { Fragment, useCallback, useEffect } from "react";
 import { Unity, useUnityContext } from "react-unity-webgl";
 
-export default function Game({ roomName, gameMode }) {
+export default function Game({ roomName, gameMode, leaveRoom }) {
   const { unityProvider, sendMessage, addEventListener, removeEventListener } =
     useUnityContext({
       loaderUrl: "/Build/poker_face.loader.js",
@@ -11,7 +11,9 @@ export default function Game({ roomName, gameMode }) {
     });
 
   // 유니티에서 보낸 유저를 추방했다는 호출 확인하는 함수
-  const setUserDropOut = useCallback(() => {}, []);
+  const setUserDropOut = useCallback(() => {
+    leaveRoom();
+  }, []);
 
   // 유니티에서 보낸 얼굴인식을 시작하라는 호출 확인하는 함수
   const startFaceDetection = useCallback(() => {}, []);
