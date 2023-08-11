@@ -22,16 +22,18 @@ const RoomsPage = () => {
   const [mode, setMode] = useState("NORMAL");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [rankers, setRankers] = useState([]);
-  const [curPage, setCurPage] = useState(1);
+  const [pageInfo, setpageInfo] = useState({
+    totalPageCount: 0,
+    curPage: 1,
+  });
 
   const navigate = useNavigate();
 
   const onClickTab = (selectedMode) => {
     setMode(selectedMode);
-    setCurPage(1);
 
     if (mode === selectedMode) {
-      fetchRoomData();
+      fetchRoomData(1);
     }
   };
 
@@ -56,42 +58,27 @@ const RoomsPage = () => {
     navigate(`game/${sessionId}`);
   };
 
-  const getTotalPageNumber = () => {
-    if (!rooms) {
-      return 0;
-    }
-
-    const totalRooms = rooms.length;
-
-    if (totalRooms % 6 === 0) {
-      return parseInt(totalRooms / 6);
-    }
-
-    return parseInt(totalRooms / 6) + 1;
-  };
-
-  const calStartRoomIdx = () => {
-    return 6 * (curPage - 1);
-  };
-
-  const calEndRoomIdx = () => {
-    return 6 * curPage - 1;
-  };
-
   const navigatePage = (pageNumber) => {
-    setCurPage(pageNumber);
+    fetchRoomData(pageNumber);
   };
 
-  async function fetchRoomData() {
-    const rooms = await getRooms(mode);
+  async function fetchRoomData(pageNumber) {
+    const { totalPageCount, roomInfoResList: rooms } = await getRooms(
+      pageNumber,
+      mode
+    );
+
     setRooms(rooms);
+    setpageInfo((prevPageInfo) => ({
+      totalPageCount,
+      curPage: pageNumber,
+    }));
   }
 
   async function searchRooms() {
     const rooms = await searchRoomsWithKeyword(mode, searchKeyword);
     setSearchKeyword("");
     setRooms(rooms);
-    setCurPage(1);
   }
 
   async function fetchRankers() {
@@ -101,7 +88,7 @@ const RoomsPage = () => {
   }
 
   useEffect(() => {
-    fetchRoomData();
+    fetchRoomData(1);
   }, [mode]);
 
   useEffect(() => {
@@ -167,20 +154,14 @@ const RoomsPage = () => {
                       flex: "1 0 auto",
                     }}
                   >
-                    {rooms
-                      .filter((_, idx) => {
-                        return (
-                          calStartRoomIdx() <= idx && idx <= calEndRoomIdx()
-                        );
-                      })
-                      .map((room) => (
-                        <Room id={room.title} {...room} />
-                      ))}
+                    {rooms.map((room) => (
+                      <Room id={room.title} {...room} />
+                    ))}
                   </div>
 
                   <div className="flex justify-center w-full">
                     <Navigator
-                      totalPage={getTotalPageNumber()}
+                      totalPage={pageInfo.totalPageCount}
                       onClickPage={navigatePage}
                     />
                   </div>
