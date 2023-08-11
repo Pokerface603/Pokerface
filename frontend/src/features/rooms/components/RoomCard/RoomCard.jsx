@@ -4,19 +4,23 @@ import React from "react";
 import Dividor from "./Dividor";
 import { hashOpenviduTitle } from "@util/hashing";
 import { useNavigate } from "react-router-dom";
+import { participateRoom } from "@feature/rooms/api/session";
+import { roomColor } from "../constants/RoomColor";
 
-function RoomCard({ title, hostName, hostTier, playerCount }) {
+function RoomCard({ title, hostName, hostTier, playerCount, gameMode }) {
   const navigate = useNavigate();
 
-  const enterGameRoom = () => {
+  const enterGameRoom = async () => {
     const sessionId = hashOpenviduTitle(title);
-    navigate(`../game/${sessionId}`);
+    const token = await participateRoom(sessionId);
+    navigate(`../game/${sessionId}`, { state: { token, gameMode } });
   };
 
   return (
     <div
       style={{
-        border: "6px solid #CCC0BB",
+        display: "inline-block",
+        border: `6px solid ${roomColor[hostTier]}`,
         borderRadius: "18px",
       }}
     >
@@ -27,7 +31,7 @@ function RoomCard({ title, hostName, hostTier, playerCount }) {
           padding: "12px 15px",
           gap: "3px",
         }}
-        className="bg-room box-border bg-cover flex items-center "
+        className="bg-room box-border bg-cover flex items-center"
       >
         <TierBox tier={hostTier} />
         <div

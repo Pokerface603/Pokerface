@@ -1,34 +1,19 @@
 import React from "react";
 import TierNoBox from "../TierNoBox";
 
-function RankingItem({ id, nickname, tier, reward }) {
-  const isenglish = /^[A-Za-z]+$/;
-
-  const fontFamily = isenglish.test(nickname)
-    ? "Unchained-Spaghetti"
-    : "NexonGothic";
-
+function RankingItem({ id, nickname, tier, reward, ranking }) {
   return (
     <div className="flex items-center justify-center">
       <div
-        className="grid grid-cols-8 gap-2 items-center"
-        style={{ width: "380px", height: "43px" }}
+        className="grid grid-cols-8 gap-2 items-center font-nexonGothic"
+        style={{ width: "380px", height: "43px", fontSize: "30px" }}
       >
-        <p
-          className="inline-block text-center"
-          style={{ fontFamily, fontSize: "30px" }}
-        >
-          #1
-        </p>
+        <p className="inline-block text-center">#{ranking}</p>
         <div className="m-auto">
           <TierNoBox tier={tier} />
         </div>
-        <p className="col-span-4" style={{ fontFamily, fontSize: "30px" }}>
-          {nickname}
-        </p>
-        <p className="col-span-2" style={{ fontFamily, fontSize: "30px" }}>
-          ${reward}
-        </p>
+        <p className="col-span-4">{nickname}</p>
+        <p className="col-span-2">${reward}</p>
       </div>
     </div>
   );
