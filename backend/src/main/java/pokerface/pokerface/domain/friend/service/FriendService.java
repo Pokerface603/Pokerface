@@ -28,12 +28,12 @@ public class FriendService {
         return friendRepository.findById(friendId).orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND));
     }
 
-    public FriendResponse getFriend(Long friendId){
+    public FriendResponse getFriend(Long friendId) {
         return FriendResponse.of(findById(friendId));
     }
 
-    public List<Friend> findByFromId(Long fromId){
-        return friendRepository.findFriendByFromId(fromId);
+    public List<Friend> findFriendsByFromEmail(String email) {
+        return friendRepository.findByFromEmail(email);
     }
 
     @Transactional

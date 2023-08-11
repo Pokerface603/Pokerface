@@ -30,8 +30,8 @@ public class DetailService {
                 .collect(Collectors.toList());
     }
 
-    public List<DetailResponse> findPagingByMemberId(Pageable pageable, Long memberId) {
-        return detailRepository.findPagingByMemberId(pageable, memberId).stream()
+    public List<DetailResponse> findPagingByMemberEmail(Pageable pageable, String email) {
+        return detailRepository.findPagingByMemberEmail(pageable, email).stream()
                 .map(DetailResponse::of)
                 .collect(Collectors.toList());
     }
@@ -49,7 +49,7 @@ public class DetailService {
         detailRepository.save(detailRequest.toDetail(history, member));
     }
 
-    public DetailCountResponse countByMemberId(Long memberId){
-        return DetailCountResponse.of(detailRepository.countByMemberId(memberId), detailRepository.countWinByMemberId(memberId));
+    public DetailCountResponse countByMemberEmail(String email){
+        return DetailCountResponse.of(detailRepository.countByMemberEmail(email), detailRepository.countWinByMemberEmail(email));
     }
 }

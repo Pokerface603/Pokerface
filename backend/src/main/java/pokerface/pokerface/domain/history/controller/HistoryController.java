@@ -26,9 +26,9 @@ public class HistoryController {
                 HttpStatus.OK);
     }
 
-    @GetMapping("/{historyId}/{memberId}")
-    public ResponseEntity<HistoryResponse> getHistory(@PathVariable Long historyId, @PathVariable Long memberId){
-        return new ResponseEntity<>(historyService.getHistory(historyId, memberId), HttpStatus.OK);
+    @GetMapping("/{historyId}/{email}")
+    public ResponseEntity<HistoryResponse> getHistory(@PathVariable Long historyId, @PathVariable String email){
+        return new ResponseEntity<>(historyService.getHistory(historyId, email), HttpStatus.OK);
     }
 
     @PostMapping

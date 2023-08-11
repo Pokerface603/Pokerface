@@ -44,10 +44,10 @@ public class HistoryService {
         return historyRepository.findById(historyId).orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND));
     }
 
-    public HistoryResponse getHistory(Long historyId, Long memberId){
+    public HistoryResponse getHistory(Long historyId, String email){
         History history = findById(historyId);
 
-        return HistoryResponse.of(history, convertGameLogToData(history.getGameLog(), isHost(history, memberId)));
+        return HistoryResponse.of(history, convertGameLogToData(history.getGameLog(), isHost(history, email)), isHost(history, email));
     }
 
     @Transactional
@@ -63,8 +63,8 @@ public class HistoryService {
 
     public Integer calculateRating(Member player, Member opponent, Result result){
         double expectRate = 1 / (Math.pow(10, (double)(opponent.getRating() - player.getRating())/RATING_SCALE) + 1);
-        Double playerCount = calculateCount(detailRepository.countByMemberId(player.getId()));
-        Double opponentCount = calculateCount(detailRepository.countByMemberId(opponent.getId()));
+        Double playerCount = calculateCount(detailRepository.countByMemberEmail(player.getEmail()));
+        Double opponentCount = calculateCount(detailRepository.countByMemberEmail(opponent.getEmail()));
 
         return (int)Math.round(player.getRating() + (result.getValue() - expectRate) * (RATING_WEIGHT * opponentCount) / (playerCount + opponentCount));
     }
@@ -100,7 +100,12 @@ public class HistoryService {
                 Result.valueOf(st.nextToken()), isHost);
     }
 
-    public boolean isHost(History history, Long memberId){
-        return history.getHost().getId().equals(memberId);
+    public TurnLogResponse convertTurnLogToData(String turnLog){
+        StringTokenizer st = new StringTokenizer(turnLog, "-");
+        return TurnLogResponse.of(BetType.valueOf(st.nextToken().toUpperCase()), Integer.parseInt(st.nextToken()));
+    }
+
+    public boolean isHost(History history, String email){
+        return history.getHost().getEmail().equals(email);
     }
 }
