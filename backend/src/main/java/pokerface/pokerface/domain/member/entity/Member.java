@@ -77,6 +77,15 @@ public class Member extends BaseTime {
         this.authKey = authKey;
     }
 
+    @Builder(builderMethodName = "socialJoin")
+    public Member(String socialId, SocialType socialType, String nickname, String email, String userPassword) {
+        this.socialId = socialId;
+        this.socialType = socialType;
+        this.nickname = nickname;
+        this.email = email;
+        this.userPassword = userPassword;
+    }
+
     public Long convertRatingToBounty(){
         return Math.round(Math.pow(BOUNTY_RATIO, rating)) * ROUND_UNIT;
     }
