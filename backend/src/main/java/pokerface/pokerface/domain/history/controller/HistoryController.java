@@ -21,7 +21,7 @@ public class HistoryController {
     @GetMapping
     public ResponseEntity<List<HistoryResponse>> historyListAll(){
         return new ResponseEntity<>(historyService.findAll().stream()
-                .map(history -> HistoryResponse.of(history, historyService.convertGameLogToData(history.getGameLog(), true)))
+                .map(history -> HistoryResponse.of(history, historyService.convertGameLogToData(history.getGameLog(), true), true))
                 .collect(Collectors.toList()),
                 HttpStatus.OK);
     }
