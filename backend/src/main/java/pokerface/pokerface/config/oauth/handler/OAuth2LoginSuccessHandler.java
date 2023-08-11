@@ -39,13 +39,10 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler{
 		
 		memberService.updateRefreshToken(oAuth2User.getEmail(), refreshToken);
 
-		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-		final Map<String, Object> body = new HashMap<>(); // 응답 body
-		body.put("Authorization", accessToken);
-		body.put("Authorization-refresh", refreshToken);
-
-		final ObjectMapper mapper = new ObjectMapper();
-		mapper.writeValue(response.getOutputStream(), body);
-		response.setStatus(HttpServletResponse.SC_OK);
+		String uri = UriComponentsBuilder.fromUriString("https://pokerface-server.ddns.net/lobby")
+				.queryParam("accessToken", accessToken)
+				.queryParam("refreshToken", refreshToken)
+				.build().toUriString();
+		response.sendRedirect(uri);
 	}
 }
