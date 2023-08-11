@@ -50,6 +50,6 @@ public class DetailService {
     }
 
     public DetailCountResponse countByMemberEmail(String email){
-        return DetailCountResponse.of(detailRepository.countByMemberEmail(email), detailRepository.countWinByMemberEmail(email));
+        return DetailCountResponse.of(detailRepository.countByMemberEmail(email), detailRepository.countWinByMemberEmail(email), memberService.findRankingByEmail(email));
     }
 }
