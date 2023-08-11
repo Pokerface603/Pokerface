@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pokerface.pokerface.domain.lobby.dto.response.LobbyFriendsResponse;
+import pokerface.pokerface.domain.lobby.dto.response.LobbyResponse;
 import pokerface.pokerface.domain.lobby.handler.LobbyHandler;
 import pokerface.pokerface.domain.lobby.service.LobbyService;
-import pokerface.pokerface.domain.member.dto.response.MemberLoginRes;
-import pokerface.pokerface.domain.member.service.MemberService;
 import pokerface.pokerface.domain.room.dto.response.RoomInfoRes;
 
 import java.util.List;
@@ -23,12 +23,16 @@ import java.util.List;
 public class LobbyController {
 
     private final LobbyHandler lobbyHandler;
-    private final MemberService memberService;
     private final LobbyService lobbyService;
 
-    @GetMapping
-    public List<MemberLoginRes> getConnectionMembers(){
-        return memberService.findByEmails(lobbyHandler.connectionMemberList());
+    @GetMapping("/{email}")
+    public List<LobbyResponse> getConnectionMembers(@PathVariable String email){
+        return lobbyService.getConnectionMembers(lobbyHandler.connectionMemberList(), email);
+    }
+
+    @GetMapping("/friend/{email}")
+    public List<LobbyFriendsResponse> getConnectionFriends(@PathVariable String email){
+        return lobbyService.friendsList(lobbyHandler.connectionMemberList(), email);
     }
 
     @GetMapping("/match/{email}")

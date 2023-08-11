@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import pokerface.pokerface.config.error.RestException;
 import pokerface.pokerface.config.error.errorcode.ErrorCode;
 import pokerface.pokerface.domain.friend.service.FriendService;
+import pokerface.pokerface.domain.lobby.dto.response.LobbyFriendsResponse;
+import pokerface.pokerface.domain.lobby.dto.response.LobbyResponse;
 import pokerface.pokerface.domain.member.service.MemberService;
 import pokerface.pokerface.domain.room.dto.response.RoomInfoRes;
 import pokerface.pokerface.domain.room.entity.Room;
@@ -69,6 +71,7 @@ public class LobbyService {
         assert target != null;
         return target.getSessionId();
     }
+
     public List<Room> findRoomsByMaxRatingAndMinRating(Integer maxRating, Integer minRating){
         Iterable<Room> rooms = roomRepository.findAll();
 
@@ -76,6 +79,26 @@ public class LobbyService {
                 .filter(room -> room.getMembers().size() == 1)
                 .filter(room -> room.getMembers().get(0).getRating() < maxRating)
                 .filter(room -> room.getMembers().get(0).getRating() > minRating)
+                .collect(Collectors.toList());
+    }
+
+    public List<LobbyFriendsResponse> friendsList(List<String> emails, String memberEmail){
+        return friendService.findFriendsByFromEmail(memberEmail).stream()
+                .filter(emails::contains)
+                .map(s -> memberService.findByEmail(s).getNickname())
+                .map(s -> LobbyFriendsResponse.of(s,
+                        roomService.findAllRoomInfos().stream()
+                            .filter(roomInfoRes -> roomInfoRes.getHostName().equals(s))
+                            .findFirst().orElse(null)))
+                .collect(Collectors.toList());
+    }
+
+    public List<LobbyResponse> getConnectionMembers(List<String> connections, String email){
+        List<String> friends = friendService.findFriendsByFromEmail(email);
+
+        return memberService.findByEmails(connections).stream()
+                .map(memberLoginRes -> LobbyResponse.of(memberLoginRes,
+                        friends.contains(memberLoginRes.getEmail())))
                 .collect(Collectors.toList());
     }
 }
