@@ -47,7 +47,7 @@ public class RoomController {
     /**
      * 게임 모드로만 방 검색
      */
-    @GetMapping("/findByGameMode")
+    @PostMapping("/findByGameMode")
     public ResponseEntity<RoomPageInfoRes> findByGameMode(@RequestBody FindByGameModeReq req) {
         return new ResponseEntity<>(RoomPageInfoRes.builder()
                 .totalPageCount(roomService.findByGameModeRoomsCount(GameMode.valueOf(req.getGameMode())))
@@ -66,7 +66,7 @@ public class RoomController {
     /**
      * 게임 모드와 제목으로 방 검색
      */
-    @GetMapping("/findByGameModeAndTitle")
+    @PostMapping("/findByGameModeAndTitle")
     public ResponseEntity<RoomPageInfoRes> findByGameModeAndTitle(@RequestBody FindByGameModeAndTitle req) {
         return new ResponseEntity<>(RoomPageInfoRes.builder()
                 .totalPageCount(roomService.findByGameModeAndTitleRoomsCount(
