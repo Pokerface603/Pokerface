@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pokerface.pokerface.config.error.RestException;
 import pokerface.pokerface.config.error.errorcode.ErrorCode;
-import pokerface.pokerface.domain.detail.dto.request.DetailRequest;
 import pokerface.pokerface.domain.detail.entity.Result;
 import pokerface.pokerface.domain.detail.repository.DetailRepository;
 import pokerface.pokerface.domain.detail.service.DetailService;
@@ -14,6 +13,8 @@ import pokerface.pokerface.domain.history.dto.request.HistoryRequest;
 import pokerface.pokerface.domain.history.dto.response.GameLogResponse;
 import pokerface.pokerface.domain.history.dto.response.HistoryResponse;
 import pokerface.pokerface.domain.history.dto.response.RoundLogResponse;
+import pokerface.pokerface.domain.history.dto.response.TurnLogResponse;
+import pokerface.pokerface.domain.history.entity.BetType;
 import pokerface.pokerface.domain.history.entity.History;
 import pokerface.pokerface.domain.history.entity.PlayerType;
 import pokerface.pokerface.domain.history.repository.HistoryRepository;
@@ -44,10 +45,10 @@ public class HistoryService {
         return historyRepository.findById(historyId).orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND));
     }
 
-    public HistoryResponse getHistory(Long historyId, Long memberId){
+    public HistoryResponse getHistory(Long historyId, String email){
         History history = findById(historyId);
 
-        return HistoryResponse.of(history, convertGameLogToData(history.getGameLog(), isHost(history, memberId)));
+        return HistoryResponse.of(history, convertGameLogToData(history.getGameLog(), isHost(history, email)), isHost(history, email));
     }
 
     @Transactional
@@ -56,15 +57,20 @@ public class HistoryService {
         Member guest = memberService.findByEmail(historyRequest.getGuestEmail());
         History history = historyRepository.save(historyRequest.toHistory(host, guest));
         Result hostResult = Result.valueOf(historyRequest.getResult());
+        Integer hostPostRating = calculateRating(host, guest, hostResult);
+        Integer guestPostRating = calculateRating(guest, host, hostResult.reverse());
 
-        detailService.save(new DetailRequest(calculateRating(host, guest, hostResult), hostResult), history, host);
-        detailService.save(new DetailRequest(calculateRating(guest, host, hostResult.reverse()), hostResult.reverse()), history, guest);
+        detailService.save(history, host, hostPostRating, hostResult);
+        detailService.save(history, guest, guestPostRating, hostResult.reverse());
+
+        memberService.updateRating(host.getEmail(), hostPostRating);
+        memberService.updateRating(guest.getEmail(), guestPostRating);
     }
 
     public Integer calculateRating(Member player, Member opponent, Result result){
         double expectRate = 1 / (Math.pow(10, (double)(opponent.getRating() - player.getRating())/RATING_SCALE) + 1);
-        Double playerCount = calculateCount(detailRepository.countByMemberId(player.getId()));
-        Double opponentCount = calculateCount(detailRepository.countByMemberId(opponent.getId()));
+        Double playerCount = calculateCount(detailRepository.countByMemberEmail(player.getEmail()));
+        Double opponentCount = calculateCount(detailRepository.countByMemberEmail(opponent.getEmail()));
 
         return (int)Math.round(player.getRating() + (result.getValue() - expectRate) * (RATING_WEIGHT * opponentCount) / (playerCount + opponentCount));
     }
@@ -94,13 +100,17 @@ public class HistoryService {
                 Integer.parseInt(st.nextToken()),
                 Pattern.compile(",")
                         .splitAsStream(st.nextToken())
-                        .filter(x -> !x.equals(""))
-                        .map(Integer::parseInt)
+                        .map(this::convertTurnLogToData)
                         .collect(Collectors.toList()),
                 Result.valueOf(st.nextToken()), isHost);
     }
 
-    public boolean isHost(History history, Long memberId){
-        return history.getHost().getId().equals(memberId);
+    public TurnLogResponse convertTurnLogToData(String turnLog){
+        StringTokenizer st = new StringTokenizer(turnLog, "-");
+        return TurnLogResponse.of(BetType.valueOf(st.nextToken().toUpperCase()), Integer.parseInt(st.nextToken()));
+    }
+
+    public boolean isHost(History history, String email){
+        return history.getHost().getEmail().equals(email);
     }
 }

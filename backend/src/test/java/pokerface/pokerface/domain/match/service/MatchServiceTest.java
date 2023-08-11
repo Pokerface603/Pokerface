@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import pokerface.pokerface.domain.history.entity.GameMode;
+import pokerface.pokerface.domain.lobby.service.LobbyService;
 import pokerface.pokerface.domain.member.entity.Member;
 import pokerface.pokerface.domain.member.repository.MemberRepository;
 import pokerface.pokerface.domain.room.entity.Room;
@@ -17,7 +18,7 @@ import java.util.List;
 class MatchServiceTest {
 
     @Autowired
-    private MatchService matchService;
+    private LobbyService lobbyService;
 
     @Autowired
     private RoomRepository roomRepository;
@@ -51,6 +52,6 @@ class MatchServiceTest {
         roomRepository.save(room2);
         roomRepository.save(room3);
 
-        System.out.println(matchService.findRoomByRating(member4.getId()));
+        System.out.println(lobbyService.findRoomByRating(member4.getEmail()));
     }
 }

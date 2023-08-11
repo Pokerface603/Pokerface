@@ -11,10 +11,10 @@ import java.util.List;
 
 @Repository
 public interface DetailRepository extends JpaRepository<Detail, Long> {
-    List<Detail> findPagingByMemberId(Pageable pageable, Long memberId);
+    List<Detail> findPagingByMemberEmail(Pageable pageable, String email);
 
-    Long countByMemberId(Long memberId);
+    Long countByMemberEmail(String email);
 
-    @Query(value = "select count(*) from Detail d where d.result='WIN' and d.member.id=:memberId ")
-    Long countWinByMemberId(@Param("memberId") Long memberId);
+    @Query(value = "select count(*) from Detail d where d.result='WIN' and d.member.email=:email ")
+    Long countWinByMemberEmail(@Param("email") String email);
 }

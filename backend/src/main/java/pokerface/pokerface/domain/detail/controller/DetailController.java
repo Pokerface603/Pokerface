@@ -24,9 +24,9 @@ public class DetailController {
         return new ResponseEntity<>(detailService.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/member/{memberId}")
-    public ResponseEntity<List<DetailResponse>> detailListPagingByMemberId(@PageableDefault(page = 0, size = 10, sort = "memberId", direction = Sort.Direction.DESC) Pageable pageable, @PathVariable Long memberId){
-        return new ResponseEntity<>(detailService.findPagingByMemberId(pageable, memberId), HttpStatus.OK);
+    @GetMapping("/member/{email}")
+    public ResponseEntity<List<DetailResponse>> detailListPagingByEmail(@PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable, @PathVariable String email){
+        return new ResponseEntity<>(detailService.findPagingByMemberEmail(pageable, email), HttpStatus.OK);
     }
 
     @GetMapping("/{detailId}")
@@ -34,8 +34,8 @@ public class DetailController {
         return new ResponseEntity<>(detailService.getDetail(detailId), HttpStatus.OK);
     }
 
-    @GetMapping("/count/{memberId}")
-    public ResponseEntity<DetailCountResponse> countByMemberId(@PathVariable Long memberId){
-        return new ResponseEntity<>(detailService.countByMemberId(memberId), HttpStatus.OK);
+    @GetMapping("/count/{email}")
+    public ResponseEntity<DetailCountResponse> countByMemberId(@PathVariable String email){
+        return new ResponseEntity<>(detailService.countByMemberEmail(email), HttpStatus.OK);
     }
 }

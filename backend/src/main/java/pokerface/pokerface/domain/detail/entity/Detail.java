@@ -45,6 +45,6 @@ public class Detail extends BaseTime {
     }
 
     public Long convertRatingToBounty(Integer rating){
-        return Math.round(Math.pow(BOUNTY_RATIO, rating) / ROUND_UNIT) * ROUND_UNIT;
+        return Math.round(Math.pow(BOUNTY_RATIO, rating)) * ROUND_UNIT;
     }
 }

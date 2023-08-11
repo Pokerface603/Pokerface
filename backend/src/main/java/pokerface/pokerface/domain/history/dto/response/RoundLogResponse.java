@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 public class RoundLogResponse {
     @Enumerated(EnumType.STRING)
-    private PlayerType firstPlayer;
+    private boolean isMeFirst;
 
     private final Integer myCardNum;
 
@@ -25,20 +25,20 @@ public class RoundLogResponse {
 
     private final Integer seedMoney;
 
-    private final List<Integer> battingMoney;
+    private final List<TurnLogResponse> turnLogResponses;
 
     @Enumerated(EnumType.STRING)
     private Result result;
 
-    public static RoundLogResponse of(PlayerType firstPlayer, Integer hostCardNum, Integer guestCardNum, Integer hostRemainChips, Integer guestRemainChips, Integer seedMoney, List<Integer> battingMoney, Result result, Boolean isHost){
+    public static RoundLogResponse of(PlayerType firstPlayer, Integer hostCardNum, Integer guestCardNum, Integer hostRemainChips, Integer guestRemainChips, Integer seedMoney, List<TurnLogResponse> turnLogResponses, Result result, boolean isHost){
         return RoundLogResponse.builder()
-                .firstPlayer(firstPlayer)
+                .isMeFirst(isHost == firstPlayer.isValue())
                 .myCardNum(isHost ? hostCardNum : guestCardNum)
                 .opponentCardNum(isHost ? guestCardNum : hostCardNum)
                 .myRemainChips(isHost ? hostRemainChips : guestRemainChips)
                 .opponentRemainChips(isHost ? guestRemainChips : hostRemainChips)
                 .seedMoney(seedMoney)
-                .battingMoney(battingMoney)
+                .turnLogResponses(turnLogResponses)
                 .result(isHost ? result : result.reverse())
                 .build();
     }

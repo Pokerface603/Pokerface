@@ -3,6 +3,7 @@ package pokerface.pokerface.domain.history.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pokerface.pokerface.domain.detail.entity.Result;
 import pokerface.pokerface.domain.member.entity.Member;
 import pokerface.pokerface.global.BaseTime;
 
@@ -29,10 +30,14 @@ public class History extends BaseTime {
     @JoinColumn(name = "guest_id")
     private Member guest;
 
-    public History(String gameMode, String gameLog, Member host, Member guest){
+    @Enumerated(EnumType.STRING)
+    private Result result;
+
+    public History(String gameMode, String gameLog, Member host, Member guest, Result result){
         this.gameMode = GameMode.valueOf(gameMode);
         this.gameLog = gameLog;
         this.host = host;
         this.guest = guest;
+        this.result = result;
     }
 }
