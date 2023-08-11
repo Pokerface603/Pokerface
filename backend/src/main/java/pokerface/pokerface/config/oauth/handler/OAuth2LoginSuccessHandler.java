@@ -41,6 +41,9 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler{
 //                .queryParam("refreshToken", refreshToken)
 //                .build().toUriString();
 		// 2. 배포 버전
+
+//		response
+
 		String uri = UriComponentsBuilder.fromUriString("https://pokerface-server.ddns.net/lobby")
 				.queryParam("accessToken", accessToken)
 				.queryParam("refreshToken", refreshToken)
