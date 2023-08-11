@@ -14,6 +14,8 @@ import pokerface.pokerface.domain.history.dto.request.HistoryRequest;
 import pokerface.pokerface.domain.history.dto.response.GameLogResponse;
 import pokerface.pokerface.domain.history.dto.response.HistoryResponse;
 import pokerface.pokerface.domain.history.dto.response.RoundLogResponse;
+import pokerface.pokerface.domain.history.dto.response.TurnLogResponse;
+import pokerface.pokerface.domain.history.entity.BetType;
 import pokerface.pokerface.domain.history.entity.History;
 import pokerface.pokerface.domain.history.entity.PlayerType;
 import pokerface.pokerface.domain.history.repository.HistoryRepository;
@@ -94,8 +96,7 @@ public class HistoryService {
                 Integer.parseInt(st.nextToken()),
                 Pattern.compile(",")
                         .splitAsStream(st.nextToken())
-                        .filter(x -> !x.equals(""))
-                        .map(Integer::parseInt)
+                        .map(this::convertTurnLogToData)
                         .collect(Collectors.toList()),
                 Result.valueOf(st.nextToken()), isHost);
     }
