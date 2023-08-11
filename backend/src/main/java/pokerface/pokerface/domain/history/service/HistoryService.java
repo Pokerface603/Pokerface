@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pokerface.pokerface.config.error.RestException;
 import pokerface.pokerface.config.error.errorcode.ErrorCode;
-import pokerface.pokerface.domain.detail.dto.request.DetailRequest;
 import pokerface.pokerface.domain.detail.entity.Result;
 import pokerface.pokerface.domain.detail.repository.DetailRepository;
 import pokerface.pokerface.domain.detail.service.DetailService;
