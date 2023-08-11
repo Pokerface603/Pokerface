@@ -58,9 +58,14 @@ public class HistoryService {
         Member guest = memberService.findByEmail(historyRequest.getGuestEmail());
         History history = historyRepository.save(historyRequest.toHistory(host, guest));
         Result hostResult = Result.valueOf(historyRequest.getResult());
+        Integer hostPostRating = calculateRating(host, guest, hostResult);
+        Integer guestPostRating = calculateRating(guest, host, hostResult.reverse());
 
-        detailService.save(new DetailRequest(calculateRating(host, guest, hostResult), hostResult), history, host);
-        detailService.save(new DetailRequest(calculateRating(guest, host, hostResult.reverse()), hostResult.reverse()), history, guest);
+        detailService.save(history, host, hostPostRating, hostResult);
+        detailService.save(history, guest, guestPostRating, hostResult.reverse());
+
+        memberService.updateRating(host.getEmail(), hostPostRating);
+        memberService.updateRating(guest.getEmail(), guestPostRating);
     }
 
     public Integer calculateRating(Member player, Member opponent, Result result){

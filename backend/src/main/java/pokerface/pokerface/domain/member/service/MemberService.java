@@ -101,6 +101,13 @@ public class MemberService {
                 .collect(Collectors.toList());
     }
 
+    public void updateRating(String email, Integer rating) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND));
+
+        member.setRating(rating);
+    }
+
     public Member findBySocialIdAndSocialType(String socialId, SocialType socialType) {
         return memberRepository.findBySocialIdAndSocialType(socialId, socialType)
                 .orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND));
