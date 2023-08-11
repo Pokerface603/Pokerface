@@ -5,10 +5,12 @@ import org.springframework.stereotype.Service;
 
 import pokerface.pokerface.config.error.RestException;
 import pokerface.pokerface.config.error.errorcode.ErrorCode;
+import pokerface.pokerface.config.oauth.dto.SocialJoinDto;
 import pokerface.pokerface.domain.member.dto.request.MemberJoinReq;
 import pokerface.pokerface.domain.member.dto.response.MemberLoginRes;
 import pokerface.pokerface.domain.member.dto.response.RankingRes;
 import pokerface.pokerface.domain.member.entity.Member;
+import pokerface.pokerface.domain.member.entity.SocialType;
 import pokerface.pokerface.domain.member.repository.MemberRepository;
 
 import javax.transaction.Transactional;
@@ -70,6 +72,12 @@ public class MemberService {
         return memberRepository.findByRefreshToken(refreshToken);
     }
 
+    public void updateRefreshToken(String email, String refreshToken) {
+        memberRepository.findByEmail(email).orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND))
+                .setRefreshToken(refreshToken);
+        memberRepository.flush();
+    }
+
     public List<RankingRes> findAllRankings(){
         return findAll().stream()
                 .map(RankingRes::of)
@@ -91,5 +99,22 @@ public class MemberService {
                 .map(memberRepository::findByEmail)
                 .map(member -> new MemberLoginRes(member.get().getNickname(), member.get().getEmail()))
                 .collect(Collectors.toList());
+    }
+
+    public Member findBySocialIdAndSocialType(String socialId, SocialType socialType) {
+        return memberRepository.findBySocialIdAndSocialType(socialId, socialType)
+                .orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND));
+    }
+
+    public String socialJoin(SocialJoinDto socialJoinDto) {
+        memberRepository.save(Member.socialJoin()
+                .socialType(SocialType.valueOf(socialJoinDto.getSocialType()))
+                .socialId(socialJoinDto.getSocialId())
+                .nickname(socialJoinDto.getNickname())
+                .email(socialJoinDto.getEmail())
+                .userPassword(socialJoinDto.getUserPassword())
+                .build());
+
+        return socialJoinDto.getEmail();
     }
 }
