@@ -3,6 +3,7 @@ import { getRatingUpDown, getTicketImg } from "./utils/table";
 import { getHistoryTableRow } from "../api/getTableRow";
 import { useState } from "react";
 import { useRef } from "react";
+import { useSelector } from "react-redux";
 
 const MatchHistoryTableBody = () => {
   const [tableBody, setTableBody] = useState([]);
@@ -11,13 +12,10 @@ const MatchHistoryTableBody = () => {
   const [hasMorePage, setHasMorePage] = useState(true);
 
   const loaderRef = useRef(null);
-  const initialLoadRef = useRef(true);
+
+  const email = useSelector((state) => state.user.email);
 
   useEffect(() => {
-    if (initialLoadRef.current || !hasMorePage) {
-      initialLoadRef.current = false;
-      return;
-    }
     fetchData();
   }, [page]);
 
@@ -42,7 +40,7 @@ const MatchHistoryTableBody = () => {
   const fetchData = async () => {
     try {
       setIsLoading(true);
-      const newData = await getHistoryTableRow(3, page);
+      const newData = await getHistoryTableRow(email, page);
       setTableBody((prevData) => [...prevData, ...newData]);
       if (newData.length < 10) {
         setHasMorePage(false);

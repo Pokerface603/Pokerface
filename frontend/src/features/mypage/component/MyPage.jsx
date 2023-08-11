@@ -1,13 +1,28 @@
 import WoodBackground from "@component/WoodBackground";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MatchHistoryTable from "./MatchHistoryTable";
 import HistorySummary from "./HistorySummary";
 import MyInfo from "../../../components/myinfo/MyInfo";
-import { myInfoTest } from "./test";
 import BackButton from "./BackButton";
+import { useSelector } from "react-redux";
+import { getTotalRecord } from "../api/getTotalRecord";
 
 const MyPage = () => {
-  const test = myInfoTest;
+  const [totalData, setTotalData] = useState(null);
+  const nickname = useSelector((state) => state.user.nickname);
+  const email = useSelector((state) => state.user.email);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getTotalRecord(email);
+        setTotalData(data);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    fetchData();
+  }, [email]);
 
   return (
     <WoodBackground>
@@ -16,16 +31,17 @@ const MyPage = () => {
         style={{ width: "1000px", height: "880px" }}>
         <div className="w-full h-full flex">
           <div className="mt-4">
-            <MyInfo
-              width="455px"
-              height="160px"
-              // 테스트 데이터 연결 중, api 작업 시 수정
-              tier={test.tier}
-              nickname={test.nickname}
-              reward={test.reward}
-              totalMatches={test.totalMatches}
-              wins={test.wins}
-            />
+            {totalData !== null && (
+              <MyInfo
+                width="455px"
+                height="160px"
+                tier={totalData.tier}
+                nickname={nickname}
+                reward={totalData.rating}
+                totalMatches={totalData.totalCount}
+                wins={totalData.winCount}
+              />
+            )}
           </div>
           <BackButton />
         </div>
@@ -37,7 +53,13 @@ const MyPage = () => {
         className="grid grid-cols-1 grid-rows-[400px,auto] ml-4 content-stretch justify-center items-center"
         style={{ width: "800px", height: "880px" }}>
         <div className="w-full h-2/3 flex">
-          <HistorySummary />
+          {totalData !== null && (
+            <HistorySummary
+              win={totalData.winCount}
+              lose={totalData.loseCount}
+              winrate={totalData.winRate}
+            />
+          )}
         </div>
         <div className="w-full h-full bg-blue-900">
           {/* 그래프 들어갈 위치 */}

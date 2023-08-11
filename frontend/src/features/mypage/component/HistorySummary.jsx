@@ -1,30 +1,8 @@
 import Parchment from "@component/Parchment";
 import React from "react";
 import SummaryCard from "./SummaryCard";
-import { useEffect } from "react";
-import { useState } from "react";
-import { getTotalRecord } from "../api/getTotalRecord";
 
-const HistorySummary = () => {
-  const [win, setWin] = useState("");
-  const [lose, setLose] = useState("");
-  const [winrate, setWinrate] = useState("");
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getTotalRecord(3);
-        // test중, 차후 api에 맞게 수정 예정
-        setWin(data.winCount);
-        setLose(data.loseCount);
-        setWinrate(data.winRate);
-      } catch (error) {
-        console.log("error");
-      }
-    };
-    fetchData();
-  }, []);
-
+const HistorySummary = ({ win, lose, winrate }) => {
   return (
     <Parchment
       style={{
