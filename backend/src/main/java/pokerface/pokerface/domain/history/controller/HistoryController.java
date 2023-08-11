@@ -21,14 +21,14 @@ public class HistoryController {
     @GetMapping
     public ResponseEntity<List<HistoryResponse>> historyListAll(){
         return new ResponseEntity<>(historyService.findAll().stream()
-                .map(history -> HistoryResponse.of(history, historyService.convertGameLogToData(history.getGameLog(), true)))
+                .map(history -> HistoryResponse.of(history, historyService.convertGameLogToData(history.getGameLog(), true), true))
                 .collect(Collectors.toList()),
                 HttpStatus.OK);
     }
 
-    @GetMapping("/{historyId}/{memberId}")
-    public ResponseEntity<HistoryResponse> getHistory(@PathVariable Long historyId, @PathVariable Long memberId){
-        return new ResponseEntity<>(historyService.getHistory(historyId, memberId), HttpStatus.OK);
+    @GetMapping("/{historyId}/{email}")
+    public ResponseEntity<HistoryResponse> getHistory(@PathVariable Long historyId, @PathVariable String email){
+        return new ResponseEntity<>(historyService.getHistory(historyId, email), HttpStatus.OK);
     }
 
     @PostMapping

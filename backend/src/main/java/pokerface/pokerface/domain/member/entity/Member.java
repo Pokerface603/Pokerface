@@ -3,6 +3,7 @@ package pokerface.pokerface.domain.member.entity;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+import pokerface.pokerface.config.oauth.dto.SocialJoinDto;
 import pokerface.pokerface.global.BaseTime;
 import javax.persistence.*;
 
@@ -69,12 +70,28 @@ public class Member extends BaseTime {
         this.tier = tier;
     }
 
-    @Builder
+    @Builder(builderMethodName = "join")
     public Member(String email, String userPassword, String nickname, String authKey) {
         this.email = email;
         this.userPassword = userPassword;
         this.nickname = nickname;
         this.authKey = authKey;
+    }
+
+    public static Member socialJoin(SocialJoinDto socialJoinDto) {
+        return new Member(socialJoinDto.getSocialId(),
+                SocialType.valueOf(socialJoinDto.getSocialType()),
+                socialJoinDto.getNickname(),
+                socialJoinDto.getEmail() + "carrot",
+                socialJoinDto.getUserPassword());
+    }
+
+    public Member(String socialId, SocialType socialType, String nickname, String email, String userPassword) {
+        this.socialId = socialId;
+        this.socialType = socialType;
+        this.nickname = nickname;
+        this.email = email;
+        this.userPassword = userPassword;
     }
 
     public Long convertRatingToBounty(){
