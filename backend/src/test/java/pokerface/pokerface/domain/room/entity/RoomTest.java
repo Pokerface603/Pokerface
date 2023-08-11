@@ -97,10 +97,10 @@ class RoomTest {
     @Test
     @Transactional
     void findRoomsByMode() {
-        List<RoomInfoRes> roomsByMode = roomService.findRoomsByGameMode(GameMode.NORMAL);
+        List<RoomInfoRes> roomsByMode = roomService.findByGameMode(GameMode.NORMAL);
         System.out.println("roomsByMode.size() = " + roomsByMode.size());
 
-        roomService.findRoomsByGameMode(GameMode.NORMAL).forEach(System.out::println);
+        roomService.findByGameMode(GameMode.NORMAL).forEach(System.out::println);
         }
 
     @Test

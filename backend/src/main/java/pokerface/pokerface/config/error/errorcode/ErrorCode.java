@@ -17,7 +17,8 @@ public enum ErrorCode {
     ALREADY_FULL(HttpStatus.METHOD_NOT_ALLOWED, "이미 꽉 찬 방입니다."),
     INVALID_AUTHKEY(HttpStatus.UNAUTHORIZED, "이메일 인증 키가 일치하지 않습니다."),
     EMAIL_NOT_AUTHENTICATED(HttpStatus.UNAUTHORIZED, "이메일 인증이 필요합니다."),
-    MATCHING_FAILED(HttpStatus.METHOD_NOT_ALLOWED, "조건에 맞는 방이 없습니다.");
+    MATCHING_FAILED(HttpStatus.METHOD_NOT_ALLOWED, "조건에 맞는 방이 없습니다."),
+    WEBSOCKET_MESSAGE_ERROR(HttpStatus.METHOD_NOT_ALLOWED, "메세지 유형이 올바르지 않습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

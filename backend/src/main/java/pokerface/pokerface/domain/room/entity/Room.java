@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.index.Indexed;
 import pokerface.pokerface.domain.history.entity.GameMode;
 import pokerface.pokerface.domain.member.entity.Member;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -28,15 +29,18 @@ public class Room {
 
     private String roomPassword;
 
+    private LocalDateTime createdAt;
+
     private List<Member> members;
 
     @Builder
-    public Room(String sessionId, GameMode gameMode, String title, Boolean isPrivate, String roomPassword, List<Member> members) {
+    public Room(String sessionId, GameMode gameMode, String title, Boolean isPrivate, String roomPassword, List<Member> members, LocalDateTime createdAt) {
         this.sessionId = sessionId;
         this.gameMode = gameMode;
         this.title = title;
         this.isPrivate = isPrivate;
         this.roomPassword = roomPassword;
         this.members = members;
+        this.createdAt = createdAt;
     }
 }

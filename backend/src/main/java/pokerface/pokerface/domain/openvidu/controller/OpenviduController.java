@@ -88,6 +88,8 @@ public class OpenviduController {
                                                    @AuthenticationPrincipal PrincipalDetails principalDetails)
             throws OpenViduJavaClientException, OpenViduHttpException {
 
+        log.debug("참가하려는 인원 정보 : {}", principalDetails.getMember());
+
         String inputPassword = (String) params.get("password");
         log.debug("비밀번호 검증 : {}", inputPassword);
         if(!inputPassword.equals("")) { // 비빌번호가 있는 방에 참가하려는 경우

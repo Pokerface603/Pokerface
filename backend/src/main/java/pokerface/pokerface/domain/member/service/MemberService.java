@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import pokerface.pokerface.config.error.RestException;
 import pokerface.pokerface.config.error.errorcode.ErrorCode;
 import pokerface.pokerface.domain.member.dto.request.MemberJoinReq;
+import pokerface.pokerface.domain.member.dto.response.MemberLoginRes;
 import pokerface.pokerface.domain.member.dto.response.RankingRes;
 import pokerface.pokerface.domain.member.entity.Member;
 import pokerface.pokerface.domain.member.repository.MemberRepository;
@@ -81,7 +82,14 @@ public class MemberService {
                 .collect(Collectors.toList());
     }
 
-    public RankingRes findRankingByMemberId(Long memberId){
-        return RankingRes.of(findById(memberId));
+    public RankingRes findRankingByEmail(String email){
+        return RankingRes.of(findByEmail(email));
+    }
+
+    public List<MemberLoginRes> findByEmails(List<String> emails){
+        return emails.stream().distinct()
+                .map(memberRepository::findByEmail)
+                .map(member -> new MemberLoginRes(member.get().getNickname(), member.get().getEmail()))
+                .collect(Collectors.toList());
     }
 }
