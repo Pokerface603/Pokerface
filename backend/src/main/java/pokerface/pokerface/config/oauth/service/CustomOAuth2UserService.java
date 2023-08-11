@@ -52,7 +52,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         
         // 4. 소셜 로그인을 시도하는 사용자가 기존에 있던 사용자인지 유무 확인
         Member member = memberService.findBySocialIdAndSocialType(
-				oAuthAttributes.getOAuth2UserInfo().getId(), SocialType.valueOf(socialType));
+				oAuthAttributes.getOAuth2UserInfo().getId(), SocialType.valueOf(socialType)).orElse(null);
 
         // 5. 처음 로그인한 사용자라면 회원 가입 진행
         if(member == null) {
