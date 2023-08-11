@@ -9,11 +9,11 @@ import pokerface.pokerface.domain.friend.entity.Friend;
 public class FriendResponse {
     private final Long friendId;
 
-    private final Long fromId;
+    private final String fromEmail;
 
-    private final Long toId;
+    private final String toEmail;
 
     public static FriendResponse of(Friend friend){
-        return new FriendResponse(friend.getId(), friend.getFrom().getId(), friend.getTo().getId());
+        return new FriendResponse(friend.getId(), friend.getFrom().getEmail(), friend.getTo().getEmail());
     }
 }

@@ -32,11 +32,8 @@ public class FriendController {
     }
 
     @GetMapping("/from/{email}")
-    public ResponseEntity<List<FriendResponse>> fromFriendListByMemberId(@PathVariable String email){
-        return new ResponseEntity<>(friendService.findFriendsByFromEmail(email).stream()
-                .map(FriendResponse::of)
-                .collect(Collectors.toList()),
-                HttpStatus.OK);
+    public ResponseEntity<List<String>> findFriendsByMemberEmail(@PathVariable String email){
+        return new ResponseEntity<>(friendService.findFriendsByFromEmail(email), HttpStatus.OK);
     }
 
     @PostMapping

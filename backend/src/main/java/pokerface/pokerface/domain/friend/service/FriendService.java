@@ -12,6 +12,7 @@ import pokerface.pokerface.domain.friend.repository.FriendRepository;
 import pokerface.pokerface.domain.member.service.MemberService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -32,8 +33,10 @@ public class FriendService {
         return FriendResponse.of(findById(friendId));
     }
 
-    public List<Friend> findFriendsByFromEmail(String email) {
-        return friendRepository.findByFromEmail(email);
+    public List<String> findFriendsByFromEmail(String email) {
+        return friendRepository.findByFromEmail(email).stream()
+                .map(friend -> friend.getTo().getEmail())
+                .collect(Collectors.toList());
     }
 
     @Transactional
