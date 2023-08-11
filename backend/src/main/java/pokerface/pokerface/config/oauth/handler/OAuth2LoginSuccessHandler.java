@@ -1,7 +1,9 @@
 package pokerface.pokerface.config.oauth.handler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -14,6 +16,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Component
@@ -35,20 +39,13 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler{
 		
 		memberService.updateRefreshToken(oAuth2User.getEmail(), refreshToken);
 
-		// 1. local test 버전
-//		String uri = UriComponentsBuilder.fromUriString("http://localhost:3000/lobby")
-//                .queryParam("accessToken", accessToken)
-//                .queryParam("refreshToken", refreshToken)
-//                .build().toUriString();
-		// 2. 배포 버전
+		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+		final Map<String, Object> body = new HashMap<>(); // 응답 body
+		body.put("Authorization", accessToken);
+		body.put("Authorization-refresh", refreshToken);
 
-//		response
-
-		String uri = UriComponentsBuilder.fromUriString("https://pokerface-server.ddns.net/lobby")
-				.queryParam("accessToken", accessToken)
-				.queryParam("refreshToken", refreshToken)
-				.build().toUriString();
-        response.sendRedirect(uri);
+		final ObjectMapper mapper = new ObjectMapper();
+		mapper.writeValue(response.getOutputStream(), body);
+		response.setStatus(HttpServletResponse.SC_OK);
 	}
-	
 }

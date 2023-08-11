@@ -53,7 +53,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 		
 		String uri = request.getRequestURI();
 		
-		if(uri.equals("/api/members/login") || uri.startsWith("/api/members/oauth2")) { // "/login", "/oauth2" url로 요청시 인증 과정 생략
+		if(uri.equals("/api/members/login") || uri.startsWith("/api/login/oauth2")) { // "/login", "/oauth2" url로 요청시 인증 과정 생략
 			log.debug("로그인 요청 또는 소셜 로그인 요청일 경우");
 			chain.doFilter(request, response); // 다음 필터로 이동
 			return; // return을 하지 않으면 밑에 로직을 수행 수 다음 필터로 이동하기에 필수로 넣어줘야한다.

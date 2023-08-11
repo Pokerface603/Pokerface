@@ -1,6 +1,7 @@
 package pokerface.pokerface.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import pokerface.pokerface.config.error.RestException;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class MemberService {
     private final MemberRepository memberRepository;
 
@@ -49,7 +51,7 @@ public class MemberService {
     }
 
     public void join(MemberJoinReq memberJoinReq) {
-        memberRepository.save(Member.builder()
+        memberRepository.save(Member.join()
                 .email(memberJoinReq.getEmail())
                 .nickname(memberJoinReq.getNickname())
                 .userPassword(memberJoinReq.getPassword())
@@ -101,20 +103,12 @@ public class MemberService {
                 .collect(Collectors.toList());
     }
 
-    public Member findBySocialIdAndSocialType(String socialId, SocialType socialType) {
-        return memberRepository.findBySocialIdAndSocialType(socialId, socialType)
-                .orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND));
+    public Optional<Member> findBySocialIdAndSocialType(String socialId, SocialType socialType) {
+        return memberRepository.findBySocialIdAndSocialType(socialId, socialType);
     }
 
     public String socialJoin(SocialJoinDto socialJoinDto) {
-        memberRepository.save(Member.socialJoin()
-                .socialType(SocialType.valueOf(socialJoinDto.getSocialType()))
-                .socialId(socialJoinDto.getSocialId())
-                .nickname(socialJoinDto.getNickname())
-                .email(socialJoinDto.getEmail())
-                .userPassword(socialJoinDto.getUserPassword())
-                .build());
-
+        memberRepository.saveAndFlush(Member.socialJoin(socialJoinDto));
         return socialJoinDto.getEmail();
     }
 }
