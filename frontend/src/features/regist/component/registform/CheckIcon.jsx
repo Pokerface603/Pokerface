@@ -1,11 +1,10 @@
 import React from "react";
 
-const CheckIcon = ({ width, height, onClick }) => {
+const CheckIcon = ({ width, height, filter }) => {
   return (
     <div
-      className="bg-check-button bg-cover cursor-pointer brightness-0 hover:brightness-50"
-      style={{ width, height }}
-      onClick={onClick}
+      className="bg-check-button bg-cover cursor-pointer"
+      style={{ width, height, filter: filter }}
     />
   );
 };

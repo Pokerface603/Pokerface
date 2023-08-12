@@ -125,6 +125,7 @@ const LoginFormContent = () => {
               height="25px"
               fontSize="28px"
               text="회원가입"
+              onClick={()=>navigate("/regist")}
             />
           </div>
           <div className="flex  items-center justify-center mt-3">
