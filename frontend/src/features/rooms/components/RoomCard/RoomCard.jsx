@@ -14,7 +14,7 @@ function RoomCard({
   hostTier,
   playerCount,
   gameMode,
-  isSecret,
+  isPrivate,
 }) {
   const navigate = useNavigate();
 
@@ -76,7 +76,7 @@ function RoomCard({
               height={"33px"}
               fontSize={"20px"}
               onClick={enterGameRoom}
-              icon={isSecret ? <img src={Lock} alt="자물쇠" /> : <></>}
+              icon={isPrivate ? <img src={Lock} alt="자물쇠" /> : <></>}
             />
           </div>
         </div>
