@@ -15,6 +15,9 @@ import Room from "./RoomCard/RoomCard";
 import { getRankers } from "../api/ranker";
 import { useNavigate } from "react-router-dom";
 import Navigator from "./Paging/Navigator";
+import { useSelector } from "react-redux";
+import { hashOpenviduTitle } from "@util/hashing";
+import { participateRoom } from "../api/session";
 
 const RoomsPage = () => {
   const [showRoomMakeModal, setShowRoomMakeModal] = useState(false);
@@ -26,6 +29,8 @@ const RoomsPage = () => {
     totalPageCount: 0,
     curPage: 1,
   });
+
+  const { email } = useSelector((state) => state.user);
 
   const navigate = useNavigate();
 
@@ -54,8 +59,11 @@ const RoomsPage = () => {
   };
 
   const onQuickStart = async () => {
-    const { token, sessionId } = await quickStart();
-    navigate(`game/${sessionId}`);
+    const { roomName, gameMode } = await quickStart(email);
+    const sessionId = hashOpenviduTitle(roomName);
+
+    const token = await participateRoom(sessionId, "");
+    navigate(`game/${sessionId}`, { state: { token, gameMode } });
   };
 
   const navigatePage = (pageNumber) => {
