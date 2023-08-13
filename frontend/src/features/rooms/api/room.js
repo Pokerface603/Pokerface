@@ -13,8 +13,8 @@ export const searchRoomsWithKeyword = async (mode, title) => {
   return data;
 };
 
-export const quickStart = async () => {
-  const data = await axios.get(`/matches/{member_id}`);
+export const quickStart = async (email) => {
+  const { data } = await axios.get(`/lobbies/match/${email}`);
   return data;
 };
 
