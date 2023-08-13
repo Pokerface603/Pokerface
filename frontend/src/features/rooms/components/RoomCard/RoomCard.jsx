@@ -6,8 +6,16 @@ import { hashOpenviduTitle } from "@util/hashing";
 import { useNavigate } from "react-router-dom";
 import { participateRoom } from "@feature/rooms/api/session";
 import { roomColor } from "../constants/RoomColor";
+import Lock from "@asset/images/Lock.png";
 
-function RoomCard({ title, hostName, hostTier, playerCount, gameMode }) {
+function RoomCard({
+  title,
+  hostName,
+  hostTier,
+  playerCount,
+  gameMode,
+  isSecret,
+}) {
   const navigate = useNavigate();
 
   const enterGameRoom = async () => {
@@ -68,6 +76,7 @@ function RoomCard({ title, hostName, hostTier, playerCount, gameMode }) {
               height={"33px"}
               fontSize={"20px"}
               onClick={enterGameRoom}
+              icon={isSecret ? <img src={Lock} alt="자물쇠" /> : <></>}
             />
           </div>
         </div>
