@@ -44,7 +44,7 @@ const RegistForm = () => {
     } else {
       try {
         const isAvailable = await checkEmailAvailability(emailCurrent);
-        if (!isAvailable) {
+        if (isAvailable) {
           setEmailMessage("사용 가능한 아이디 입니다.");
           setIsEmail(true);
         } else {
@@ -67,7 +67,7 @@ const RegistForm = () => {
     } else {
       try {
         const isAvailable = await checkNicknameAvailability(nickname);
-        if (!isAvailable) {
+        if (isAvailable) {
           setNickNameMessage("사용 가능한 닉네임 입니다.");
           setIsNickName(true);
         } else {
