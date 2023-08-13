@@ -75,7 +75,7 @@ function RoomMakeModal({ close }) {
       }}
     >
       <div>
-        <ModalHeader />
+        <ModalHeader title={"방 생성"} />
         <div
           style={{
             display: "flex",
