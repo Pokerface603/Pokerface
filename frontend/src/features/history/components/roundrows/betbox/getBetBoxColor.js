@@ -1,14 +1,14 @@
 export const getBetBoxColor = (betType) => {
   switch (betType) {
-    case "check":
+    case "CHECK":
       return "green";
-    case "bet":
+    case "BET":
       return "blue";
-    case "all-in":
+    case "ALL-IN":
       return "red";
-    case "call":
+    case "CALL":
       return "green";
     default:
-      return "ocher";
+      return "black";
   }
 };

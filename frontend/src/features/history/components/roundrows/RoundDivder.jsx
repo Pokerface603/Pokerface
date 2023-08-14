@@ -9,7 +9,7 @@ const RoundDivider = ({ roundNum, leftCardNum, rightCardNum }) => {
         <img
           src={getCardImg(leftCardNum)}
           alt={leftCardNum}
-          className="w-20 h-20 mr-2"
+          className="w-14 h-18 mr-2"
         />
         <span
           className="text-black"
@@ -19,7 +19,7 @@ const RoundDivider = ({ roundNum, leftCardNum, rightCardNum }) => {
         <img
           src={getCardImg(rightCardNum)}
           alt={rightCardNum}
-          className="w-20 h-20 ml-2"
+          className="w-14 h-18 ml-2"
         />
       </div>
 
