@@ -24,12 +24,12 @@ export async function createRoom({
   return response.data;
 }
 
-export async function participateRoom(sessionId) {
+export async function participateRoom(sessionId, password) {
   const response = await axios
     .post(
       "/sessions/" + sessionId + "/connections",
       {
-        password: "",
+        password,
       },
       {
         headers: { "Content-Type": "application/json" },

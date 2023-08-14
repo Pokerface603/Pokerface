@@ -2,16 +2,19 @@ import { OpenVidu } from "openvidu-browser";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import OpeviduVideo from "../components/OpeviduVideo";
-import Button from "@component/Button";
 import { useRef } from "react";
 import Game from "../components/Game";
 import { ReactComponent as Avatar } from "@asset/images/BlindAvatar.svg";
+import { leaveRoom } from "@feature/rooms/api/room";
+import { useSelector } from "react-redux";
 
 function GamePage() {
   const navigate = useNavigate();
   const {
     state: { token, gameMode },
   } = useLocation();
+
+  const { email } = useSelector((state) => state.user);
 
   let ov = new OpenVidu();
   const { sessionId } = useParams();
@@ -113,9 +116,13 @@ function GamePage() {
     setMySession(ovSession);
   };
 
-  const leaveSession = () => {
+  const leaveSession = async () => {
     mySessionRef.current.disconnect();
-    navigate("/");
+    await leaveRoom({ email, sessionId });
+  };
+
+  const onClickLeave = () => {
+    navigate("../lobby");
   };
 
   const needCamera = () => {
@@ -124,7 +131,7 @@ function GamePage() {
 
   return (
     <div>
-      <Game roomName={sessionId} gameMode={gameMode} />
+      <Game roomName={sessionId} gameMode={gameMode} leaveRoom={onClickLeave} />
       {needCamera() &&
         sessionInfo?.subscribers?.map((sub, i) => (
           <OpeviduVideo key={i} streamManager={sub} />

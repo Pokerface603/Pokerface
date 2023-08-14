@@ -3,14 +3,31 @@
 @tailwind utilities;
 
 :root {
-  --red: #B22D36;
-  --ocher: #C59C70;
+  --red: #b22d36;
+  --ocher: #c59c70;
   --brown_dark: #482613;
-  --ocher_light: #DFD2BA;
+  --ocher_light: #dfd2ba;
   --brown: #794626;
-  --orange: #E58632;
+  --orange: #e58632;
   --green: #4c9c61;
-  --blue: #13A7E6;
+  --blue: #13a7e6;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
 }
 
 @font-face {
