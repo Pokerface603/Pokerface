@@ -67,8 +67,7 @@ const LoginFormContent = () => {
 
   // 카카오 로그인
   const kakaoLogin = () => {
-    const kakaoAuthUrl =
-      "https://pokerface-server.ddns.net/api/oauth2/authorization/kakao"; // Kakao 로그인 HTTPS URL
+    const kakaoAuthUrl = `${process.env.REACT_APP_API_URL}/oauth2/authorization/kakao`; // Kakao 로그인 HTTPS URL
     window.location.href = kakaoAuthUrl;
   };
 
