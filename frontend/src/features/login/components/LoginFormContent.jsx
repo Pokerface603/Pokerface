@@ -23,7 +23,6 @@ const LoginFormContent = () => {
   const [isEmail, setIsEmail] = useState(false);
 
   const navigate = useNavigate();
-
   const clickLogin = () => {
     if (!email) {
       return alert("이메일을 입력해주세요.");
@@ -65,6 +64,24 @@ const LoginFormContent = () => {
         });
     }
   };
+
+  // 카카오 로그인
+  const kakaoLogin = () => {
+    const kakaoAuthUrl =
+      "https://pokerface-server.ddns.net/api/oauth2/authorization/kakao"; // Kakao 로그인 HTTPS URL
+    window.location.href = kakaoAuthUrl;
+  };
+
+  // const kakaoLogin = () => {
+  //   const kakaoAuthUrl =
+  //     "https://pokerface-server.ddns.net/api/oauth2/authorization/kakao"; // Kakao 로그인 URL
+  //   window.location.href = kakaoAuthUrl;
+  //   // const token = new URL(window.location.href).searchParams.get("accessToken");
+  //   // console.log(token);
+  //   // const refreshToken = new URL(window.location.href).searchParams.get(
+  //   // "refreshToken"
+  //   // );
+  // };
 
   // 이메일 유효성 검사
   const onChangeEmail = useCallback((e) => {
@@ -125,7 +142,7 @@ const LoginFormContent = () => {
               height="25px"
               fontSize="28px"
               text="회원가입"
-              onClick={()=>navigate("/regist")}
+              onClick={() => navigate("/regist")}
             />
           </div>
           <div className="flex  items-center justify-center mt-3">
@@ -135,6 +152,7 @@ const LoginFormContent = () => {
               fontSize="25px"
               text="KAKAO"
               imgSrc={KakaoLogo}
+              onClick={kakaoLogin}
             />
           </div>
         </form>
