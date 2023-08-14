@@ -26,13 +26,13 @@ public class LobbyController {
     private final LobbyService lobbyService;
 
     @GetMapping("/{email}")
-    public List<LobbyResponse> getConnectionMembers(@PathVariable String email){
-        return lobbyService.getConnectionMembers(lobbyHandler.connectionMemberList(), email);
+    public ResponseEntity<List<LobbyResponse>> getConnectionMembers(@PathVariable String email){
+        return new ResponseEntity<>(lobbyService.getConnectionMembers(lobbyHandler.connectionMemberList(), email), HttpStatus.OK);
     }
 
     @GetMapping("/friend/{email}")
-    public List<LobbyFriendsResponse> getConnectionFriends(@PathVariable String email){
-        return lobbyService.friendsList(lobbyHandler.connectionMemberList(), email);
+    public ResponseEntity<List<LobbyFriendsResponse>> getConnectionFriends(@PathVariable String email){
+        return new ResponseEntity<>(lobbyService.friendsList(lobbyHandler.connectionMemberList(), email), HttpStatus.OK);
     }
 
     @GetMapping("/match/{email}")

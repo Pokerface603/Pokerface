@@ -1,5 +1,5 @@
 package pokerface.pokerface.domain.lobby.entity;
 
 public enum MessageType {
-    REQUEST, RESPONSE
+    REQUEST, RESPONSE, UPDATE
 }
