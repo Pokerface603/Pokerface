@@ -4,6 +4,7 @@ import RoomsPage from "@feature/rooms/components/RoomsPage";
 import RegistPage from "@feature/regist/component/RegistPage";
 import { createBrowserRouter } from "react-router-dom";
 import MyPage from "@feature/mypage/component/MyPage";
+import Redirect from "@feature/login/routes/Redirect";
 
 const router = createBrowserRouter([
   { path: "/", element: <LoginFormPage /> },
@@ -11,6 +12,7 @@ const router = createBrowserRouter([
   { path: "/game/:sessionId", element: <GamePage /> },
   { path: "/regist", element: <RegistPage /> },
   { path: "/mypage", element: <MyPage /> },
+  { path: "/redirect", element: <Redirect /> },
 ]);
 
 export default router;

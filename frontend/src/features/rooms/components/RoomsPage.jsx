@@ -15,28 +15,11 @@ import Room from "./RoomCard/RoomCard";
 import { getRankers } from "../api/ranker";
 import { useNavigate } from "react-router-dom";
 import Navigator from "./Paging/Navigator";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { hashOpenviduTitle } from "@util/hashing";
 import { participateRoom } from "../api/session";
-import { loginUser } from "@store/userSlice";
 
 const RoomsPage = () => {
-  const dispatch = useDispatch();
-  const token = new URL(window.location.href).searchParams.get("accessToken");
-  const refreshToken = new URL(window.location.href).searchParams.get(
-    "refreshToken"
-  );
-
-  if (token) {
-    dispatch(
-      loginUser({
-        authorization: "authorization",
-        authorizationRefresh: "Authorization-refresh",
-      })
-    );
-    localStorage.setItem("token", token);
-    localStorage.setItem("refreshToken", refreshToken);
-  }
   const [showRoomMakeModal, setShowRoomMakeModal] = useState(false);
   const [rooms, setRooms] = useState([]);
   const [mode, setMode] = useState("NORMAL");
