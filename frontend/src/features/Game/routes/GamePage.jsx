@@ -42,8 +42,10 @@ function GamePage() {
 
   useEffect(() => {
     joinSession();
+    window.addEventListener("beforeunload", leaveSession);
 
     return () => {
+      window.removeEventListener("beforeunload", leaveSession);
       leaveSession();
     };
   }, []);
