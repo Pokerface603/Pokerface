@@ -1,9 +1,7 @@
 package pokerface.pokerface.config.oauth.handler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -16,8 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.net.URLEncoder;
 
 @Slf4j
 @Component
@@ -39,9 +36,13 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler{
 		
 		memberService.updateRefreshToken(oAuth2User.getEmail(), refreshToken);
 
-		String uri = UriComponentsBuilder.fromUriString("https://pokerface-server.ddns.net/lobby")
+		log.debug("oAuth2User.getNickname : {}", oAuth2User.getNickname());
+
+		String uri = UriComponentsBuilder.fromUriString("https://pokerface-server.ddns.net/redirect")
 				.queryParam("accessToken", accessToken)
 				.queryParam("refreshToken", refreshToken)
+				.queryParam("email", oAuth2User.getEmail())
+				.queryParam("nickname", URLEncoder.encode(oAuth2User.getNickname(), "UTF-8"))
 				.build().toUriString();
 		response.sendRedirect(uri);
 	}
