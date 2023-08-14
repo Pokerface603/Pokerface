@@ -30,25 +30,21 @@ public class LobbyHandler extends TextWebSocketHandler {
         String[] strs = payload.split(",");
 
         try {
-            if(strs.length == 2){
-                WebSocketSession target = sessions.get(strs[1]);
-                String addMessage = "";
-                String nickName = lobbyService.findNickNameByEmail(session.getPrincipal().getName());
-
-                switch (MessageType.valueOf(strs[0])){
-                    case REQUEST:
-                        addMessage += "님이 친구요청을 보냈습니다. ";
-                        break;
-                    case RESPONSE:
-                        addMessage += "님이 친구요청을 수락했습니다. ";
-                        lobbyService.saveFriends(session.getPrincipal().getName(), target.getPrincipal().getName());
-                        break;
-                    default:
-                        throw new RestException(ErrorCode.WEBSOCKET_MESSAGE_ERROR);
-                }
-                TextMessage msg = new TextMessage(nickName + addMessage);
-                target.sendMessage(msg);
+            if(strs.length != 2) {
+                throw new RestException(ErrorCode.WEBSOCKET_MESSAGE_ERROR);
             }
+
+            WebSocketSession target = sessions.get(strs[1]);
+
+            if(MessageType.valueOf(strs[0]).equals(MessageType.RESPONSE)){
+                lobbyService.saveFriends(session.getPrincipal().getName(), target.getPrincipal().getName());
+            }
+
+            String nickName = lobbyService.findNickNameByEmail(session.getPrincipal().getName());
+            TextMessage msg = new TextMessage(strs[0] + "," + session.getPrincipal().getName() + "," + nickName);
+
+            target.sendMessage(msg);
+
         }catch (Exception e){
             throw new RestException(ErrorCode.WEBSOCKET_MESSAGE_ERROR);
         }
@@ -60,6 +56,8 @@ public class LobbyHandler extends TextWebSocketHandler {
 
         sessions.put(session.getPrincipal().getName(), session);
         log.info(session + " 클라이언트 접속");
+
+        sendUpdateMessage();
     }
 
     /* Client가 접속 해제 시 호출되는 메서드 */
@@ -67,12 +65,21 @@ public class LobbyHandler extends TextWebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 
         log.info(session + " 클라이언트 접속 해제");
-
         sessions.remove(session.getPrincipal().getName());
+
+        sendUpdateMessage();
     }
 
     /* 인터셉트한 HttpSession에서 현재 접속한 멤버의 정보를 획득 후 반환하는 메서드*/
     public List<String> connectionMemberList(){
         return new ArrayList<>(sessions.keySet());
+    }
+
+    public void sendUpdateMessage() throws Exception{
+        TextMessage msg = new TextMessage(MessageType.UPDATE.toString());
+
+        for(String key : sessions.keySet()){
+            sessions.get(key).sendMessage(msg);
+        }
     }
 }
