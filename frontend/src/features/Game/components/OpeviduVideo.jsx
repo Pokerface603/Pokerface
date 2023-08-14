@@ -72,7 +72,7 @@ function OpeviduVideo({ streamManager }) {
       videoEl.ended ||
       !isFaceDetectionModelLoaded()
     )
-      return setTimeout(() => this.onPlay());
+      return setTimeout(() => onPlay());
 
     const options = getFaceDetectorOptions();
 
