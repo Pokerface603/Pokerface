@@ -4,12 +4,15 @@ import { getHistoryTableRow } from "../api/getTableRow";
 import { useState } from "react";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const MatchHistoryTableBody = () => {
   const [tableBody, setTableBody] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [hasMorePage, setHasMorePage] = useState(true);
+
+  const navigate = useNavigate();
 
   const loaderRef = useRef(null);
 
@@ -59,12 +62,17 @@ const MatchHistoryTableBody = () => {
     }
   };
 
+  const onClickHistory = (historyId) => {
+    navigate(`/history/${historyId}`);
+  };
+
   const makeTableRow = () => {
     if (tableBody.length > 0) {
       return tableBody.map((match) => (
         <tr
           key={match.historyId}
-          className="h-20 text-center border-y-2 border-black">
+          className="h-20 text-center border-y-2 border-black cursor-pointer hover:scale-105 hover:bg-black hover:bg-opacity-10"
+          onClick={() => onClickHistory(match.historyId)}>
           <td
             style={{
               fontFamily: "Unchained-RegularShadow",
