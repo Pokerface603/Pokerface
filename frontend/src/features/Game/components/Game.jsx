@@ -1,4 +1,3 @@
-import { hashOpenviduTitle } from "@util/hashing";
 import React, { Fragment, useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Unity, useUnityContext } from "react-unity-webgl";
@@ -38,7 +37,7 @@ export default function Game({ roomName, gameMode, leaveRoom }) {
     // 방 정보를 담고 있는 객체
     const info = {
       userId: email,
-      roomName: hashOpenviduTitle(roomName),
+      roomName,
       gameMode,
     };
 
