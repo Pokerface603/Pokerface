@@ -16,7 +16,7 @@ const RegistPage = () => {
             <Wanted text="only alive" />
           </div>
           <div className="flex justify-center align-middle items-center">
-            <img src={cowboy} alt="" />
+            <img src={cowboy} alt="cowboy" style={{ height: "370px" }} />
           </div>
           <RegistForm />
         </Parchment>

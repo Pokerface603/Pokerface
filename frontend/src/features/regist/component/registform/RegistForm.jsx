@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import EmailInput from "../input/EmailInput";
 import NicknameInput from "../input/NicknameInput";
 import PasswordInputs from "../input/PasswordInputs";
-import RegistStamp from "../RegistStamp";
+import RegistStamp from "./RegistStamp";
 import { useNavigate } from "react-router-dom";
 import {
   checkEmailAvailability,
   checkNicknameAvailability,
   regist,
 } from "../../api/api";
+import Loading from "@component/Loading";
 
 const RegistForm = () => {
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ const RegistForm = () => {
   const [capsLockFlag, setCapsLockFlag] = useState(false);
   const [capsLockMessage, setCapsLockMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
 
   const checkCapsLock = (e) => {
     let capsLock = e.getModifierState("CapsLock");
@@ -44,7 +46,7 @@ const RegistForm = () => {
     } else {
       try {
         const isAvailable = await checkEmailAvailability(emailCurrent);
-        if (isAvailable) {
+        if (!isAvailable) {
           setEmailMessage("사용 가능한 아이디 입니다.");
           setIsEmail(true);
         } else {
@@ -57,17 +59,18 @@ const RegistForm = () => {
     }
   };
 
+  // 닉네임 길이 제한 5 -> 8로 변경
   const onChangeNickName = async (e) => {
-    const nicknameRegex = /^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,5}$/;
+    const nicknameRegex = /^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,8}$/;
     let nickname = e.target.value;
     setNickName(e.target.value);
     if (!nicknameRegex.test(nickname)) {
-      setNickNameMessage("특수문자를 제거한 5자 이하의 닉네임만 가능합니다.");
+      setNickNameMessage("특수문자를 제거한 8자 이하의 닉네임만 가능합니다.");
       setIsNickName(false);
     } else {
       try {
         const isAvailable = await checkNicknameAvailability(nickname);
-        if (isAvailable) {
+        if (!isAvailable) {
           setNickNameMessage("사용 가능한 닉네임 입니다.");
           setIsNickName(true);
         } else {
@@ -80,9 +83,14 @@ const RegistForm = () => {
     }
   };
 
+  // 비밀번호 이중 체크 확인
   const onChangePassword = (e) => {
     const newPassword = e.target.value;
     setPassword(newPassword);
+    if (newPassword === "" || passwordConfirmation === "") {
+      setIsPassword(false);
+      return;
+    }
     if (passwordCheck(newPassword, passwordConfirmation)) {
       setPasswordMessage("비밀번호가 동일합니다");
       setIsPassword(true);
@@ -95,6 +103,10 @@ const RegistForm = () => {
   const onChangePasswordChk = (e) => {
     const newPasswordConfirmation = e.target.value;
     setPasswordConfirmation(newPasswordConfirmation);
+    if (password === "" || newPasswordConfirmation === "") {
+      setIsPassword(false);
+      return;
+    }
     if (passwordCheck(password, newPasswordConfirmation)) {
       setPasswordMessage("비밀번호가 동일합니다");
       setIsPassword(true);
@@ -122,7 +134,7 @@ const RegistForm = () => {
         if (response.status === 200) {
           alert("회원가입이 완료되었습니다. \n이메일 인증을 완료해주세요!");
           // 회원가입 완료시 로그인 페이지로 이동.
-          navigate("/");
+          navigate("/login");
         }
       } catch (error) {
         // console.error(error);
@@ -130,12 +142,21 @@ const RegistForm = () => {
     }
   };
 
+  // 도장 아이콘 bounce
+  useEffect(() => {
+    if (isEmail && isNickName && isPassword && passwordCheck) {
+      setIsCompleted(true);
+    } else {
+      setIsCompleted(false);
+    }
+  }, [isNickName, isEmail, isPassword]);
+
   return (
     <>
       <form>
         <div
           className="grid grid-cols-1 justify-items-center content-center"
-          style={{ width: "912px", height: "320px" }}
+          style={{ width: "912px", height: "330px" }}
         >
           <EmailInput
             onChange={onChangeEmail}
@@ -161,7 +182,11 @@ const RegistForm = () => {
           />
         </div>
       </form>
-      {!isLoading && <RegistStamp onClick={clickRegistStamp} />}
+      {!isLoading ? (
+        <RegistStamp onClick={clickRegistStamp} animate={isCompleted} />
+      ) : (
+        <Loading />
+      )}
     </>
   );
 };
