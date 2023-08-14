@@ -1,7 +1,10 @@
 import { axios } from "@lib/axios";
 
-export const getRooms = async (mode) => {
-  const { data } = await axios.get(`/rooms/mode/${mode}`);
+export const getRooms = async (pageNum, mode) => {
+  const { data } = await axios.post(`/rooms/findByGameMode`, {
+    pageNum,
+    gameMode: mode,
+  });
   return data;
 };
 
@@ -10,7 +13,14 @@ export const searchRoomsWithKeyword = async (mode, title) => {
   return data;
 };
 
-export const quickStart = async () => {
-  const data = await axios.get(`/matches/{member_id}`);
+export const quickStart = async (email) => {
+  const { data } = await axios.get(`/lobbies/match/${email}`);
   return data;
+};
+
+export const leaveRoom = async ({ email, sessionId }) => {
+  await axios.post(`/rooms/disconnect`, {
+    email,
+    sessionId,
+  });
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import { ReactComponent as HeaderFrame } from "@asset/images/HeaderFrame.svg";
 
-function ModalHeader() {
+function ModalHeader({ title }) {
   return (
     <div
       className="relative flex justify-center items-center"
@@ -18,7 +18,7 @@ function ModalHeader() {
           fontWeight: "bold",
         }}
       >
-        방 생성
+        {title}
       </span>
     </div>
   );

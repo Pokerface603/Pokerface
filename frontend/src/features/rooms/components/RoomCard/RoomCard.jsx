@@ -1,77 +1,108 @@
 import Button from "@component/Button";
 import TierBox from "@component/TierBox";
-import React from "react";
+import React, { useState } from "react";
 import Dividor from "./Dividor";
 import { hashOpenviduTitle } from "@util/hashing";
 import { useNavigate } from "react-router-dom";
 import { participateRoom } from "@feature/rooms/api/session";
+import { roomColor } from "../constants/RoomColor";
+import Lock from "@asset/images/Lock.png";
+import PrivateRoomInputModal from "../PrivateRoomInputModal/PrivateRoomInputModal";
 
-function RoomCard({ title, hostName, hostTier, playerCount, gameMode }) {
+function RoomCard({
+  title,
+  hostName,
+  hostTier,
+  playerCount,
+  gameMode,
+  isPrivate,
+}) {
+  const [showPrivateModal, setShowPrivateModal] = useState(false);
+
   const navigate = useNavigate();
 
   const enterGameRoom = async () => {
+    if (isPrivate) {
+      setShowPrivateModal(true);
+      return;
+    }
+
     const sessionId = hashOpenviduTitle(title);
-    const token = await participateRoom(sessionId);
+    const token = await participateRoom(sessionId, "");
     navigate(`../game/${sessionId}`, { state: { token, gameMode } });
   };
 
+  const onCloseModal = () => {
+    setShowPrivateModal(false);
+  };
+
   return (
-    <div
-      style={{
-        display: "inline-block",
-        border: "6px solid #CCC0BB",
-        borderRadius: "18px",
-      }}
-    >
+    <>
       <div
         style={{
-          width: "580px",
-          height: "130px",
-          padding: "12px 15px",
-          gap: "3px",
+          display: "inline-block",
+          border: `6px solid ${roomColor[hostTier]}`,
+          borderRadius: "18px",
         }}
-        className="bg-room box-border bg-cover flex items-center "
       >
-        <TierBox tier={hostTier} />
         <div
-          className="w-full flex flex-col justify-evenly h-full font-nexonGothic"
           style={{
-            fontSize: "25px",
-            fontWeight: "bold",
+            width: "580px",
+            height: "130px",
+            padding: "12px 15px",
+            gap: "3px",
           }}
+          className="bg-room box-border bg-cover flex items-center"
         >
+          <TierBox tier={hostTier} />
           <div
-            className="flex justify-between items-center"
+            className="w-full flex flex-col justify-evenly h-full font-nexonGothic"
             style={{
-              marginRight: "135px",
+              fontSize: "25px",
+              fontWeight: "bold",
             }}
           >
-            <span>{title}</span>
-            <span
+            <div
+              className="flex justify-between items-center"
               style={{
-                fontFamily: "Unchained-Spaghetti",
-                fontSize: "30px",
+                marginRight: "135px",
               }}
             >
-              {playerCount} / 2
-            </span>
-          </div>
-          <Dividor />
-          <div className="flex justify-between items-center">
-            <span>{hostName}</span>
-            <Button
-              label={"입장"}
-              background={"var(--orange)"}
-              width={"100px"}
-              color={"white"}
-              height={"33px"}
-              fontSize={"20px"}
-              onClick={enterGameRoom}
-            />
+              <span>{title}</span>
+              <span
+                style={{
+                  fontFamily: "Unchained-Spaghetti",
+                  fontSize: "30px",
+                }}
+              >
+                {playerCount} / 2
+              </span>
+            </div>
+            <Dividor />
+            <div className="flex justify-between items-center">
+              <span>{hostName}</span>
+              <Button
+                label={"입장"}
+                background={"var(--orange)"}
+                width={"100px"}
+                color={"white"}
+                height={"33px"}
+                fontSize={"20px"}
+                onClick={enterGameRoom}
+                icon={isPrivate ? <img src={Lock} alt="자물쇠" /> : <></>}
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      {showPrivateModal && (
+        <PrivateRoomInputModal
+          close={onCloseModal}
+          roomName={title}
+          gameMode={gameMode}
+        />
+      )}
+    </>
   );
 }
 
