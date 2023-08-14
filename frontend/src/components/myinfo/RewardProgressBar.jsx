@@ -1,4 +1,5 @@
 import React from "react";
+import { getRewardPercent } from "./getRewardPercent";
 
 const RewardProgressBar = ({
   reward,
@@ -8,22 +9,16 @@ const RewardProgressBar = ({
   marginTop,
   style,
 }) => {
-  
-  // totalMatches는 임의로 넣어논 값. 
-  const percentage = (reward / totalMatches) * 100;
+  const percentage = getRewardPercent(reward);
   return (
-    <div
-      className="w-full bg-white"
-      style={{ height, ...style }}
-    >
+    <div className="w-full bg-white" style={{ height, ...style }}>
       <div
         style={{
           width: `${percentage}%`,
           height,
           marginTop,
           background,
-        }}
-      ></div>
+        }}></div>
     </div>
   );
 };
