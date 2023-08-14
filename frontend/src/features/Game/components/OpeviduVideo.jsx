@@ -1,4 +1,4 @@
-import React, { createRef, useEffect } from "react";
+import React, { createRef, useEffect, useState } from "react";
 import * as faceapi from "face-api.js";
 
 const SSD_MOBILENETV1 = "ssd_mobilenetv1";
@@ -34,6 +34,8 @@ function getFaceDetectorOptions() {
 
 function OpeviduVideo({ streamManager, gameMode }) {
   const videoRef = createRef();
+
+  const [emotion, setemotion] = useState("");
 
   useEffect(() => {
     streamManager.addVideoElement(videoRef.current);
@@ -76,11 +78,21 @@ function OpeviduVideo({ streamManager, gameMode }) {
 
     const options = getFaceDetectorOptions();
 
-    const result = await faceapi
+    const data = await faceapi
       .detectSingleFace(videoEl, options)
       .withFaceExpressions();
 
-    console.log(result);
+    if (!data) {
+      return setTimeout(() => onPlay());
+    }
+
+    const { expressions } = data;
+
+    const most = Object.keys(expressions).reduce((ex1, ex2) => {
+      return expressions[ex1] > expressions[ex2] ? ex1 : ex2;
+    });
+
+    setemotion(most);
 
     setTimeout(() => onPlay());
   };
@@ -88,17 +100,24 @@ function OpeviduVideo({ streamManager, gameMode }) {
   return (
     streamManager &&
     (gameMode === "EMOTION" ? (
-      <video
-        style={{
-          width: "400px",
-          position: "absolute",
-          left: "calc(50vw - 200px)",
-          top: "0px",
-        }}
-        autoPlay={true}
-        ref={videoRef}
-        onLoadedData={() => onPlay()}
-      />
+      <>
+        <video
+          style={{
+            width: "400px",
+            position: "absolute",
+            left: "calc(50vw - 200px)",
+            top: "0px",
+          }}
+          autoPlay={true}
+          ref={videoRef}
+          onLoadedData={() => onPlay()}
+        />
+
+        <div>
+          <h3>상대방의 감정</h3>
+          <span>{emotion}</span>
+        </div>
+      </>
     ) : (
       <video
         style={{
