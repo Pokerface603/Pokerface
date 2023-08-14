@@ -32,7 +32,7 @@ function getFaceDetectorOptions() {
     : new faceapi.TinyFaceDetectorOptions({ inputSize, scoreThreshold });
 }
 
-function OpeviduVideo({ streamManager }) {
+function OpeviduVideo({ streamManager, gameMode }) {
   const videoRef = createRef();
 
   useEffect(() => {
@@ -86,7 +86,8 @@ function OpeviduVideo({ streamManager }) {
   };
 
   return (
-    streamManager && (
+    streamManager &&
+    (gameMode === "EMOTION" ? (
       <video
         style={{
           width: "400px",
@@ -98,7 +99,18 @@ function OpeviduVideo({ streamManager }) {
         ref={videoRef}
         onLoadedData={() => onPlay()}
       />
-    )
+    ) : (
+      <video
+        style={{
+          width: "400px",
+          position: "absolute",
+          left: "calc(50vw - 200px)",
+          top: "0px",
+        }}
+        autoPlay={true}
+        ref={videoRef}
+      />
+    ))
   );
 }
 

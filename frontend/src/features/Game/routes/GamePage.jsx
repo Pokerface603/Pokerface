@@ -136,7 +136,7 @@ function GamePage() {
       <Game roomName={sessionId} gameMode={gameMode} leaveRoom={onClickLeave} />
       {needCamera() &&
         sessionInfo?.subscribers?.map((sub, i) => (
-          <OpeviduVideo key={i} streamManager={sub} />
+          <OpeviduVideo key={i} streamManager={sub} gameMode={gameMode} />
         ))}
       {!needCamera() && (
         <Avatar
