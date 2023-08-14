@@ -48,8 +48,13 @@ public class FriendService {
     }
 
     @Transactional
-    public void save(String firstMemberEmail, String secondMemberEmail){
+    public boolean save(String firstMemberEmail, String secondMemberEmail){
+        if(findFriendsByFromEmail(firstMemberEmail).contains(secondMemberEmail)){
+            return false;
+        }
+
         friendRepository.save(new Friend(memberService.findByEmail(firstMemberEmail), memberService.findByEmail(secondMemberEmail)));
         friendRepository.save(new Friend(memberService.findByEmail(secondMemberEmail), memberService.findByEmail(firstMemberEmail)));
+        return true;
     }
 }
