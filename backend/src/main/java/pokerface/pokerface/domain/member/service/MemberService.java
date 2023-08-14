@@ -108,6 +108,7 @@ public class MemberService {
                 .orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND));
 
         member.setRating(rating);
+        member.setTier(member.getTier().changedTier(rating));
     }
 
     public Optional<Member> findBySocialIdAndSocialType(String socialId, SocialType socialType) {
