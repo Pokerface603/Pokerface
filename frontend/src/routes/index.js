@@ -5,14 +5,26 @@ import RegistPage from "@feature/regist/component/RegistPage";
 import { createBrowserRouter } from "react-router-dom";
 import MyPage from "@feature/mypage/component/MyPage";
 import Redirect from "@feature/login/routes/Redirect";
+import WebsocketProvider from "context/WebsocketProvider";
 
-const router = createBrowserRouter([
-  { path: "/", element: <LoginFormPage /> },
-  { path: "/lobby", element: <RoomsPage /> },
-  { path: "/game/:sessionId", element: <GamePage /> },
-  { path: "/regist", element: <RegistPage /> },
-  { path: "/mypage", element: <MyPage /> },
-  { path: "/redirect", element: <Redirect /> },
+export const publicRouter = createBrowserRouter([
+  {
+    path: "/regist",
+    element: <RegistPage />,
+  },
+  { path: "*", element: <LoginFormPage /> },
 ]);
 
-export default router;
+export const privateRouter = createBrowserRouter([
+  { path: "/game/:sessionId", element: <GamePage /> },
+  { path: "/mypage", element: <MyPage /> },
+  { path: "/redirect", element: <Redirect /> },
+  {
+    path: "/lobby",
+    element: (
+      <WebsocketProvider>
+        <RoomsPage />{" "}
+      </WebsocketProvider>
+    ),
+  },
+]);
