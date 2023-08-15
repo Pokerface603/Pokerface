@@ -6,6 +6,8 @@ import MyInfo from "../../../components/myinfo/MyInfo";
 import BackButton from "./BackButton";
 import { useSelector } from "react-redux";
 import useRatingInfo from "@hook/useRatingInfo";
+import RatingGraph from "./RatingGraph";
+import Parchment from "@component/Parchment";
 
 const MyPage = () => {
   const nickname = useSelector((state) => state.user.nickname);
@@ -52,9 +54,16 @@ const MyPage = () => {
             />
           )}
         </div>
-        <div className="w-full h-full bg-blue-900">
-          {/* 그래프 들어갈 위치 */}
-        </div>
+        <Parchment
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <RatingGraph />
+        </Parchment>
       </div>
     </WoodBackground>
   );
