@@ -1,8 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import TierNoBoxSvg from "../constants/TierNoBoxSvg";
 import Button from "@component/Button";
+import { WebSocketContext } from "context/WebsocketProvider";
 
-function OnlineMemberItem({ tier, nickname }) {
+function OnlineMemberItem({ tier, nickname, email }) {
+  const ws = useContext(WebSocketContext);
+
+  const onClickRequestFriend = () => {
+    ws.current.send(`REQUEST,${email}`);
+  };
   return (
     <>
       <div className="m-auto">{/* <TierNoBoxSvg tier={tier} /> */}</div>
@@ -19,6 +25,7 @@ function OnlineMemberItem({ tier, nickname }) {
           label="친구맺기"
           background="var(--brown_dark)"
           color="white"
+          onClick={onClickRequestFriend}
         />
       </div>
     </>
