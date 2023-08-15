@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { useSelector } from "react-redux";
 
 export const WebSocketContext = React.createContext(null);
 
@@ -6,10 +7,12 @@ function WebsocketProvider({ children }) {
   const webSocketUrl = process.env.REACT_APP_WEB_SOCKET_URL;
   let ws = useRef(null);
 
+  const { email } = useSelector((state) => state.user);
+
   if (!ws.current) {
     ws.current = new WebSocket(webSocketUrl);
     ws.current.onopen = () => {
-      console.log("connected to " + webSocketUrl);
+      ws.current.send(`CONNECT,${email}`);
     };
 
     ws.current.onclose = (error) => {
@@ -22,7 +25,9 @@ function WebsocketProvider({ children }) {
       console.log(error);
     };
   }
-  <WebSocketContext.Provider value={ws}>{children}</WebSocketContext.Provider>;
+  return (
+    <WebSocketContext.Provider value={ws}>{children}</WebSocketContext.Provider>
+  );
 }
 
 export default WebsocketProvider;
