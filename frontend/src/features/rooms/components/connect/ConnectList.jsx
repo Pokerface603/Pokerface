@@ -1,16 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import FrameButton from "./FrameButton";
 import AmericanSaloon from "../../../../assets/images/rooms/american-saloon.svg";
 import { getFriends, getLobbies } from "@feature/rooms/api/connect";
 import OnlineMemberItem from "./OnlineMemberItem";
 import { useSelector } from "react-redux";
 import OnlineFriendItem from "./OnlineFriendItem";
+import { WebSocketContext } from "context/WebsocketProvider";
 
 const ConnectList = () => {
   const [selectedTab, setSelectedTab] = useState("CONNECT");
   const [memberList, setMemberList] = useState([]);
 
   const { email } = useSelector((state) => state.user);
+
+  const ws = useContext(WebSocketContext);
+
+  ws.current.onmessage = (e) => {
+    const { data } = e;
+    const [_, reqEmail, nickname] = data.split(",");
+
+    const ret = window.confirm(
+      `${nickname}님이 친구요청을 하셨습니다. 수락하시겠습니까?`
+    );
+
+    if (ret) {
+      ws.current.sendMessage(`RESPONSE,${email}`);
+    }
+  };
 
   const fetchMembers = async () => {
     if (selectedTab === "CONNECT") {

@@ -31,10 +31,6 @@ const RoomsPage = () => {
     curPage: 1,
   });
 
-  const ws = useContext(WebSocketContext);
-
-  ws.current.onmessage = (e) => {};
-
   const { email } = useSelector((state) => state.user);
 
   const navigate = useNavigate();
