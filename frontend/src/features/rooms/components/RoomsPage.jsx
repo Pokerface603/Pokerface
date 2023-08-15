@@ -141,7 +141,7 @@ const RoomsPage = () => {
                     background: "var(--ocher)",
                   }}
                 >
-                  <Tab onClickTab={onClickTab} />
+                  <Tab onClickTab={onClickTab} mode={mode} />
                 </div>
 
                 {/* 방 정보들이 들어가야하는 부분 */}
