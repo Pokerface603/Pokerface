@@ -60,11 +60,12 @@ const RoomsPage = () => {
   };
 
   const onQuickStart = async () => {
-    const { roomName, gameMode } = await quickStart(email);
-    const sessionId = hashOpenviduTitle(roomName);
+    const { title, gameMode } = await quickStart(email);
+
+    const sessionId = hashOpenviduTitle(title);
 
     const token = await participateRoom(sessionId, "");
-    navigate(`game/${sessionId}`, { state: { token, gameMode } });
+    navigate(`../game/${sessionId}`, { state: { token, gameMode } });
   };
 
   const navigatePage = (pageNumber) => {
