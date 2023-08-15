@@ -17,14 +17,18 @@ const ConnectList = () => {
 
   ws.current.onmessage = (e) => {
     const { data } = e;
-    const [_, reqEmail, nickname] = data.split(",");
+    const [cmd, reqEmail, nickname] = data.split(",");
 
-    const ret = window.confirm(
-      `${nickname}님이 친구요청을 하셨습니다. 수락하시겠습니까?`
-    );
+    if (cmd === "REQUEST") {
+      const ret = window.confirm(
+        `${nickname}님이 친구요청을 하셨습니다. 수락하시겠습니까?`
+      );
 
-    if (ret) {
-      ws.current.send(`RESPONSE,${email}`);
+      if (ret) {
+        ws.current.send(`RESPONSE,${email}`);
+      }
+    } else if (cmd === "UPDATE") {
+      fetchMembers();
     }
   };
 
