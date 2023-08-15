@@ -5,6 +5,7 @@ import RegistPage from "@feature/regist/component/RegistPage";
 import { createBrowserRouter } from "react-router-dom";
 import MyPage from "@feature/mypage/component/MyPage";
 import History from "@feature/history/components/History";
+import Redirect from "@feature/login/routes/Redirect";
 
 const router = createBrowserRouter([
   { path: "/", element: <LoginFormPage /> },
@@ -13,6 +14,7 @@ const router = createBrowserRouter([
   { path: "/regist", element: <RegistPage /> },
   { path: "/mypage", element: <MyPage /> },
   { path: "/history/:historyId", element: <History /> },
+  { path: "/redirect", element: <Redirect /> },
 ]);
 
 export default router;
