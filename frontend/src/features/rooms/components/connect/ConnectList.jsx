@@ -9,6 +9,7 @@ const ConnectList = ({ tier, nickname, button }) => {
   const fontFamily = isenglish.test(nickname)
     ? "Unchained-Spaghetti"
     : "NexonGothic";
+
   return (
     <div className="relative w-600 h-200">
       <div className="flex">

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Parchment from "@component/Parchment";
 import WoodBackground from "@component/WoodBackground";
 import Button from "@component/Button";
@@ -18,6 +18,7 @@ import Navigator from "./Paging/Navigator";
 import { useSelector } from "react-redux";
 import { hashOpenviduTitle } from "@util/hashing";
 import { participateRoom } from "../api/session";
+import { WebSocketContext } from "context/WebsocketProvider";
 
 const RoomsPage = () => {
   const [showRoomMakeModal, setShowRoomMakeModal] = useState(false);
@@ -29,6 +30,10 @@ const RoomsPage = () => {
     totalPageCount: 0,
     curPage: 1,
   });
+
+  const ws = useContext(WebSocketContext);
+
+  ws.current.onmessage = (e) => {};
 
   const { email } = useSelector((state) => state.user);
 
