@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Parchment from "@component/Parchment";
 import WoodBackground from "@component/WoodBackground";
 import Button from "@component/Button";
@@ -18,6 +18,7 @@ import Navigator from "./Paging/Navigator";
 import { useSelector } from "react-redux";
 import { hashOpenviduTitle } from "@util/hashing";
 import { participateRoom } from "../api/session";
+import { WebSocketContext } from "context/WebsocketProvider";
 
 const RoomsPage = () => {
   const [showRoomMakeModal, setShowRoomMakeModal] = useState(false);
@@ -216,19 +217,7 @@ const RoomsPage = () => {
               <Parchment style={{ width: "450px", height: "320px" }}>
                 <div className="mt-1">
                   {/* 임의의 값 입력 */}
-                  <ConnectList
-                    tier="J"
-                    nickname="Nana"
-                    button={
-                      <Button
-                        width="130px"
-                        height="30px"
-                        label="같이하기"
-                        background="var(--brown_dark)"
-                        color="white"
-                      />
-                    }
-                  />
+                  <ConnectList />
                 </div>
               </Parchment>
             </div>
