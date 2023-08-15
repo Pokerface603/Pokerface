@@ -221,19 +221,7 @@ const RoomsPage = () => {
               <Parchment style={{ width: "450px", height: "320px" }}>
                 <div className="mt-1">
                   {/* 임의의 값 입력 */}
-                  <ConnectList
-                    tier="J"
-                    nickname="Nana"
-                    button={
-                      <Button
-                        width="130px"
-                        height="30px"
-                        label="같이하기"
-                        background="var(--brown_dark)"
-                        color="white"
-                      />
-                    }
-                  />
+                  <ConnectList />
                 </div>
               </Parchment>
             </div>
