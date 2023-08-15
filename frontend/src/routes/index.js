@@ -27,4 +27,8 @@ export const privateRouter = createBrowserRouter([
       </WebsocketProvider>
     ),
   },
+  {
+    path: "/myinfo",
+    element: <MyPage />,
+  },
 ]);

@@ -19,8 +19,11 @@ import { useSelector } from "react-redux";
 import { hashOpenviduTitle } from "@util/hashing";
 import { participateRoom } from "../api/session";
 import { WebSocketContext } from "context/WebsocketProvider";
+import useRatingInfo from "@hook/useRatingInfo";
 
 const RoomsPage = () => {
+  const { email, nickname } = useSelector((state) => state.user);
+  const { userRatingInfo } = useRatingInfo(email);
   const [showRoomMakeModal, setShowRoomMakeModal] = useState(false);
   const [rooms, setRooms] = useState([]);
   const [mode, setMode] = useState("NORMAL");
@@ -30,8 +33,6 @@ const RoomsPage = () => {
     totalPageCount: 0,
     curPage: 1,
   });
-
-  const { email } = useSelector((state) => state.user);
 
   const navigate = useNavigate();
 
@@ -70,6 +71,10 @@ const RoomsPage = () => {
 
   const navigatePage = (pageNumber) => {
     fetchRoomData(pageNumber);
+  };
+
+  const onClickMyPage = () => {
+    navigate("../mypage");
   };
 
   async function fetchRoomData(pageNumber) {
@@ -192,17 +197,18 @@ const RoomsPage = () => {
               <MyInfo
                 width="450px"
                 height="160px"
-                tier="A"
-                nickname="닉네임임임임임임"
-                reward="999"
-                wins="2000"
-                totalMatches="4000"
+                tier={userRatingInfo.tier}
+                nickname={nickname}
+                reward={userRatingInfo.rating}
+                totalMatches={userRatingInfo.totalCount}
+                wins={userRatingInfo.winCount}
                 button={
                   <Button
                     width="103px"
                     height="35px"
                     label="내 정보"
                     background="white"
+                    onClick={() => onClickMyPage()}
                   />
                 }
               />
