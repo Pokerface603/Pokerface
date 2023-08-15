@@ -1,4 +1,4 @@
-import React, { createRef, useEffect } from "react";
+import React, { createRef, useEffect, useRef, useState } from "react";
 import * as faceapi from "face-api.js";
 import Parchment from "@component/Parchment";
 
@@ -33,9 +33,11 @@ function getFaceDetectorOptions() {
     : new faceapi.TinyFaceDetectorOptions({ inputSize, scoreThreshold });
 }
 
-function OpeviduVideo({ streamManager, gameMode }) {
-  const videoRef = createRef();
-  const spanRef = createRef();
+function OpeviduVideo({ streamManager, gameMode, startEmotion }) {
+  const videoRef = useRef();
+  const spanRef = useRef();
+
+  const [text, setText] = useState("");
 
   useEffect(() => {
     streamManager.addVideoElement(videoRef.current);
@@ -67,7 +69,6 @@ function OpeviduVideo({ streamManager, gameMode }) {
 
   const onPlay = async () => {
     const videoEl = videoRef.current;
-
     if (
       !videoEl ||
       videoEl.paused ||
@@ -88,13 +89,22 @@ function OpeviduVideo({ streamManager, gameMode }) {
 
     const { expressions } = data;
 
+    console.log(expressions);
+
     const most = Object.keys(expressions).reduce((ex1, ex2) => {
       return expressions[ex1] > expressions[ex2] ? ex1 : ex2;
     });
 
     spanRef.current.innerText = most;
-    setTimeout(() => onPlay());
+    // setText(most);
+    setTimeout(() => onPlay(), 500);
   };
+
+  useEffect(() => {
+    if (startEmotion) {
+      onPlay();
+    }
+  }, [startEmotion]);
 
   return (
     streamManager &&
@@ -109,7 +119,6 @@ function OpeviduVideo({ streamManager, gameMode }) {
           }}
           autoPlay={true}
           ref={videoRef}
-          onLoadedData={() => onPlay()}
         />
 
         <Parchment
@@ -117,12 +126,20 @@ function OpeviduVideo({ streamManager, gameMode }) {
             position: "absolute",
             left: "75vw",
             top: "0px",
+            width: "200px",
+            height: "200px",
             backgroundColor: "black",
             fontFamily: "NexonGothic",
+            fontSize: "24px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
           }}
+          className="flex justify-center items-center"
         >
-          <h3>상대방의 감정</h3>
-          <span ref={spanRef}></span>
+          <div>상대방의 감정</div>
+          <div ref={spanRef}>{text}</div>
         </Parchment>
       </>
     ) : (
