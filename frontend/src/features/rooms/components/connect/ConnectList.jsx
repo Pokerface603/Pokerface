@@ -24,7 +24,7 @@ const ConnectList = () => {
     );
 
     if (ret) {
-      ws.current.sendMessage(`RESPONSE,${email}`);
+      ws.current.send(`RESPONSE,${email}`);
     }
   };
 
