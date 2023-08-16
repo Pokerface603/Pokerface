@@ -11,21 +11,21 @@ const RatingGraph = () => {
   const fetchLast10Rating = async () => {
     try {
       // 임시데이터
-      // const newData = [
-      //   { postRating: 40000000 },
-      //   { postRating: 250000000 },
-      //   { postRating: 1000000000 },
-      //   { postRating: 4000000000 },
-      //   { postRating: 4000000000 },
-      //   { postRating: 4000000000 },
-      //   { postRating: 4000000000 },
-      //   { postRating: 4000000000 },
-      //   { postRating: 1000000000 },
-      //   { postRating: 1000000000 },
-      //   { postRating: 1000000000 },
-      // ];
+      const newData = [
+        { postRating: 40000000 },
+        { postRating: 250000000 },
+        { postRating: 1000000000 },
+        { postRating: 4000000000 },
+        { postRating: 4000000000 },
+        { postRating: 4000000000 },
+        { postRating: 4000000000 },
+        { postRating: 4000000000 },
+        { postRating: 1000000000 },
+        { postRating: 1000000000 },
+        { postRating: 1000000000 },
+      ];
 
-      const newData = await getHistoryTableRow(email, 1);
+      // const newData = await getHistoryTableRow(email, 1);
       const ratings = newData.reduce((acc, rating, index) => {
         return [...acc, { x: index, y: rating.postRating }];
       }, []);
