@@ -32,4 +32,8 @@ export const privateRouter = createBrowserRouter([
     path: "/tutorial",
     element: <Tutorial />,
   },
+  {
+    path: "/myinfo",
+    element: <MyPage />,
+  },
 ]);
