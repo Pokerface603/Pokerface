@@ -82,7 +82,7 @@ public class Member extends BaseTime {
         return new Member(socialJoinDto.getSocialId(),
                 SocialType.valueOf(socialJoinDto.getSocialType()),
                 socialJoinDto.getNickname(),
-                socialJoinDto.getEmail() + "carrot",
+                socialJoinDto.getEmail(),
                 socialJoinDto.getUserPassword());
     }
 
