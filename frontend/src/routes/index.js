@@ -17,23 +17,19 @@ export const publicRouter = createBrowserRouter([
 ]);
 
 export const privateRouter = createBrowserRouter([
-  { path: "/game/:sessionId", element: <GamePage /> },
   { path: "/mypage", element: <MyPage /> },
+  { path: "/game/:sessionId", element: <GamePage /> },
   { path: "/redirect", element: <Redirect /> },
   {
     path: "/lobby",
     element: (
       <WebsocketProvider>
-        <RoomsPage />{" "}
+        <RoomsPage />
       </WebsocketProvider>
     ),
   },
   {
     path: "/tutorial",
     element: <Tutorial />,
-  },
-  {
-    path: "/myinfo",
-    element: <MyPage />,
   },
 ]);
