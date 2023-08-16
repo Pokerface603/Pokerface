@@ -1,7 +1,19 @@
 import Button from "@component/Button";
+import { participateRoom } from "@feature/rooms/api/session";
+import { hashOpenviduTitle } from "@util/hashing";
 import React from "react";
+import { Navigate } from "react-router";
 
 function OnlineFriendItem({ friendNickname, roomInfoRes }) {
+  const onClickPlayTogether = async () => {
+    const { title, gameMode } = roomInfoRes;
+
+    const sessionId = hashOpenviduTitle(title);
+
+    const token = await participateRoom(sessionId, "");
+    Navigate(`../game/${sessionId}`, { state: { token, gameMode } });
+  };
+
   return (
     <>
       <div className="m-auto">{/* <TierNoBoxSvg tier={tier} /> */}</div>
@@ -19,6 +31,7 @@ function OnlineFriendItem({ friendNickname, roomInfoRes }) {
             label="같이하기"
             background="var(--brown_dark)"
             color="white"
+            onClick={onClickPlayTogether}
           />
         )}
       </div>
