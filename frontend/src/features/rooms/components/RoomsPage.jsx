@@ -51,6 +51,10 @@ const RoomsPage = () => {
     setShowRoomMakeModal(false);
   };
 
+  const onClickTutorial = () => {
+    navigate("../tutorial");
+  };
+
   const onInputSearchKeyword = (e) => {
     const {
       target: { value },
@@ -127,6 +131,7 @@ const RoomsPage = () => {
                   <StartButton
                     onClickCreateRoom={onClickMakeRoom}
                     onQuickStart={onQuickStart}
+                    onClickTutorial={onClickTutorial}
                   />
                 </div>
               </div>
