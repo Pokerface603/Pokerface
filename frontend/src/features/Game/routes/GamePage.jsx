@@ -9,6 +9,7 @@ import { leaveRoom } from "@feature/rooms/api/room";
 import { useSelector } from "react-redux";
 
 function GamePage() {
+  const [startEmotion, setStartEmotion] = useState(false);
   const navigate = useNavigate();
   const {
     state: { token, gameMode },
@@ -42,8 +43,10 @@ function GamePage() {
 
   useEffect(() => {
     joinSession();
+    window.addEventListener("beforeunload", leaveSession);
 
     return () => {
+      window.removeEventListener("beforeunload", leaveSession);
       leaveSession();
     };
   }, []);
@@ -131,10 +134,20 @@ function GamePage() {
 
   return (
     <div>
-      <Game roomName={sessionId} gameMode={gameMode} leaveRoom={onClickLeave} />
+      <Game
+        roomName={sessionId}
+        gameMode={gameMode}
+        leaveRoom={onClickLeave}
+        onEmotion={setStartEmotion}
+      />
       {needCamera() &&
         sessionInfo?.subscribers?.map((sub, i) => (
-          <OpeviduVideo key={i} streamManager={sub} />
+          <OpeviduVideo
+            key={i}
+            streamManager={sub}
+            gameMode={gameMode}
+            startEmotion={startEmotion}
+          />
         ))}
       {!needCamera() && (
         <Avatar
