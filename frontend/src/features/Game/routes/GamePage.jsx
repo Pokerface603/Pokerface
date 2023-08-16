@@ -1,5 +1,5 @@
 import { OpenVidu } from "openvidu-browser";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import OpeviduVideo from "../components/OpeviduVideo";
 import { useRef } from "react";
@@ -41,12 +41,15 @@ function GamePage() {
     _setMySession(newMySession);
   };
 
+  const onUnload = (e) => {
+    leaveSession();
+  };
+
   useEffect(() => {
     joinSession();
-    window.addEventListener("beforeunload", () => leaveSession());
+    window.addEventListener("beforeunload", onUnload);
 
     return () => {
-      window.removeEventListener("beforeunload", () => leaveSession());
       leaveSession();
     };
   }, []);
@@ -120,12 +123,13 @@ function GamePage() {
   };
 
   const leaveSession = async () => {
+    await leaveRoom({ email, sessionId });
+
     if (!needCamera()) {
       return;
     }
 
-    mySessionRef.current.disconnect();
-    await leaveRoom({ email, sessionId });
+    await mySessionRef.current.disconnect();
   };
 
   const onClickLeave = () => {
