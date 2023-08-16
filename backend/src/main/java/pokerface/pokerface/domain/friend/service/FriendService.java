@@ -49,7 +49,7 @@ public class FriendService {
 
     @Transactional
     public boolean save(String firstMemberEmail, String secondMemberEmail){
-        if(findFriendsByFromEmail(firstMemberEmail).contains(secondMemberEmail)){
+        if(findFriendsByFromEmail(firstMemberEmail).contains(secondMemberEmail) || firstMemberEmail.equals(secondMemberEmail)){
             return false;
         }
 

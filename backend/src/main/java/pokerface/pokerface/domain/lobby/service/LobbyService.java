@@ -7,6 +7,7 @@ import pokerface.pokerface.config.error.errorcode.ErrorCode;
 import pokerface.pokerface.domain.friend.service.FriendService;
 import pokerface.pokerface.domain.lobby.dto.response.LobbyFriendsResponse;
 import pokerface.pokerface.domain.lobby.dto.response.LobbyResponse;
+import pokerface.pokerface.domain.member.repository.MemberRepository;
 import pokerface.pokerface.domain.member.service.MemberService;
 import pokerface.pokerface.domain.room.dto.response.RoomInfoRes;
 import pokerface.pokerface.domain.room.entity.Room;
@@ -28,6 +29,7 @@ public class LobbyService {
     private final FriendService friendService;
 
     private final RoomRepository roomRepository;
+    private final MemberRepository memberRepository;
 
     public String findNickNameByEmail(String email){
         return memberService.findByEmail(email).getNickname();
@@ -85,20 +87,27 @@ public class LobbyService {
     public List<LobbyFriendsResponse> friendsList(List<String> emails, String memberEmail){
         return friendService.findFriendsByFromEmail(memberEmail).stream()
                 .filter(emails::contains)
-                .map(s -> memberService.findByEmail(s).getNickname())
-                .map(s -> LobbyFriendsResponse.of(s,
+                .map(memberService::findByEmail)
+                .map(member -> LobbyFriendsResponse.of(member.getNickname(),
                         roomService.findAllRoomInfos().stream()
-                            .filter(roomInfoRes -> roomInfoRes.getHostName().equals(s))
-                            .findFirst().orElse(null)))
+                                .filter(roomInfoRes -> roomInfoRes.getHostName().equals(member.getNickname()))
+                                .findFirst().orElse(null),
+                        member.getTier()))
                 .collect(Collectors.toList());
     }
 
     public List<LobbyResponse> getConnectionMembers(List<String> connections, String email){
         List<String> friends = friendService.findFriendsByFromEmail(email);
 
-        return memberService.findByEmails(connections).stream()
-                .map(memberLoginRes -> LobbyResponse.of(memberLoginRes,
-                        friends.contains(memberLoginRes.getEmail())))
+        return connections.stream().distinct()
+                .filter(s -> !s.equals(email))
+                .map(memberRepository::findByEmail)
+                .map(member -> member.orElseThrow(() -> new RestException(ErrorCode.RESOURCE_NOT_FOUND)))
+                .map(member -> LobbyResponse.of(
+                        member.getNickname(),
+                        member.getEmail(),
+                        friends.contains(member.getEmail()),
+                        member.getTier()))
                 .collect(Collectors.toList());
     }
 }
