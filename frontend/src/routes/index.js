@@ -9,6 +9,7 @@ import History from "@feature/history/components/History";
 import Redirect from "@feature/login/routes/Redirect";
 import WebsocketProvider from "context/WebsocketProvider";
 import Tutorial from "@feature/Game/routes/TutorialPage";
+import GameResult from "@feature/gameresult/component/GameResult";
 
 export const publicRouter = createBrowserRouter([
   {
@@ -22,6 +23,8 @@ export const publicRouter = createBrowserRouter([
 export const privateRouter = createBrowserRouter([
   { path: "/mypage", element: <MyPage /> },
   { path: "/game/:sessionId", element: <GamePage /> },
+  { path: "/history/:historyId", element: <History /> },
+  { path: "/result", element: <GameResult /> },
   {
     path: "/lobby",
     element: (
