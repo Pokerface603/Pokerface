@@ -8,7 +8,6 @@ import pokerface.pokerface.config.error.RestException;
 import pokerface.pokerface.config.error.errorcode.ErrorCode;
 import pokerface.pokerface.config.oauth.dto.SocialJoinDto;
 import pokerface.pokerface.domain.member.dto.request.MemberJoinReq;
-import pokerface.pokerface.domain.member.dto.response.MemberLoginRes;
 import pokerface.pokerface.domain.member.dto.response.RankingRes;
 import pokerface.pokerface.domain.member.entity.Member;
 import pokerface.pokerface.domain.member.entity.SocialType;
@@ -94,13 +93,6 @@ public class MemberService {
 
     public RankingRes findRankingByEmail(String email){
         return RankingRes.of(findByEmail(email));
-    }
-
-    public List<MemberLoginRes> findByEmails(List<String> emails){
-        return emails.stream().distinct()
-                .map(memberRepository::findByEmail)
-                .map(member -> new MemberLoginRes(member.get().getNickname(), member.get().getEmail()))
-                .collect(Collectors.toList());
     }
 
     public void updateRating(String email, Integer rating) {
