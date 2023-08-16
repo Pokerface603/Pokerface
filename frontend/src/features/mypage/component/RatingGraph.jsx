@@ -4,28 +4,17 @@ import { getHistoryTableRow } from "../api/getTableRow";
 import { useSelector } from "react-redux";
 
 const RatingGraph = () => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
 
   const { email } = useSelector((state) => state.user);
 
   const fetchLast10Rating = async () => {
     try {
-      // 임시데이터
-      const newData = [
-        { postRating: 40000000 },
-        { postRating: 250000000 },
-        { postRating: 1000000000 },
-        { postRating: 4000000000 },
-        { postRating: 4000000000 },
-        { postRating: 4000000000 },
-        { postRating: 4000000000 },
-        { postRating: 4000000000 },
-        { postRating: 1000000000 },
-        { postRating: 1000000000 },
-        { postRating: 1000000000 },
-      ];
+      const newData = await getHistoryTableRow(email, 1);
+      if (!newData) {
+        return;
+      }
 
-      // const newData = await getHistoryTableRow(email, 1);
       const ratings = newData.reduce((acc, rating, index) => {
         return [...acc, { x: index, y: rating.postRating }];
       }, []);

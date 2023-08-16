@@ -1,7 +1,10 @@
 import { loginUser } from "@store/userSlice";
+import { useDispatch } from "react-redux";
 import { Navigate } from "react-router";
 
 function Redirect() {
+  const dispatch = useDispatch();
+
   const params = new URLSearchParams(window.location.search);
 
   const accessToken = params.get("accessToken");
@@ -11,12 +14,14 @@ function Redirect() {
 
   localStorage.setItem("authorization", "Bearer " + accessToken);
 
-  loginUser({
-    authorization: accessToken,
-    authorizationRefresh: refreshToken,
-    email,
-    nickname,
-  });
+  dispatch(
+    loginUser({
+      authorization: accessToken,
+      authorizationRefresh: refreshToken,
+      email,
+      nickname,
+    })
+  );
 
   return <Navigate to="/lobby"></Navigate>;
 }

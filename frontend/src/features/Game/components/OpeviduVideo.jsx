@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import * as faceapi from "face-api.js";
 import Parchment from "@component/Parchment";
 
@@ -37,13 +37,15 @@ function OpeviduVideo({ streamManager, gameMode, startEmotion }) {
   const videoRef = useRef();
   const spanRef = useRef();
 
-  const [text, setText] = useState("");
-
   useEffect(() => {
     streamManager.addVideoElement(videoRef.current);
   }, [streamManager, videoRef]);
 
   useEffect(() => {
+    if (gameMode !== "EMOTION") {
+      return;
+    }
+
     const videoEl = videoRef.current;
 
     const loadModels = async () => {
@@ -89,23 +91,17 @@ function OpeviduVideo({ streamManager, gameMode, startEmotion }) {
 
     const { expressions } = data;
 
-    console.log(expressions);
-
     const most = Object.keys(expressions).reduce((ex1, ex2) => {
       return expressions[ex1] > expressions[ex2] ? ex1 : ex2;
     });
 
     spanRef.current.innerText = most;
-    // setText(most);
-    setTimeout(() => onPlay(), 500);
+    setTimeout(() => onPlay(), 1000);
   };
 
-  useEffect(() => {
-    if (startEmotion) {
-      onPlay();
-    }
-  }, [startEmotion]);
-
+  if (gameMode === "EMOTION") {
+    onPlay();
+  }
   return (
     streamManager &&
     (gameMode === "EMOTION" ? (
@@ -139,7 +135,7 @@ function OpeviduVideo({ streamManager, gameMode, startEmotion }) {
           className="flex justify-center items-center"
         >
           <div>상대방의 감정</div>
-          <div ref={spanRef}>{text}</div>
+          <div ref={spanRef}></div>
         </Parchment>
       </>
     ) : (
