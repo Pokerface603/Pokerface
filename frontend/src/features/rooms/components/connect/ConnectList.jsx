@@ -25,7 +25,7 @@ const ConnectList = () => {
       );
 
       if (ret) {
-        ws.current.send(`RESPONSE,${email}`);
+        ws.current.send(`RESPONSE,${reqEmail}`);
       }
     } else if (cmd === "UPDATE") {
       fetchMembers();

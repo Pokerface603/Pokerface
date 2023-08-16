@@ -43,10 +43,10 @@ function GamePage() {
 
   useEffect(() => {
     joinSession();
-    window.addEventListener("beforeunload", leaveSession);
+    window.addEventListener("beforeunload", () => leaveSession());
 
     return () => {
-      window.removeEventListener("beforeunload", leaveSession);
+      window.removeEventListener("beforeunload", () => leaveSession());
       leaveSession();
     };
   }, []);
@@ -120,6 +120,10 @@ function GamePage() {
   };
 
   const leaveSession = async () => {
+    if (!needCamera()) {
+      return;
+    }
+
     mySessionRef.current.disconnect();
     await leaveRoom({ email, sessionId });
   };
@@ -141,14 +145,16 @@ function GamePage() {
         onEmotion={setStartEmotion}
       />
       {needCamera() &&
-        sessionInfo?.subscribers?.map((sub, i) => (
-          <OpeviduVideo
-            key={i}
-            streamManager={sub}
-            gameMode={gameMode}
-            startEmotion={startEmotion}
-          />
-        ))}
+        sessionInfoRef?.current.subscribers?.map((sub, i) => {
+          return (
+            <OpeviduVideo
+              key={i}
+              streamManager={sub}
+              gameMode={gameMode}
+              startEmotion={startEmotion}
+            />
+          );
+        })}
       {!needCamera() && (
         <Avatar
           style={{
