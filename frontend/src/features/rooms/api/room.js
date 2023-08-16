@@ -8,8 +8,12 @@ export const getRooms = async (pageNum, mode) => {
   return data;
 };
 
-export const searchRoomsWithKeyword = async (mode, title) => {
-  const { data } = await axios.get(`/rooms/mode/${mode}/title/${title}`);
+export const searchRoomsWithKeyword = async (gameMode, title) => {
+  const { data } = await axios.post(`/rooms/findByGameModeAndTitle`, {
+    pageNum: 1,
+    gameMode,
+    title,
+  });
   return data;
 };
 
