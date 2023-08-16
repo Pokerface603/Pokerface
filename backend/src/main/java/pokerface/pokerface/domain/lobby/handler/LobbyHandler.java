@@ -30,9 +30,9 @@ public class LobbyHandler extends TextWebSocketHandler {
         String payload = message.getPayload();
         log.info("message : " + payload);
         String[] splitMessage = payload.split(",");
-        String sessionEmail = sessions.get(session);
+        String sessionEmail = sessions.getOrDefault(session, "");
 
-        if(splitMessage.length != 2) {
+        if(splitMessage.length != 2 || sessionEmail.equals(splitMessage[1])) {
             throw new RestException(ErrorCode.WEBSOCKET_MESSAGE_ERROR);
         }
 
