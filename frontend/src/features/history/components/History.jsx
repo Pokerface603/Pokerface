@@ -17,8 +17,6 @@ const History = () => {
   useEffect(() => {
     const fetchHistoryDetails = async () => {
       try {
-        console.log(email);
-        console.log(historyId);
         const historyDetails = await getHistoryDetails(email, historyId);
         setHistory(historyDetails);
       } catch (error) {
