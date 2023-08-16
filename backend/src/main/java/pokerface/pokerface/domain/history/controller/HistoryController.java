@@ -36,4 +36,9 @@ public class HistoryController {
         historyService.save(historyRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/{email}")
+    public ResponseEntity<HistoryResponse> getLatestHistory(@PathVariable String email){
+        return new ResponseEntity<>(historyService.getLatestHistory(email), HttpStatus.OK);
+    }
 }
