@@ -20,6 +20,7 @@ export const publicRouter = createBrowserRouter([
 
 export const privateRouter = createBrowserRouter([
   { path: "/mypage", element: <MyPage /> },
+  { path: "/history/:historyId", element: <History /> },
   { path: "/game/:sessionId", element: <GamePage /> },
   { path: "/redirect", element: <Redirect /> },
   {
