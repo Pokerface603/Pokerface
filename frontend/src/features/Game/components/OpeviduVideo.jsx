@@ -1,5 +1,6 @@
-import React, { createRef, useEffect, useState } from "react";
+import React, { createRef, useEffect, useRef, useState } from "react";
 import * as faceapi from "face-api.js";
+import Parchment from "@component/Parchment";
 
 const SSD_MOBILENETV1 = "ssd_mobilenetv1";
 const TINY_FACE_DETECTOR = "tiny_face_detector";
@@ -32,10 +33,11 @@ function getFaceDetectorOptions() {
     : new faceapi.TinyFaceDetectorOptions({ inputSize, scoreThreshold });
 }
 
-function OpeviduVideo({ streamManager, gameMode }) {
-  const videoRef = createRef();
+function OpeviduVideo({ streamManager, gameMode, startEmotion }) {
+  const videoRef = useRef();
+  const spanRef = useRef();
 
-  const [emotion, setemotion] = useState("");
+  const [text, setText] = useState("");
 
   useEffect(() => {
     streamManager.addVideoElement(videoRef.current);
@@ -67,7 +69,6 @@ function OpeviduVideo({ streamManager, gameMode }) {
 
   const onPlay = async () => {
     const videoEl = videoRef.current;
-
     if (
       !videoEl ||
       videoEl.paused ||
@@ -88,14 +89,22 @@ function OpeviduVideo({ streamManager, gameMode }) {
 
     const { expressions } = data;
 
+    console.log(expressions);
+
     const most = Object.keys(expressions).reduce((ex1, ex2) => {
       return expressions[ex1] > expressions[ex2] ? ex1 : ex2;
     });
 
-    setemotion(most);
-
-    setTimeout(() => onPlay());
+    spanRef.current.innerText = most;
+    // setText(most);
+    setTimeout(() => onPlay(), 500);
   };
+
+  useEffect(() => {
+    if (startEmotion) {
+      onPlay();
+    }
+  }, [startEmotion]);
 
   return (
     streamManager &&
@@ -110,13 +119,28 @@ function OpeviduVideo({ streamManager, gameMode }) {
           }}
           autoPlay={true}
           ref={videoRef}
-          onLoadedData={() => onPlay()}
         />
 
-        <div>
-          <h3>상대방의 감정</h3>
-          <span>{emotion}</span>
-        </div>
+        <Parchment
+          style={{
+            position: "absolute",
+            left: "75vw",
+            top: "0px",
+            width: "200px",
+            height: "200px",
+            backgroundColor: "black",
+            fontFamily: "NexonGothic",
+            fontSize: "24px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+          }}
+          className="flex justify-center items-center"
+        >
+          <div>상대방의 감정</div>
+          <div ref={spanRef}>{text}</div>
+        </Parchment>
       </>
     ) : (
       <video
