@@ -2,7 +2,7 @@ import React, { Fragment, useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Unity, useUnityContext } from "react-unity-webgl";
 
-export default function Game({ roomName, gameMode, leaveRoom }) {
+export default function Game({ roomName, gameMode, leaveRoom, onEmotion }) {
   const { unityProvider, sendMessage, addEventListener, removeEventListener } =
     useUnityContext({
       loaderUrl: "/Build/poker_face.loader.js",
@@ -25,11 +25,16 @@ export default function Game({ roomName, gameMode, leaveRoom }) {
 
   // 한 라운드를 시작하라는 유니티를 호출하는 함수
   const handleRoundStart = () => {
+    // onEmotion(false);
     sendMessage("GameManager", "FinishFaceDetection");
   };
 
   // 유니티에서 보낸 얼굴인식을 시작하라는 호출 확인하는 함수
   const startFaceDetection = useCallback(() => {
+    // onEmotion(true);
+    // setTimeout(() => {
+    //   handleRoundStart();
+    // }, 5000);
     handleRoundStart();
   }, [handleRoundStart]);
 
@@ -55,14 +60,14 @@ export default function Game({ roomName, gameMode, leaveRoom }) {
     addEventListener("TakeGameInfoFromReact", handleGameSetting);
     addEventListener("UserDropOutToReact", setUserDropOut);
     addEventListener("UserRoomOutToReact", userRoomOut);
-    addEventListener("StartFaceAPIFromReact", startFaceDetection);
+    addEventListener("StartFaceAPIToReact", startFaceDetection);
     addEventListener("GameOverToReact", handleSendToken);
 
     return () => {
       removeEventListener("TakeGameInfoFromReact", handleGameSetting);
       removeEventListener("UserDropOutToReact", setUserDropOut);
       removeEventListener("UserRoomOutToReact", userRoomOut);
-      removeEventListener("StartFaceAPIFromReact", startFaceDetection);
+      removeEventListener("StartFaceAPIToReact", startFaceDetection);
       removeEventListener("GameOverToReact", handleSendToken);
     };
   }, [
@@ -78,7 +83,7 @@ export default function Game({ roomName, gameMode, leaveRoom }) {
     <Fragment>
       <Unity
         unityProvider={unityProvider}
-        style={{ width: "100vw", height: "100vh" }}
+        style={{ width: "100%", height: "100vh" }}
       ></Unity>
     </Fragment>
   );

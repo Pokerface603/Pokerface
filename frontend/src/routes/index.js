@@ -6,6 +6,7 @@ import { createBrowserRouter } from "react-router-dom";
 import MyPage from "@feature/mypage/component/MyPage";
 import Redirect from "@feature/login/routes/Redirect";
 import WebsocketProvider from "context/WebsocketProvider";
+import Tutorial from "@feature/Game/routes/TutorialPage";
 
 export const publicRouter = createBrowserRouter([
   {
@@ -16,15 +17,19 @@ export const publicRouter = createBrowserRouter([
 ]);
 
 export const privateRouter = createBrowserRouter([
-  { path: "/game/:sessionId", element: <GamePage /> },
   { path: "/mypage", element: <MyPage /> },
+  { path: "/game/:sessionId", element: <GamePage /> },
   { path: "/redirect", element: <Redirect /> },
   {
     path: "/lobby",
     element: (
       <WebsocketProvider>
-        <RoomsPage />{" "}
+        <RoomsPage />
       </WebsocketProvider>
     ),
+  },
+  {
+    path: "/tutorial",
+    element: <Tutorial />,
   },
 ]);
