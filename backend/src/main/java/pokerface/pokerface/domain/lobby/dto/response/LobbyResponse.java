@@ -2,7 +2,10 @@ package pokerface.pokerface.domain.lobby.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
-import pokerface.pokerface.domain.member.dto.response.MemberLoginRes;
+import pokerface.pokerface.domain.member.entity.Tier;
+
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 @Builder
 @Getter
@@ -13,7 +16,10 @@ public class LobbyResponse {
 
     private Boolean isFriend;
 
-    public static LobbyResponse of(MemberLoginRes memberLoginRes, Boolean isFriend){
-        return new LobbyResponse(memberLoginRes.getNickname(), memberLoginRes.getEmail(), isFriend);
+    @Enumerated(EnumType.STRING)
+    private Tier tier;
+
+    public static LobbyResponse of(String nickname, String email, Boolean isFriend, Tier tier){
+        return new LobbyResponse(nickname, email, isFriend, tier);
     }
 }
