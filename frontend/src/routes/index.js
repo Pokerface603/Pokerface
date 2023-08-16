@@ -2,6 +2,7 @@ import GamePage from "@feature/Game/routes/GamePage";
 import LoginFormPage from "@feature/login/components/LoginFormPage";
 import RoomsPage from "@feature/rooms/components/RoomsPage";
 import RegistPage from "@feature/regist/component/RegistPage";
+import LogoPage from "../components/LogoPage";
 import { createBrowserRouter } from "react-router-dom";
 import MyPage from "@feature/mypage/component/MyPage";
 import Redirect from "@feature/login/routes/Redirect";
