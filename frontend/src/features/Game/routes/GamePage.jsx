@@ -120,6 +120,10 @@ function GamePage() {
   };
 
   const leaveSession = async () => {
+    if (!needCamera()) {
+      return;
+    }
+
     mySessionRef.current.disconnect();
     await leaveRoom({ email, sessionId });
   };

@@ -2,16 +2,22 @@ import Button from "@component/Button";
 import { participateRoom } from "@feature/rooms/api/session";
 import { hashOpenviduTitle } from "@util/hashing";
 import React from "react";
-import { Navigate } from "react-router";
+import { useNavigate } from "react-router";
 
 function OnlineFriendItem({ friendNickname, roomInfoRes }) {
+  const navigate = useNavigate();
+
   const onClickPlayTogether = async () => {
     const { title, gameMode } = roomInfoRes;
 
     const sessionId = hashOpenviduTitle(title);
 
-    const token = await participateRoom(sessionId, "");
-    Navigate(`../game/${sessionId}`, { state: { token, gameMode } });
+    if (gameMode !== "BLIND") {
+      const token = await participateRoom(sessionId, "");
+      navigate(`../game/${sessionId}`, { state: { token, gameMode } });
+    } else {
+      navigate(`../game/${sessionId}`, { state: { gameMode } });
+    }
   };
 
   return (
