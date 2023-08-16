@@ -15,7 +15,6 @@ const GameResult = () => {
   useEffect(() => {
     const fetchHistoryDetails = async () => {
       try {
-        console.log(email);
         const gameResultDetails = await getGameResultData(email);
         setHistory(gameResultDetails);
       } catch (error) {
