@@ -14,12 +14,12 @@ export const publicRouter = createBrowserRouter([
     element: <RegistPage />,
   },
   { path: "*", element: <LoginFormPage /> },
+  { path: "/redirect", element: <Redirect /> },
 ]);
 
 export const privateRouter = createBrowserRouter([
   { path: "/mypage", element: <MyPage /> },
   { path: "/game/:sessionId", element: <GamePage /> },
-  { path: "/redirect", element: <Redirect /> },
   {
     path: "/lobby",
     element: (
