@@ -12,6 +12,7 @@
 /build
 
 /public/Build
+/public/tutorial
 
 # misc
 .DS_Store

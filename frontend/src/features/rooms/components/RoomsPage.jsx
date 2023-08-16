@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Parchment from "@component/Parchment";
 import WoodBackground from "@component/WoodBackground";
 import Button from "@component/Button";
@@ -18,8 +18,12 @@ import Navigator from "./Paging/Navigator";
 import { useSelector } from "react-redux";
 import { hashOpenviduTitle } from "@util/hashing";
 import { participateRoom } from "../api/session";
+import { WebSocketContext } from "context/WebsocketProvider";
+import useRatingInfo from "@hook/useRatingInfo";
 
 const RoomsPage = () => {
+  const { email, nickname } = useSelector((state) => state.user);
+  const { userRatingInfo } = useRatingInfo(email);
   const [showRoomMakeModal, setShowRoomMakeModal] = useState(false);
   const [rooms, setRooms] = useState([]);
   const [mode, setMode] = useState("NORMAL");
@@ -29,8 +33,6 @@ const RoomsPage = () => {
     totalPageCount: 0,
     curPage: 1,
   });
-
-  const { email } = useSelector((state) => state.user);
 
   const navigate = useNavigate();
 
@@ -50,6 +52,10 @@ const RoomsPage = () => {
     setShowRoomMakeModal(false);
   };
 
+  const onClickTutorial = () => {
+    navigate("../tutorial");
+  };
+
   const onInputSearchKeyword = (e) => {
     const {
       target: { value },
@@ -59,15 +65,20 @@ const RoomsPage = () => {
   };
 
   const onQuickStart = async () => {
-    const { roomName, gameMode } = await quickStart(email);
-    const sessionId = hashOpenviduTitle(roomName);
+    const { title, gameMode } = await quickStart(email);
+
+    const sessionId = hashOpenviduTitle(title);
 
     const token = await participateRoom(sessionId, "");
-    navigate(`game/${sessionId}`, { state: { token, gameMode } });
+    navigate(`../game/${sessionId}`, { state: { token, gameMode } });
   };
 
   const navigatePage = (pageNumber) => {
     fetchRoomData(pageNumber);
+  };
+
+  const onClickMyPage = () => {
+    navigate("../mypage");
   };
 
   async function fetchRoomData(pageNumber) {
@@ -125,6 +136,7 @@ const RoomsPage = () => {
                   <StartButton
                     onClickCreateRoom={onClickMakeRoom}
                     onQuickStart={onQuickStart}
+                    onClickTutorial={onClickTutorial}
                   />
                 </div>
               </div>
@@ -141,7 +153,7 @@ const RoomsPage = () => {
                     background: "var(--ocher)",
                   }}
                 >
-                  <Tab onClickTab={onClickTab} />
+                  <Tab onClickTab={onClickTab} mode={mode} />
                 </div>
 
                 {/* 방 정보들이 들어가야하는 부분 */}
@@ -190,17 +202,18 @@ const RoomsPage = () => {
               <MyInfo
                 width="450px"
                 height="160px"
-                tier="A"
-                nickname="닉네임임임임임임"
-                reward="999"
-                wins="2000"
-                totalMatches="4000"
+                tier={userRatingInfo.tier}
+                nickname={nickname}
+                reward={userRatingInfo.rating}
+                totalMatches={userRatingInfo.totalCount}
+                wins={userRatingInfo.winCount}
                 button={
                   <Button
                     width="103px"
                     height="35px"
                     label="내 정보"
                     background="white"
+                    onClick={() => onClickMyPage()}
                   />
                 }
               />
@@ -216,19 +229,7 @@ const RoomsPage = () => {
               <Parchment style={{ width: "450px", height: "320px" }}>
                 <div className="mt-1">
                   {/* 임의의 값 입력 */}
-                  <ConnectList
-                    tier="J"
-                    nickname="Nana"
-                    button={
-                      <Button
-                        width="130px"
-                        height="30px"
-                        label="같이하기"
-                        background="var(--brown_dark)"
-                        color="white"
-                      />
-                    }
-                  />
+                  <ConnectList />
                 </div>
               </Parchment>
             </div>
