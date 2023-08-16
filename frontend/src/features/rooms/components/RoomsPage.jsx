@@ -69,8 +69,12 @@ const RoomsPage = () => {
 
     const sessionId = hashOpenviduTitle(title);
 
-    const token = await participateRoom(sessionId, "");
-    navigate(`../game/${sessionId}`, { state: { token, gameMode } });
+    if (gameMode !== "BLIND") {
+      const token = await participateRoom(sessionId, "");
+      navigate(`../game/${sessionId}`, { state: { token, gameMode } });
+    } else {
+      navigate(`../game/${sessionId}`, { state: { gameMode } });
+    }
   };
 
   const navigatePage = (pageNumber) => {
