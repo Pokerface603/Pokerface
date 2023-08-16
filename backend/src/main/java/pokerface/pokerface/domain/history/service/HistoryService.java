@@ -51,6 +51,12 @@ public class HistoryService {
         return HistoryResponse.of(history, convertGameLogToData(history.getGameLog(), isHost(history, email)), isHost(history, email));
     }
 
+    public HistoryResponse getLatestHistory(String email){
+        History history = historyRepository.findByHostEmailOrGuestEmailOrderByCreatedAtDesc(email).get(0);
+
+        return HistoryResponse.of(history, convertGameLogToData(history.getGameLog(), isHost(history, email)), isHost(history, email));
+    }
+
     @Transactional
     public void save(HistoryRequest historyRequest) {
         Member host = memberService.findByEmail(historyRequest.getHostEmail());
