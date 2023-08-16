@@ -12,13 +12,15 @@ function OnlineFriendItem({ friendNickname, roomInfoRes }) {
         {friendNickname}
       </p>
       <div className="col-end-7 col-span-2">
-        <Button
-          width="130px"
-          height="30px"
-          label="같이하기"
-          background="var(--brown_dark)"
-          color="white"
-        />
+        {roomInfoRes && (
+          <Button
+            width="130px"
+            height="30px"
+            label="같이하기"
+            background="var(--brown_dark)"
+            color="white"
+          />
+        )}
       </div>
     </>
   );
