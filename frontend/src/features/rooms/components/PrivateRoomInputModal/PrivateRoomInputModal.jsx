@@ -22,10 +22,13 @@ function PrivateRoomInputModal({ close, roomName, gameMode }) {
 
   const onClickMakeRoom = async () => {
     const sessionId = hashOpenviduTitle(roomName);
-    const token = await participateRoom(sessionId, password);
-    navigate(`../game/${sessionId}`, {
-      state: { token, gameMode },
-    });
+
+    if (gameMode !== "BLIND") {
+      const token = await participateRoom(sessionId, "");
+      navigate(`../game/${sessionId}`, { state: { token, gameMode } });
+    } else {
+      navigate(`../game/${sessionId}`, { state: { gameMode } });
+    }
   };
   return (
     <Parchment
