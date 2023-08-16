@@ -99,8 +99,9 @@ public class OpenviduController {
         }
 
         Session session = openvidu.getActiveSession(sessionId);
+
         log.debug("방 인원 검증 : {}", session.getConnections().size());
-        if (session.getConnections().size() >= 2) { // 방에 두 명 넘게 접속을 시도할 경우
+        if (roomService.findRoomById(sessionId).getMembers().size() >= 2) { // 방에 두 명 넘게 접속을 시도할 경우
             throw new RestException(ErrorCode.ALREADY_FULL);
         }
 
