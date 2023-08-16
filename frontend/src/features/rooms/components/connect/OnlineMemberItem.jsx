@@ -3,7 +3,7 @@ import TierNoBoxSvg from "../constants/TierNoBoxSvg";
 import Button from "@component/Button";
 import { WebSocketContext } from "context/WebsocketProvider";
 
-function OnlineMemberItem({ tier, nickname, email }) {
+function OnlineMemberItem({ tier, nickname, email, isFriend }) {
   const ws = useContext(WebSocketContext);
 
   const onClickRequestFriend = () => {
@@ -19,14 +19,16 @@ function OnlineMemberItem({ tier, nickname, email }) {
         {nickname}
       </p>
       <div className="col-end-7 col-span-2">
-        <Button
-          width="130px"
-          height="30px"
-          label="친구맺기"
-          background="var(--brown_dark)"
-          color="white"
-          onClick={onClickRequestFriend}
-        />
+        {!isFriend && (
+          <Button
+            width="130px"
+            height="30px"
+            label="친구맺기"
+            background="var(--brown_dark)"
+            color="white"
+            onClick={onClickRequestFriend}
+          />
+        )}
       </div>
     </>
   );
