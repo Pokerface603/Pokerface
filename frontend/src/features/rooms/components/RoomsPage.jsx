@@ -230,7 +230,7 @@ const RoomsPage = () => {
               </Parchment>
             </div>
             <div className="h-2/5 flex justify-center items-center">
-              <Parchment style={{ width: "450px", height: "320px" }}>
+              <Parchment style={{ width: "450px", height: "320px", overflow:"auto" }}>
                 <div className="mt-1">
                   {/* 임의의 값 입력 */}
                   <ConnectList />
