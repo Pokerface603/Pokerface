@@ -12,13 +12,14 @@ import Tutorial from "@feature/Game/routes/TutorialPage";
 import GameResult from "@feature/gameresult/component/GameResult";
 
 export const publicRouter = createBrowserRouter([
+  { path: "/", element: <LogoPage /> },
   {
     path: "/regist",
     element: <RegistPage />,
   },
-  { path: "/", element: <LoginFormPage /> },
+  { path: "/login", element: <LoginFormPage /> },
   { path: "/redirect", element: <Redirect /> },
-  { path: "*", element: <Navigate to="/" /> },
+  { path: "*", element: <Navigate to="/login" /> },
 ]);
 
 export const privateRouter = createBrowserRouter([
