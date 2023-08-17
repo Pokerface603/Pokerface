@@ -6,6 +6,7 @@ import Button from "@component/Button";
 import { useNavigate } from "react-router-dom";
 import { hashOpenviduTitle } from "@util/hashing";
 import { participateRoom } from "@feature/rooms/api/session";
+import soundEffects from "@config/soundEffects";
 
 function PrivateRoomInputModal({ close, roomName, gameMode }) {
   const [password, setPassword] = useState("");
@@ -21,6 +22,8 @@ function PrivateRoomInputModal({ close, roomName, gameMode }) {
   };
 
   const onClickMakeRoom = async () => {
+    soundEffects.shot.play();
+
     const sessionId = hashOpenviduTitle(roomName);
 
     if (gameMode !== "BLIND") {

@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { hashOpenviduTitle } from "@util/hashing";
 import { createRoom } from "../../api/session";
 import GameModeSelector from "./GameModeSelector";
+import soundEffects from "@config/soundEffects";
 
 function RoomMakeModal({ close }) {
   const navigate = useNavigate();
@@ -46,6 +47,7 @@ function RoomMakeModal({ close }) {
   };
 
   const onClickMakeRoom = async () => {
+    soundEffects.shot.play();
     const sessionId = hashOpenviduTitle(roomData.roomName);
 
     const token = await createRoom({ ...roomData, sessionId });

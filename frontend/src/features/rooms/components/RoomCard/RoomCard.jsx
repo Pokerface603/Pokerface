@@ -8,6 +8,7 @@ import { participateRoom } from "@feature/rooms/api/session";
 import { roomColor } from "../constants/RoomColor";
 import Lock from "@asset/images/Lock.png";
 import PrivateRoomInputModal from "../PrivateRoomInputModal/PrivateRoomInputModal";
+import soundEffects from "@config/soundEffects";
 
 function RoomCard({
   title,
@@ -22,6 +23,7 @@ function RoomCard({
   const navigate = useNavigate();
 
   const enterGameRoom = async () => {
+    soundEffects.shot.play();
     if (isPrivate) {
       setShowPrivateModal(true);
       return;
@@ -37,6 +39,7 @@ function RoomCard({
   };
 
   const onCloseModal = () => {
+    soundEffects.load.play();
     setShowPrivateModal(false);
   };
 
