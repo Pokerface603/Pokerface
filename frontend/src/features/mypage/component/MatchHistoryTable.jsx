@@ -32,7 +32,7 @@ const MatchHistoryTable = () => {
             <th className="w-1/5">결과</th>
             <th className="w-1/6 ">모드</th>
             <th>상대의 닉네임</th>
-            <th className="w-1/6">레이팅</th>
+            <th className="w-1/6">현상금</th>
             <th className="w-1/6">변동</th>
           </tr>
         </thead>
