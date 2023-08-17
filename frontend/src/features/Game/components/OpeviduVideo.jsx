@@ -33,7 +33,17 @@ function getFaceDetectorOptions() {
     : new faceapi.TinyFaceDetectorOptions({ inputSize, scoreThreshold });
 }
 
-function OpeviduVideo({ streamManager, gameMode, startEmotion }) {
+const EmotionEmoji = {
+  angry: "🤬",
+  disgusted: "🤮",
+  fearful: "😭",
+  happy: "😃",
+  neutral: "😐",
+  sad: "😭",
+  surprised: "😱",
+};
+
+function OpeviduVideo({ streamManager, gameMode }) {
   const videoRef = useRef();
   const spanRef = useRef();
 
@@ -95,7 +105,11 @@ function OpeviduVideo({ streamManager, gameMode, startEmotion }) {
       return expressions[ex1] > expressions[ex2] ? ex1 : ex2;
     });
 
-    spanRef.current.innerText = most;
+    if (!spanRef || !spanRef.current) {
+      return;
+    }
+
+    spanRef.current.innerText = EmotionEmoji[most];
     setTimeout(() => onPlay(), 1000);
   };
 

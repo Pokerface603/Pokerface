@@ -12,7 +12,7 @@ const Button = ({
     <>
       <button
         onClick={onClick}
-        className="flex items-center justify-center gap-1 p-2 hover:brightness-90"
+        className="hover:scale-105 duration-200 flex items-center justify-center gap-1 p-2 hover:brightness-90"
         style={{
           width,
           height,
@@ -23,8 +23,8 @@ const Button = ({
           color,
         }}
       >
-          {icon}
-          <span>{label}</span>
+        {icon}
+        <span>{label}</span>
       </button>
     </>
   );
