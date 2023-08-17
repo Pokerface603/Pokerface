@@ -17,6 +17,7 @@ function RoomCard({
   playerCount,
   gameMode,
   isPrivate,
+  fetchRoomData,
 }) {
   const [showPrivateModal, setShowPrivateModal] = useState(false);
 
@@ -30,8 +31,13 @@ function RoomCard({
     }
 
     const sessionId = hashOpenviduTitle(title);
-    const token = await participateRoom(sessionId, "");
-    navigate(`../game/${sessionId}`, { state: { token, gameMode } });
+
+    try {
+      const token = await participateRoom(sessionId, "");
+      navigate(`../game/${sessionId}`, { state: { token, gameMode } });
+    } catch (err) {
+      await fetchRoomData(1);
+    }
   };
 
   const onCloseModal = () => {

@@ -1,6 +1,6 @@
 import { axios } from "@lib/axios";
 
-export const getRooms = async (pageNum, mode) => {
+export const getRooms = async (pageNum, mode = "NORMAL") => {
   const { data } = await axios.post(`/rooms/findByGameMode`, {
     pageNum,
     gameMode: mode,

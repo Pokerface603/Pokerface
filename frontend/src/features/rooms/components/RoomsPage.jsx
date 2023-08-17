@@ -11,7 +11,6 @@ import ConnectList from "./connect/ConnectList";
 import Tab from "./Tab/Tab";
 import RoomMakeModal from "./RoomMakeModal/RoomMakeModal";
 import { getRooms, quickStart, searchRoomsWithKeyword } from "../api/room";
-import Room from "./RoomCard/RoomCard";
 import { getRankers } from "../api/ranker";
 import { useNavigate } from "react-router-dom";
 import Navigator from "./Paging/Navigator";
@@ -23,6 +22,7 @@ import useRatingInfo from "@hook/useRatingInfo";
 import soundEffects from "@config/soundEffects";
 import EntryModal from "@component/EntryModal";
 import Loading from "@component/Loading";
+import RoomCard from "./RoomCard/RoomCard";
 
 const RoomsPage = () => {
   const { email, nickname } = useSelector((state) => state.user);
@@ -203,7 +203,11 @@ const RoomsPage = () => {
                       }}
                     >
                       {rooms.map((room) => (
-                        <Room id={room.title} {...room} />
+                        <RoomCard
+                          id={room.title}
+                          {...room}
+                          fetchRoomData={fetchRoomData}
+                        />
                       ))}
                     </div>
 
