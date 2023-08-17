@@ -17,7 +17,7 @@ const RatingGraph = () => {
       }
 
       const ratings = newData.reduce((acc, rating, index) => {
-        return [...acc, { x: index, y: rating.postRating }];
+        return [...acc, { x: newData.length - index, y: rating.postRating }];
       }, []);
 
       setData([{ id: "rating", color: "black", data: ratings }]);
@@ -53,50 +53,52 @@ const RatingGraph = () => {
   };
 
   return (
-    <ResponsiveLine
-      fontFamily={"NexonGothic"}
-      data={data}
-      margin={{ top: 50, right: 160, bottom: 50, left: 60 }}
-      xScale={{ type: "linear" }}
-      yScale={{ type: "linear", stacked: true, min: "auto", max: "auto" }}
-      axisTop={null}
-      axisBottom={{
-        tickValues: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        tickSize: 5,
-        tickPadding: 5,
-        tickRotation: 0,
-        legend: "게임",
-        legendOffset: 36,
-        legendPosition: "middle",
-      }}
-      axisLeft={{
-        tickValues: [0, 40000000, 250000000, 1000000000, 4000000000],
-        tickSize: 5,
-        tickPadding: 5,
-        tickRotation: 0,
-        format: ".2s",
-        legend: "현상금($)",
-        legendOffset: -40,
-        legendPosition: "middle",
-      }}
-      enableGridX={true}
-      colors={"black"}
-      lineWidth={5}
-      pointSize={10}
-      pointColor={"black"}
-      pointBorderWidth={1}
-      pointBorderColor={{ from: "serieColor" }}
-      pointLabelYOffset={-12}
-      useMesh={true}
-      gridXValues={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
-      gridYValues={[0, 40000000, 250000000, 1000000000, 4000000000]}
-      theme={theme}
-      tooltip={({ point }) => (
-        <div style={{fontFamily:"NexonGothic"}}>
-          {`${10 - point.data.x}게임 전, ${point.data.yFormatted}$`}
-        </div>
-      )}
-    />
+    <div style={{ width: "800px", height: "480px" }}>
+      <ResponsiveLine
+        fontFamily={"NexonGothic"}
+        data={data}
+        margin={{ top: 50, right: 10, bottom: 50, left: 60 }}
+        xScale={{ type: "linear", reverse: true }}
+        yScale={{ type: "linear", stacked: true, min: "auto", max: "auto" }}
+        axisTop={null}
+        axisBottom={{
+          tickValues: [10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: 0,
+          legend: "게임",
+          legendOffset: 36,
+          legendPosition: "middle",
+        }}
+        axisLeft={{
+          tickValues: [0, 40000000, 250000000, 1000000000, 4000000000],
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: 0,
+          format: ".2s",
+          legend: "현상금($)",
+          legendOffset: -40,
+          legendPosition: "middle",
+        }}
+        enableGridX={true}
+        colors={"black"}
+        lineWidth={5}
+        pointSize={10}
+        pointColor={"black"}
+        pointBorderWidth={1}
+        pointBorderColor={{ from: "serieColor" }}
+        pointLabelYOffset={-12}
+        useMesh={true}
+        gridXValues={[10, 9, 8, 7, 6, 5, 4, 3, 2, 1]}
+        gridYValues={[0, 40000000, 250000000, 1000000000, 4000000000]}
+        theme={theme}
+        tooltip={({ point }) => (
+          <div style={{ fontFamily: "NexonGothic" }}>
+            {`${point.data.x}게임 전, ${point.data.yFormatted}$`}
+          </div>
+        )}
+      />
+    </div>
   );
 };
 
