@@ -15,6 +15,7 @@ import pokerface.pokerface.config.oauth.dto.SocialJoinDto;
 import pokerface.pokerface.config.oauth.userinfo.OAuth2UserInfo;
 import pokerface.pokerface.domain.member.entity.Member;
 import pokerface.pokerface.domain.member.entity.SocialType;
+import pokerface.pokerface.domain.member.repository.MemberRepository;
 import pokerface.pokerface.domain.member.service.MemberService;
 
 import java.util.Collections;
@@ -24,6 +25,7 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User>{
 	private final MemberService memberService;
+	private final MemberRepository memberRepository;
 
 	private SocialJoinDto socialJoinDto;
 	private static final String NAVER = "naver";
@@ -94,7 +96,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 		
 		String email = oAuth2UserInfo.getEmail();
 		if(email == null) {
-			email = "social@ssafy.com";
+			email = "social@ssafy.com" + (memberRepository.count() + 1L);
 		}
 
 		return SocialJoinDto.builder()
