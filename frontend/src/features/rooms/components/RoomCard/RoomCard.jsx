@@ -17,6 +17,7 @@ function RoomCard({
   playerCount,
   gameMode,
   isPrivate,
+  fetchRoomData,
 }) {
   const [showPrivateModal, setShowPrivateModal] = useState(false);
 
@@ -30,11 +31,12 @@ function RoomCard({
     }
 
     const sessionId = hashOpenviduTitle(title);
-    if (gameMode !== "BLIND") {
+
+    try {
       const token = await participateRoom(sessionId, "");
       navigate(`../game/${sessionId}`, { state: { token, gameMode } });
-    } else {
-      navigate(`../game/${sessionId}`, { state: { gameMode } });
+    } catch (err) {
+      await fetchRoomData(1);
     }
   };
 
