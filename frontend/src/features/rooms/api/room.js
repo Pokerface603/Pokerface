@@ -23,8 +23,12 @@ export const quickStart = async (email) => {
 };
 
 export const leaveRoom = async ({ email, sessionId }) => {
-  await axios.post(`/rooms/disconnect`, {
-    email,
-    sessionId,
-  });
+  await axios
+    .post(`/rooms/disconnect`, {
+      email,
+      sessionId,
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
