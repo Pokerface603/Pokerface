@@ -52,11 +52,19 @@ function OpeviduVideo({ streamManager, gameMode }) {
   }, [streamManager, videoRef]);
 
   useEffect(() => {
+    const videoEl = videoRef.current;
+
+    navigator.mediaDevices
+      .getUserMedia({ video: true })
+      .then(function (stream) {
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+
     if (gameMode !== "EMOTION") {
       return;
     }
-
-    const videoEl = videoRef.current;
 
     const loadModels = async () => {
       const MODEL_URL = process.env.PUBLIC_URL + "/model";
