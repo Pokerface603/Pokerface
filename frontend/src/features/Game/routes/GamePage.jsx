@@ -56,6 +56,8 @@ function GamePage() {
   const connectStream = (event) => {
     const subscriber = mySession.subscribe(event.stream, undefined);
 
+    console.log("connected!!!!!!");
+
     const { subscribers } = sessionInfoRef.current;
 
     subscribers.push(subscriber);
@@ -112,7 +114,7 @@ function GamePage() {
     });
   };
 
-  const joinSession = async () => {
+  const joinSession = () => {
     if (mySession || !needCamera()) {
       return;
     }
