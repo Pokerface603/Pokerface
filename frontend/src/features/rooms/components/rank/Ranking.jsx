@@ -20,17 +20,23 @@ const Ranking = ({ rankers }) => {
           TOP 5
         </p>
       </div>
-
-      {rankers.map(({ nickname, tier, rating }, ranking) => {
-        return (
+      {rankers.map(({ nickname, tier, rating }, ranking) => (
+        <div
+          key={ranking}
+          className="animate-vflip"
+          style={{
+            animationDelay: `${(ranking % 5) * 0.4}s`,
+            animationIterationCount: "infinite",
+          }}
+        >
           <RankingItem
             nickname={nickname}
             tier={tier}
             reward={rating}
             ranking={ranking + 1}
           />
-        );
-      })}
+        </div>
+      ))}
 
       <img
         src={Saloon}
