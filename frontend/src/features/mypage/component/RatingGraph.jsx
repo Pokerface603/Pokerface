@@ -10,7 +10,8 @@ const RatingGraph = () => {
 
   const fetchLast10Rating = async () => {
     try {
-      const newData = await getHistoryTableRow(email, 1);
+      const newData = await getHistoryTableRow(email, 0);
+      newData.reverse();
       if (!newData) {
         return;
       }
@@ -53,6 +54,7 @@ const RatingGraph = () => {
 
   return (
     <ResponsiveLine
+      fontFamily={"NexonGothic"}
       data={data}
       margin={{ top: 50, right: 160, bottom: 50, left: 60 }}
       xScale={{ type: "linear" }}
@@ -73,7 +75,7 @@ const RatingGraph = () => {
         tickPadding: 5,
         tickRotation: 0,
         format: ".2s",
-        legend: "현상금",
+        legend: "현상금($)",
         legendOffset: -40,
         legendPosition: "middle",
       }}
@@ -89,6 +91,11 @@ const RatingGraph = () => {
       gridXValues={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
       gridYValues={[0, 40000000, 250000000, 1000000000, 4000000000]}
       theme={theme}
+      tooltip={({ point }) => (
+        <div style={{fontFamily:"NexonGothic"}}>
+          {`${10 - point.data.x}게임 전, ${point.data.yFormatted}$`}
+        </div>
+      )}
     />
   );
 };

@@ -89,7 +89,7 @@ const MatchHistoryTableBody = () => {
             />
           </td>
           <td>{match.opponentNickName}</td>
-          <td>{match.postRating}</td>
+          <td>{match.postRating}$</td>
           <td>{getRatingUpDown(match.postRating - match.preRating)}</td>
         </tr>
       ));
