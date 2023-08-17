@@ -99,9 +99,14 @@ const RoomsPage = () => {
   }
 
   async function searchRooms() {
-    const rooms = await searchRoomsWithKeyword(mode, searchKeyword);
+    const { totalPageCount, roomInfoResList: rooms } =
+      await searchRoomsWithKeyword(mode, searchKeyword);
     setSearchKeyword("");
     setRooms(rooms);
+    setpageInfo((prevPageInfo) => ({
+      totalPageCount,
+      curPage: 1,
+    }));
   }
 
   async function fetchRankers() {

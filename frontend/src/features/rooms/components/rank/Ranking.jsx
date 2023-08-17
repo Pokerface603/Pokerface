@@ -24,6 +24,7 @@ const Ranking = ({ rankers }) => {
       {rankers.map(({ nickname, tier, rating }, ranking) => {
         return (
           <RankingItem
+            key={nickname}
             nickname={nickname}
             tier={tier}
             reward={rating}

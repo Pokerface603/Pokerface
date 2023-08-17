@@ -4,7 +4,7 @@ import RoundDivider from "./roundrows/RoundDivder";
 import BetRow from "./roundrows/BetRow";
 import { isMyTurn } from "./roundrows/betbox/isMyTurn";
 
-const HistoryRounds = ({ roundLogResponses }) => {
+const GameResultRounds = ({ roundLogResponses }) => {
   return (
     <div className={`grid grid-cols-1`}>
       {roundLogResponses !== null &&
@@ -52,4 +52,4 @@ const HistoryRounds = ({ roundLogResponses }) => {
   );
 };
 
-export default HistoryRounds;
+export default GameResultRounds;

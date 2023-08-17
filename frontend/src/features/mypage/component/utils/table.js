@@ -18,8 +18,8 @@ export const getTicketImg = (mode) => {
 export const getRatingUpDown = (number) => {
   const n = parseInt(number);
   if (n < 0) {
-    return <text className="text-center text-blue-700">↓{Math.abs(n)}</text>;
+    return <div className="text-center text-blue-700">↓{Math.abs(n)}</div>;
   } else {
-    return <text className="text-center text-red-700">↑{Math.abs(n)}</text>;
+    return <div className="text-center text-red-700">↑{Math.abs(n)}</div>;
   }
 };

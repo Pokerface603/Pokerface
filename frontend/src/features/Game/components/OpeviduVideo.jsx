@@ -33,7 +33,17 @@ function getFaceDetectorOptions() {
     : new faceapi.TinyFaceDetectorOptions({ inputSize, scoreThreshold });
 }
 
-function OpeviduVideo({ streamManager, gameMode, startEmotion }) {
+const EmotionEmoji = {
+  angry: "🤬",
+  disgusted: "🤮",
+  fearful: "😭",
+  happy: "😃",
+  neutral: "😐",
+  sad: "😭",
+  surprised: "😱",
+};
+
+function OpeviduVideo({ streamManager, gameMode }) {
   const videoRef = useRef();
   const spanRef = useRef();
 
@@ -42,11 +52,11 @@ function OpeviduVideo({ streamManager, gameMode, startEmotion }) {
   }, [streamManager, videoRef]);
 
   useEffect(() => {
+    const videoEl = videoRef.current;
+
     if (gameMode !== "EMOTION") {
       return;
     }
-
-    const videoEl = videoRef.current;
 
     const loadModels = async () => {
       const MODEL_URL = process.env.PUBLIC_URL + "/model";
@@ -59,14 +69,6 @@ function OpeviduVideo({ streamManager, gameMode, startEmotion }) {
     };
 
     loadModels();
-    navigator.mediaDevices
-      .getUserMedia({ video: true })
-      .then(function (stream) {
-        videoEl.srcObject = stream;
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
   }, []);
 
   const onPlay = async () => {
@@ -95,7 +97,11 @@ function OpeviduVideo({ streamManager, gameMode, startEmotion }) {
       return expressions[ex1] > expressions[ex2] ? ex1 : ex2;
     });
 
-    spanRef.current.innerText = most;
+    if (!spanRef || !spanRef.current) {
+      return;
+    }
+
+    spanRef.current.innerText = EmotionEmoji[most];
     setTimeout(() => onPlay(), 1000);
   };
 
