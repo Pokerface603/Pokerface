@@ -66,16 +66,32 @@ const ConnectList = () => {
       </div>
       <div className="flex items-center justify-center">
         <div
-          className="grid grid-cols-7 gap-2 items-center"
+          className="grid grid-cols-6 gap-2 items-center"
           style={{ width: "380px", height: "43px" }}
         >
           {selectedTab === "CONNECT"
             ? memberList.map((member) => {
-              const {tier, nickname, email, isFriend} = member;
-              return <OnlineMemberItem tier={tier} nickname={nickname} email={email} isFriend={isFriend} />;
+                const { tier, nickname, email, isFriend } = member;
+                return (
+                  <OnlineMemberItem
+                    key={nickname}
+                    tier={tier}
+                    nickname={nickname}
+                    email={email}
+                    isFriend={isFriend}
+                  />
+                );
               })
             : memberList.map((friend) => {
-                return <OnlineFriendItem {...friend} />;
+                const { tier, friendNickname, roomInfoRes } = friend;
+                return (
+                  <OnlineFriendItem
+                    key={friendNickname}
+                    tier={tier}
+                    nickname={friendNickname}
+                    roomInfoRes={roomInfoRes}
+                  />
+                );
               })}
         </div>
       </div>

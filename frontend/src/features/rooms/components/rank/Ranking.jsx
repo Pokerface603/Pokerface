@@ -30,6 +30,7 @@ const Ranking = ({ rankers }) => {
           }}
         >
           <RankingItem
+            key={nickname}
             nickname={nickname}
             tier={tier}
             reward={rating}
