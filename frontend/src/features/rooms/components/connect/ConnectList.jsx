@@ -71,10 +71,12 @@ const ConnectList = () => {
         >
           {selectedTab === "CONNECT"
             ? memberList.map((member) => {
-                return <OnlineMemberItem {...member} />;
+                return <OnlineMemberItem key={member.nickname} {...member} />;
               })
             : memberList.map((friend) => {
-                return <OnlineFriendItem {...friend} />;
+                return (
+                  <OnlineFriendItem key={friend.friendNickname} {...friend} />
+                );
               })}
         </div>
       </div>

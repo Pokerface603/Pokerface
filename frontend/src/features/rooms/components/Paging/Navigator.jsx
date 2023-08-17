@@ -7,7 +7,7 @@ function Navigator({ totalPage, onClickPage }) {
       <ul className="list-style-none flex">
         {Array.from({ length: totalPage }, (v, i) => i + 1).map((pageNum) => (
           <NavigatorPageButton
-            id={pageNum}
+            key={pageNum}
             pageNum={pageNum}
             onClick={onClickPage}
           />
