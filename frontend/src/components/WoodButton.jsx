@@ -9,14 +9,14 @@ const WoodButton = ({ width, height, text, fontSize, onClick }) => {
         height,
       }}
       onClick={onClick}>
-      <text
+      <div
         className="leading-none"
         style={{
           fontFamily: "Unchained-Spaghetti",
           fontSize,
         }}>
         {text}
-      </text>
+      </div>
     </div>
   );
 };

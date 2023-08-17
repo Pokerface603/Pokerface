@@ -71,11 +71,21 @@ const ConnectList = () => {
         >
           {selectedTab === "CONNECT"
             ? memberList.map((member) => {
-              const {tier, nickname, email, isFriend} = member;
-              return <OnlineMemberItem tier={tier} nickname={nickname} email={email} isFriend={isFriend} />;
+                const { tier, nickname, email, isFriend } = member;
+                return (
+                  <OnlineMemberItem
+                    key={nickname}
+                    tier={tier}
+                    nickname={nickname}
+                    email={email}
+                    isFriend={isFriend}
+                  />
+                );
               })
             : memberList.map((friend) => {
-                return <OnlineFriendItem {...friend} />;
+                return (
+                  <OnlineFriendItem key={friend.friendNickname} {...friend} />
+                );
               })}
         </div>
       </div>
