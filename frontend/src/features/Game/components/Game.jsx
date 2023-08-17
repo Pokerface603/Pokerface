@@ -1,5 +1,6 @@
-import React, { Fragment, useCallback, useEffect } from "react";
+import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 import { Unity, useUnityContext } from "react-unity-webgl";
 
 export default function Game({ roomName, gameMode, leaveRoom }) {
@@ -12,6 +13,8 @@ export default function Game({ roomName, gameMode, leaveRoom }) {
     });
 
   const { email, authorization } = useSelector((state) => state.user);
+
+  const navigate = useNavigate();
 
   // 유니티에서 보낸 유저를 추방했다는 호출 확인하는 함수
   const setUserDropOut = useCallback(() => {
@@ -51,12 +54,19 @@ export default function Game({ roomName, gameMode, leaveRoom }) {
       sendMessage("GameManager", "SetAccessToken", authorization);
     };
 
+    // 유니티에서 백엔드에 성공적으로 로그를 보냈다는 함수
+  const getGameLog = () => {
+    console.log("get game log");
+    navigate("/result");
+  }
+
     // 유니티에서 오는 호출을 확인하기 위한 이벤트들
     addEventListener("TakeGameInfoFromReact", handleGameSetting);
     addEventListener("UserDropOutToReact", setUserDropOut);
     addEventListener("UserRoomOutToReact", userRoomOut);
     addEventListener("StartFaceAPIToReact", startFaceDetection);
     addEventListener("GameOverToReact", handleSendToken);
+    addEventListener("SendCompleteToReact", getGameLog);
 
     return () => {
       removeEventListener("TakeGameInfoFromReact", handleGameSetting);
@@ -64,6 +74,7 @@ export default function Game({ roomName, gameMode, leaveRoom }) {
       removeEventListener("UserRoomOutToReact", userRoomOut);
       removeEventListener("StartFaceAPIToReact", startFaceDetection);
       removeEventListener("GameOverToReact", handleSendToken);
+      removeEventListener("SendCompleteToReact", getGameLog);
     };
   }, [
     sendMessage,

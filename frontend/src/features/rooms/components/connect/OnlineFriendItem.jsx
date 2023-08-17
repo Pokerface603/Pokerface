@@ -1,4 +1,5 @@
 import Button from "@component/Button";
+import TierBox from "@component/TierBox";
 import { participateRoom } from "@feature/rooms/api/session";
 import { hashOpenviduTitle } from "@util/hashing";
 import React from "react";
@@ -22,7 +23,7 @@ function OnlineFriendItem({ friendNickname, roomInfoRes }) {
 
   return (
     <>
-      <div className="m-auto">{/* <TierNoBoxSvg tier={tier} /> */}</div>
+      <div className="m-auto"><TierBox tier={roomInfoRes.tier} /></div>
       <p
         className="col-span-3"
         style={{ fontFamily: "NexonGothic", fontSize: "30px" }}
