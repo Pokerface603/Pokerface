@@ -72,7 +72,6 @@ function OpeviduVideo({ streamManager, gameMode }) {
     navigator.mediaDevices
       .getUserMedia({ video: true })
       .then(function (stream) {
-        videoEl.srcObject = stream;
       })
       .catch(function (err) {
         console.log(err);
