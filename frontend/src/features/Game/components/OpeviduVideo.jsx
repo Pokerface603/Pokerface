@@ -33,7 +33,7 @@ function getFaceDetectorOptions() {
     : new faceapi.TinyFaceDetectorOptions({ inputSize, scoreThreshold });
 }
 
-function OpeviduVideo({ streamManager, gameMode, startEmotion }) {
+function OpeviduVideo({ streamManager, gameMode }) {
   const videoRef = useRef();
   const spanRef = useRef();
 

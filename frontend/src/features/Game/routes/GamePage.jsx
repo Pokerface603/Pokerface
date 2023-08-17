@@ -9,7 +9,6 @@ import { leaveRoom } from "@feature/rooms/api/room";
 import { useSelector } from "react-redux";
 
 function GamePage() {
-  const [startEmotion, setStartEmotion] = useState(false);
   const navigate = useNavigate();
   const {
     state: { token, gameMode },
@@ -142,21 +141,11 @@ function GamePage() {
 
   return (
     <div>
-      <Game
-        roomName={sessionId}
-        gameMode={gameMode}
-        leaveRoom={onClickLeave}
-        onEmotion={setStartEmotion}
-      />
+      <Game roomName={sessionId} gameMode={gameMode} leaveRoom={onClickLeave} />
       {needCamera() &&
         sessionInfoRef?.current.subscribers?.map((sub, i) => {
           return (
-            <OpeviduVideo
-              key={i}
-              streamManager={sub}
-              gameMode={gameMode}
-              startEmotion={startEmotion}
-            />
+            <OpeviduVideo key={i} streamManager={sub} gameMode={gameMode} />
           );
         })}
       {!needCamera() && (
