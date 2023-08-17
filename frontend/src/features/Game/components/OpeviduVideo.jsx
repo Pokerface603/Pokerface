@@ -141,7 +141,7 @@ function OpeviduVideo({ streamManager, gameMode }) {
           className="flex justify-center items-center"
         >
           <div>상대방의 감정</div>
-          <div ref={spanRef}></div>
+          <div className="text-5xl m-5" ref={spanRef}></div>
         </Parchment>
       </>
     ) : (
