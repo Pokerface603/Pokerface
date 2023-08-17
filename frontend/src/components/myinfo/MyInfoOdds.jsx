@@ -2,7 +2,7 @@ import React from "react";
 
 const MyInfoOdds = ({ wins, totalMatches }) => {
   const losses = totalMatches - wins;
-  const winPercentage = Math.round((wins / totalMatches) * 100);
+  const winPercentage = totalMatches === 0 ? 0 : Math.round((wins / totalMatches) * 100);
 
   return (
     <div className="my-0 mx-3 gap-2 h-9 flex items-center">
@@ -15,7 +15,7 @@ const MyInfoOdds = ({ wins, totalMatches }) => {
       >
         ODDS
       </span>
-      {wins && !isNaN(losses) && winPercentage && (
+      {!isNaN(losses) && (
         <span
           style={{
             fontFamily: "Unchained-Spaghetti",
