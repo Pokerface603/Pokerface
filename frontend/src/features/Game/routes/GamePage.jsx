@@ -153,7 +153,7 @@ function GamePage() {
       {!needCamera() && (
         <Avatar
           style={{
-            height: "450px",
+            height: "30vh",
             position: "absolute",
             left: "calc(50vw - 337.5px)",
             top: "20px",
