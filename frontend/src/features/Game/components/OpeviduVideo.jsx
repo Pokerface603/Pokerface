@@ -69,13 +69,6 @@ function OpeviduVideo({ streamManager, gameMode }) {
     };
 
     loadModels();
-    navigator.mediaDevices
-      .getUserMedia({ video: true })
-      .then(function (stream) {
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
   }, []);
 
   const onPlay = async () => {
