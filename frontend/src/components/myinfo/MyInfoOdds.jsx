@@ -15,7 +15,7 @@ const MyInfoOdds = ({ wins, totalMatches }) => {
       >
         ODDS
       </span>
-      {wins && !isNaN(losses) && winPercentage && (
+      {!isNaN(losses) && (
         <span
           style={{
             fontFamily: "Unchained-Spaghetti",
