@@ -7,6 +7,7 @@ module.exports = {
         "wood-button": "url('/src/assets/images/WoodButton.svg')",
         "wood-background": "url('/src/assets/images/wood-background.jpg')",
         "check-button": "url('/src/assets/images/check.svg')",
+        "entry-parchment": "url('/src/assets/images/entry.svg')",
         "email-check-ticket":
           "url('/src/assets/images/email-check-ticket.svg')",
         room: "url('/src/assets/images/background/Room.svg')",
@@ -27,20 +28,28 @@ module.exports = {
         ace: "#482613",
         joker: "ffd217",
       },
-      animation: {
-        text: "text 5s ease infinite",
-      },
-      keyframes: {
-        text: {
-          "0%, 100%": {
-            "background-size": "200% 200%",
-            "background-position": "left center",
-          },
-          "50%": {
-            "background-size": "200% 200%",
-            "background-position": "right center",
-          },
+    },
+    animation: {
+      text: "text 5s ease infinite",
+      vflip: "flipVertical 6s infinite",
+    },
+    keyframes: {
+      text: {
+        "0%, 100%": {
+          "background-size": "200% 200%",
+          "background-position": "left center",
         },
+        "50%": {
+          "background-size": "200% 200%",
+          "background-position": "right center",
+        },
+      },
+      flipVertical: {
+        "3%": { transform: "rotateX(90deg)" },
+        "5%": {
+          transform: "rotateX(180deg)",
+        },
+        "10%": { transform: "rotateX(0deg)" },
       },
     },
   },

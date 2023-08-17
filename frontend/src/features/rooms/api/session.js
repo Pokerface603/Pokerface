@@ -36,7 +36,10 @@ export async function participateRoom(sessionId, password) {
       }
     )
     .catch((error) => {
-      console.log(error);
+      if (error.response.status === 405) {
+        alert("이미 꽉찬 방입니다.");
+      }
     });
+
   return response.data;
 }

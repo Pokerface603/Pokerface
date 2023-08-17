@@ -2,11 +2,13 @@ import React from "react";
 import WoodButton from "@component/WoodButton";
 import WoodStick from "../../../assets/images/rooms/wood-stick.svg";
 import { useNavigate } from "react-router-dom";
+import soundEffects from "@config/soundEffects";
 
 const BackButton = () => {
   const navigate = useNavigate();
 
   const onLobby = () => {
+    soundEffects.load.play();
     navigate("/lobby");
   };
 

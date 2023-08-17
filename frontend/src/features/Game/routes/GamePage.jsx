@@ -65,7 +65,7 @@ function GamePage() {
     setSessionInfo({ ...sessionInfoRef.current, subscribers });
   };
   useEffect(() => {
-    if (!mySession || !needCamera()) {
+    if (!mySession) {
       return;
     }
 
@@ -82,6 +82,10 @@ function GamePage() {
     });
 
     mySession.connect(token).then(async () => {
+      if (!needCamera()) {
+        return;
+      }
+
       const publisher = await ov.initPublisherAsync(undefined, {
         audioSource: undefined, // The source of audio. If undefined default microphone
         videoSource: undefined, // The source of video. If undefined default webcam
@@ -124,13 +128,17 @@ function GamePage() {
   };
 
   const leaveSession = async () => {
-    await leaveRoom({ email, sessionId });
+    try {
+      await leaveRoom({ email, sessionId });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      if (!needCamera()) {
+        return;
+      }
 
-    if (!needCamera()) {
-      return;
+      await mySessionRef.current.disconnect();
     }
-
-    await mySessionRef.current.disconnect();
   };
 
   const onClickLeave = () => {
@@ -153,7 +161,7 @@ function GamePage() {
       {!needCamera() && (
         <Avatar
           style={{
-            height: "450px",
+            height: "30vh",
             position: "absolute",
             left: "calc(50vw - 337.5px)",
             top: "20px",

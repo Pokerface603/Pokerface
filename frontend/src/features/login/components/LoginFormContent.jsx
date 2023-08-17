@@ -8,10 +8,7 @@ import { login } from "../api/api";
 import { useCallback, useState } from "react";
 import { validateEmail } from "@util/emailValidation";
 import { useNavigate } from "react-router-dom";
-
-import Howler from "howler"; // Howler 라이브러리 import
-import backgroundMusic from "../../../assets/musics/western.mp3"; //BackGroundMusic 추가
-import loadSound from "../../../assets/musics/load.wav";
+import soundEffects from "@config/soundEffects";
 
 const LoginFormContent = () => {
   const dispatch = useDispatch();
@@ -26,21 +23,9 @@ const LoginFormContent = () => {
   // 이메일 유효성 검사 state
   const [isEmail, setIsEmail] = useState(false);
 
-  // Howl 객체 생성
-  const sound = new Howler.Howl({
-    src: [backgroundMusic],
-    loop: true, // 무한 반복 설정
-    volume: 0.5, // 볼륨 설정 (0에서 1 사이 값)
-  });
-
-  const clickSound = new Howler.Howl({
-    src: [loadSound],
-    volume: 0.5,
-  });
-
   const navigate = useNavigate();
   const clickLogin = () => {
-    clickSound.play();
+    soundEffects.load.play();
     if (!email) {
       return alert("이메일을 입력해주세요.");
     } else if (!password) {
@@ -52,7 +37,6 @@ const LoginFormContent = () => {
         .then((response) => {
           // 로그인 성공
           if (response.status === 200) {
-            sound.play();
             dispatch(
               loginUser({
                 nickname: response.data.nickname,
@@ -85,7 +69,7 @@ const LoginFormContent = () => {
 
   // 카카오 로그인
   const kakaoLogin = () => {
-    clickSound.play();
+    soundEffects.load.play();
     const kakaoAuthUrl = `${process.env.REACT_APP_API_URL}/oauth2/authorization/kakao`; // Kakao 로그인 HTTPS URL
     window.location.href = kakaoAuthUrl;
   };
@@ -150,7 +134,7 @@ const LoginFormContent = () => {
               fontSize="28px"
               text="회원가입"
               onClick={() => {
-                clickSound.play();
+                soundEffects.load.play();
                 navigate("/regist");
               }}
             />

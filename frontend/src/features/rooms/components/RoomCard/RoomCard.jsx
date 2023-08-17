@@ -8,6 +8,7 @@ import { participateRoom } from "@feature/rooms/api/session";
 import { roomColor } from "../constants/RoomColor";
 import Lock from "@asset/images/Lock.png";
 import PrivateRoomInputModal from "../PrivateRoomInputModal/PrivateRoomInputModal";
+import soundEffects from "@config/soundEffects";
 
 function RoomCard({
   title,
@@ -16,27 +17,31 @@ function RoomCard({
   playerCount,
   gameMode,
   isPrivate,
+  fetchRoomData,
 }) {
   const [showPrivateModal, setShowPrivateModal] = useState(false);
 
   const navigate = useNavigate();
 
   const enterGameRoom = async () => {
+    soundEffects.shot.play();
     if (isPrivate) {
       setShowPrivateModal(true);
       return;
     }
 
     const sessionId = hashOpenviduTitle(title);
-    if (gameMode !== "BLIND") {
+
+    try {
       const token = await participateRoom(sessionId, "");
       navigate(`../game/${sessionId}`, { state: { token, gameMode } });
-    } else {
-      navigate(`../game/${sessionId}`, { state: { gameMode } });
+    } catch (err) {
+      await fetchRoomData(1);
     }
   };
 
   const onCloseModal = () => {
+    soundEffects.load.play();
     setShowPrivateModal(false);
   };
 
