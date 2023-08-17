@@ -124,13 +124,17 @@ function GamePage() {
   };
 
   const leaveSession = async () => {
-    await leaveRoom({ email, sessionId });
+    try {
+      await leaveRoom({ email, sessionId });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      if (!needCamera()) {
+        return;
+      }
 
-    if (!needCamera()) {
-      return;
+      await mySessionRef.current.disconnect();
     }
-
-    await mySessionRef.current.disconnect();
   };
 
   const onClickLeave = () => {
