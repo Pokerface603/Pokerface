@@ -14,7 +14,7 @@ function OnlineMemberItem({ tier, nickname, email, isFriend }) {
       <div className="m-auto"><TierBox tier={tier} /></div>
       <p
         className="col-span-3"
-        style={{ fontFamily: "NexonGothic", fontSize: "30px" }}
+        style={{ fontFamily: "NexonGothic", fontSize: "28px" }}
       >
         {nickname}
       </p>
