@@ -66,7 +66,7 @@ const ConnectList = () => {
       </div>
       <div className="flex items-center justify-center">
         <div
-          className="grid grid-cols-7 gap-2 items-center"
+          className="grid grid-cols-6 gap-2 items-center"
           style={{ width: "380px", height: "43px" }}
         >
           {selectedTab === "CONNECT"
@@ -83,8 +83,14 @@ const ConnectList = () => {
                 );
               })
             : memberList.map((friend) => {
+                const { tier, friendNickname, roomInfoRes } = friend;
                 return (
-                  <OnlineFriendItem key={friend.friendNickname} {...friend} />
+                  <OnlineFriendItem
+                    key={friendNickname}
+                    tier={tier}
+                    nickname={friendNickname}
+                    roomInfoRes={roomInfoRes}
+                  />
                 );
               })}
         </div>

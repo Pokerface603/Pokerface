@@ -5,9 +5,9 @@ import { hashOpenviduTitle } from "@util/hashing";
 import React from "react";
 import { useNavigate } from "react-router";
 
-function OnlineFriendItem({ friendNickname, roomInfoRes }) {
+function OnlineFriendItem({ tier, nickname, roomInfoRes }) {
   const navigate = useNavigate();
-
+  
   const onClickPlayTogether = async () => {
     const { title, gameMode } = roomInfoRes;
 
@@ -23,12 +23,12 @@ function OnlineFriendItem({ friendNickname, roomInfoRes }) {
 
   return (
     <>
-      <div className="m-auto"><TierBox tier={roomInfoRes.tier} /></div>
+      <div className="m-auto"><TierBox tier={tier} /></div>
       <p
         className="col-span-3"
-        style={{ fontFamily: "NexonGothic", fontSize: "30px" }}
+        style={{ fontFamily: "NexonGothic", fontSize: "28px" }}
       >
-        {friendNickname}
+        {nickname}
       </p>
       <div className="col-end-7 col-span-2">
         {roomInfoRes && (
