@@ -10,10 +10,19 @@ const RatingGraph = () => {
 
   const fetchLast10Rating = async () => {
     try {
-      const newData = await getHistoryTableRow(email, 0);
+      let newData = await getHistoryTableRow(email, 0);
       newData.reverse();
       if (!newData) {
         return;
+      }
+
+      if (newData.length < 10) {
+        newData = [
+          ...Array.from({ length: 10 - newData.length }, (v, i) => ({
+            postRating: 100000000,
+          })),
+          ...newData,
+        ];
       }
 
       const ratings = newData.reduce((acc, rating, index) => {
