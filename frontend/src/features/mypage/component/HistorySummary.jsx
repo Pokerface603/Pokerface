@@ -13,7 +13,7 @@ const HistorySummary = ({ win, lose, winrate }) => {
       }}>
       <SummaryCard title="win" count={win} />
       <SummaryCard title="lose" count={lose} />
-      <SummaryCard title="winrate" count={winrate} />
+      <SummaryCard title="winrate" count={winrate+"%"} />
     </Parchment>
   );
 };
