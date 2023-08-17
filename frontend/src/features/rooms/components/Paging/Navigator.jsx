@@ -4,7 +4,7 @@ import NavigatorPageButton from "./NavigatorPageButton";
 function Navigator({ totalPage, onClickPage }) {
   return (
     <nav aria-label="Page navigation example" className="bg-white">
-      <ul class="list-style-none flex">
+      <ul className="list-style-none flex">
         {Array.from({ length: totalPage }, (v, i) => i + 1).map((pageNum) => (
           <NavigatorPageButton
             id={pageNum}
