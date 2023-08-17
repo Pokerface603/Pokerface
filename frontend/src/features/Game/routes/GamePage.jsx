@@ -65,7 +65,7 @@ function GamePage() {
     setSessionInfo({ ...sessionInfoRef.current, subscribers });
   };
   useEffect(() => {
-    if (!mySession || !needCamera()) {
+    if (!mySession) {
       return;
     }
 
@@ -82,6 +82,10 @@ function GamePage() {
     });
 
     mySession.connect(token).then(async () => {
+      if (!needCamera()) {
+        return;
+      }
+
       const publisher = await ov.initPublisherAsync(undefined, {
         audioSource: undefined, // The source of audio. If undefined default microphone
         videoSource: undefined, // The source of video. If undefined default webcam

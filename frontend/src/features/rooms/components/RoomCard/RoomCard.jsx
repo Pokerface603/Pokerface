@@ -30,12 +30,8 @@ function RoomCard({
     }
 
     const sessionId = hashOpenviduTitle(title);
-    if (gameMode !== "BLIND") {
-      const token = await participateRoom(sessionId, "");
-      navigate(`../game/${sessionId}`, { state: { token, gameMode } });
-    } else {
-      navigate(`../game/${sessionId}`, { state: { gameMode } });
-    }
+    const token = await participateRoom(sessionId, "");
+    navigate(`../game/${sessionId}`, { state: { token, gameMode } });
   };
 
   const onCloseModal = () => {
