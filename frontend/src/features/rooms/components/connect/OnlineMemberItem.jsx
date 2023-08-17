@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
-import TierNoBoxSvg from "../constants/TierNoBoxSvg";
 import Button from "@component/Button";
 import { WebSocketContext } from "context/WebsocketProvider";
+import TierBox from "@component/TierBox";
 
 function OnlineMemberItem({ tier, nickname, email, isFriend }) {
   const ws = useContext(WebSocketContext);
@@ -11,7 +11,7 @@ function OnlineMemberItem({ tier, nickname, email, isFriend }) {
   };
   return (
     <>
-      <div className="m-auto">{/* <TierNoBoxSvg tier={tier} /> */}</div>
+      <div className="m-auto"><TierBox tier={tier} /></div>
       <p
         className="col-span-3"
         style={{ fontFamily: "NexonGothic", fontSize: "30px" }}
