@@ -22,6 +22,7 @@ import { WebSocketContext } from "context/WebsocketProvider";
 import useRatingInfo from "@hook/useRatingInfo";
 import soundEffects from "@config/soundEffects";
 import EntryModal from "@component/EntryModal";
+import Loading from "@component/Loading";
 
 const RoomsPage = () => {
   const { email, nickname } = useSelector((state) => state.user);
@@ -35,6 +36,7 @@ const RoomsPage = () => {
     totalPageCount: 0,
     curPage: 1,
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -71,16 +73,22 @@ const RoomsPage = () => {
   };
 
   const onQuickStart = async () => {
+    setIsLoading(true);
     soundEffects.shot.play();
-    const { title, gameMode } = await quickStart(email);
+    try {
+      const { title, gameMode } = await quickStart(email);
+      const sessionId = hashOpenviduTitle(title);
 
-    const sessionId = hashOpenviduTitle(title);
-
-    if (gameMode !== "BLIND") {
-      const token = await participateRoom(sessionId, "");
-      navigate(`../game/${sessionId}`, { state: { token, gameMode } });
-    } else {
-      navigate(`../game/${sessionId}`, { state: { gameMode } });
+      if (gameMode !== "BLIND") {
+        const token = await participateRoom(sessionId, "");
+        navigate(`../game/${sessionId}`, { state: { token, gameMode } });
+      } else {
+        navigate(`../game/${sessionId}`, { state: { gameMode } });
+      }
+    } catch (error) {
+      alert("현재 입장가능한 방이 없습니다.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -258,6 +266,7 @@ const RoomsPage = () => {
           </div>
         </div>
         {showRoomMakeModal && <RoomMakeModal close={closeModal} />}
+        {isLoading && <Loading />}
       </WoodBackground>
     </>
   );
